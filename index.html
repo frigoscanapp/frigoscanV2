@@ -2,1455 +2,181 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <meta name="theme-color" content="#059669" />
-  <meta name="mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="FrigoScan" />
-  <meta name="description" content="FrigoScan — Inventario Frigo, Dispensa, Lista Spesa Alexa & Assistente Vocale" />
-  <title>FrigoScan — Inventario Frigo, Dispensa & Assistente Vocale</title>
-  <link rel="manifest" href="./manifest.json" />
-  <link rel="icon" type="image/svg+xml" href="./icon.svg" />
-  <link rel="apple-touch-icon" href="./icon.svg" />
-  <script src="https://cdn.tailwindcss.com"></scr` + `ipt>
-  <style>
-    * { -webkit-tap-highlight-color: transparent; }
-    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
-    .no-scrollbar::-webkit-scrollbar { display: none; }
-    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-    @keyframes voicePulse {
-      0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.55); }
-      50% { transform: scale(1.07); box-shadow: 0 0 0 18px rgba(16, 185, 129, 0); }
-    }
-    .voice-orb-listening { animation: voicePulse 1.4s ease-in-out infinite; }
-    @keyframes eqBar {
-      0%, 100% { height: 8px; }
-      50% { height: 26px; }
-    }
-    .eq-bar { animation: eqBar 0.7s ease-in-out infinite; }
-    .eq-bar:nth-child(2) { animation-delay: 0.15s; }
-    .eq-bar:nth-child(3) { animation-delay: 0.3s; }
-    .eq-bar:nth-child(4) { animation-delay: 0.12s; }
-    .eq-bar:nth-child(5) { animation-delay: 0.25s; }
-    @keyframes slideDownBanner {
-      from { opacity: 0; transform: translateY(-8px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    .animate-banner-in { animation: slideDownBanner 0.25s ease-out forwards; }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Esporta Pacchetto ZIP — FrigoScan v14.1</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 </head>
-<body class="bg-slate-100 text-slate-900 min-h-screen pb-24">
+<body class="bg-slate-900 text-white min-h-screen flex items-center justify-center p-4">
 
-  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur border-b border-slate-200 shadow-sm">
-    <div class="max-w-2xl mx-auto px-4 pt-3 pb-2 flex items-center justify-between gap-2">
-      <div class="flex items-center gap-2.5 min-w-0">
-        <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-700 flex items-center justify-center text-white font-black text-base tracking-tighter shadow-sm shrink-0">FS</div>
-        <div class="min-w-0">
-          <div class="flex items-center gap-1.5 flex-wrap">
-            <h1 class="text-lg font-extrabold tracking-tight text-slate-900 leading-none">FrigoScan</h1>
-            <button type="button" onclick="switchTab('settings')" class="inline-flex items-center gap-1 text-[10px] font-mono font-extrabold px-2 py-0.5 rounded-full bg-sky-100 text-sky-900 border border-sky-200 hover:bg-sky-200 transition cursor-pointer">
-              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-              <span id="header-family-badge">FRIGO-4829-CASA</span>
-            </button>
-          </div>
-          <p class="text-[11px] text-slate-500 mt-0.5 truncate">Frigo, dispensa &amp; lista spesa Alexa</p>
-        </div>
+  <div class="max-w-lg w-full bg-slate-800 border border-slate-700 rounded-3xl p-6 shadow-2xl space-y-5">
+    <div class="flex items-center gap-3">
+      <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-700 flex items-center justify-center font-black text-lg shadow-md shrink-0">
+        FS
       </div>
-
-      <div class="flex items-center gap-1.5 shrink-0">
-        <button type="button" onclick="openGearMenuModal()" aria-label="Menu e Impostazioni" title="Menu, Installazione & Impostazioni" class="w-9 h-9 rounded-xl bg-slate-100 hover:bg-slate-200 active:scale-95 text-slate-700 flex items-center justify-center border border-slate-200 transition cursor-pointer">
-          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="3"></circle>
-            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
-          </svg>
-        </button>
-
-        <button type="button" onclick="openItemModal()" class="inline-flex items-center gap-1 bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white text-xs sm:text-sm font-bold px-3 py-2 rounded-xl shadow-sm transition cursor-pointer">
-          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-          <span>Prodotto</span>
-        </button>
+      <div>
+        <span class="text-[11px] font-extrabold uppercase tracking-wider text-emerald-400">Fix Schermata Bianca GitHub Pages</span>
+        <h1 class="text-xl font-extrabold text-white">FrigoScan v14.1 — Pacchetto ZIP</h1>
       </div>
     </div>
 
-    <nav class="max-w-2xl mx-auto px-3 pb-2.5 pt-1 flex items-center gap-1.5 overflow-x-auto no-scrollbar">
-      <button type="button" data-tab="fridge" onclick="switchTab('fridge')" class="nav-btn active inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs sm:text-sm font-bold whitespace-nowrap transition bg-emerald-600 text-white shadow-sm cursor-pointer">
-        <span>❄️ In Frigo</span>
-        <span id="badge-fridge" class="text-[11px] font-extrabold px-1.5 py-0.5 rounded-full bg-white/25 text-white">0</span>
-      </button>
-      <button type="button" data-tab="pantry" onclick="switchTab('pantry')" class="nav-btn inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs sm:text-sm font-bold whitespace-nowrap transition bg-slate-100 text-slate-700 hover:bg-slate-200 cursor-pointer">
-        <span>🥫 Dispensa</span>
-        <span id="badge-pantry" class="text-[11px] font-extrabold px-1.5 py-0.5 rounded-full bg-amber-100 text-amber-900">0</span>
-      </button>
-      <button type="button" data-tab="expiring" onclick="switchTab('expiring')" class="nav-btn inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs sm:text-sm font-bold whitespace-nowrap transition bg-slate-100 text-slate-700 hover:bg-slate-200 cursor-pointer">
-        <span>⏰ In Scadenza</span>
-        <span id="badge-expiring" class="hidden text-[11px] font-extrabold px-1.5 py-0.5 rounded-full bg-rose-100 text-rose-800">0</span>
-      </button>
-      <button type="button" data-tab="shopping" onclick="switchTab('shopping')" class="nav-btn inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs sm:text-sm font-bold whitespace-nowrap transition bg-slate-100 text-slate-700 hover:bg-slate-200 cursor-pointer">
-        <span>🛒 Lista Spesa</span>
-        <span id="badge-shopping" class="hidden text-[11px] font-extrabold px-1.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800">0</span>
-      </button>
-      <button type="button" data-tab="recipes" onclick="switchTab('recipes')" class="nav-btn inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs sm:text-sm font-bold whitespace-nowrap transition bg-slate-100 text-slate-700 hover:bg-slate-200 cursor-pointer">
-        <span>🍳 Ricette Anti-Spreco</span>
-      </button>
-      <button type="button" data-tab="settings" onclick="switchTab('settings')" class="nav-btn inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs sm:text-sm font-bold whitespace-nowrap transition bg-slate-100 text-slate-700 hover:bg-slate-200 cursor-pointer">
-        <span>🔊 Alexa &amp; Sync</span>
-      </button>
-    </nav>
-  </header>
-
-  <main class="max-w-2xl mx-auto px-4 pt-4 space-y-4">
-    <div id="update-available-banner" class="hidden animate-banner-in p-3 rounded-2xl bg-sky-950 text-white border border-sky-700/70 shadow-md flex items-center justify-between gap-2.5">
-      <div class="flex items-center gap-2.5 min-w-0">
-        <span class="w-8 h-8 rounded-xl bg-sky-500/20 border border-sky-400/30 flex items-center justify-center text-sky-300 text-sm shrink-0">↻</span>
-        <div class="min-w-0">
-          <p class="text-xs font-extrabold text-white truncate">Nuova versione disponibile su GitHub</p>
-          <p class="text-[11px] text-sky-200/90 truncate">I tuoi dati restano salvati sul telefono</p>
-        </div>
-      </div>
-      <div class="flex items-center gap-1.5 shrink-0">
-        <button type="button" onclick="applyPendingAppUpdate()" class="px-3 py-1.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 active:scale-95 text-slate-950 text-xs font-extrabold shadow-xs transition cursor-pointer">Ricarica</button>
-        <button type="button" onclick="dismissUpdateBanner()" aria-label="Chiudi avviso aggiornamento" class="w-7 h-7 rounded-lg bg-white/10 hover:bg-white/20 text-sky-200 text-xs font-bold flex items-center justify-center transition cursor-pointer">✕</button>
-      </div>
+    <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-700/80 space-y-2 text-xs text-slate-300">
+      <p class="font-bold text-slate-100">File inclusi nell'archivio <code class="text-emerald-300">frigoscan-github-v14.1.zip</code>:</p>
+      <ul class="space-y-1 font-mono text-[11px] text-slate-300 pl-1">
+        <li>📄 <strong class="text-white">index.html</strong> — HTML pulito senza backtick markdown né errori di parsing</li>
+        <li>⚙️ <strong class="text-white">sw.js</strong> — Service Worker network-first con aggiornamento rapido</li>
+        <li>📱 <strong class="text-white">manifest.json</strong> — Configurazione PWA per Android e iOS</li>
+        <li>🎨 <strong class="text-white">icon.svg</strong> — Icona vettoriale ad alta definizione</li>
+        <li>☁️ <strong class="text-white">worker.js</strong> — Script Cloudflare Worker per bridge Alexa</li>
+        <li>🚫 <strong class="text-white">.nojekyll</strong> &amp; <strong class="text-white">README.md</strong> — Configurazione GitHub Pages</li>
+      </ul>
     </div>
 
-    <div class="p-3.5 rounded-2xl bg-gradient-to-r from-slate-900 via-emerald-950 to-slate-900 text-white shadow-md flex items-center justify-between gap-3">
-      <div onclick="openFrigoVoiceModal(true)" class="flex items-center gap-3 cursor-pointer flex-1 min-w-0">
-        <div class="w-11 h-11 rounded-2xl bg-emerald-600 flex items-center justify-center shrink-0 shadow-inner">
-          <svg class="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
-        </div>
-        <div class="min-w-0">
-          <div class="flex items-center gap-1.5 flex-wrap">
-            <span class="text-xs font-extrabold text-white">Assistente Vocale FrigoScan</span>
-            <span class="text-[9px] font-extrabold uppercase px-1.5 py-0.5 rounded bg-emerald-500/30 text-emerald-300 border border-emerald-400/30">Voce: Italiano</span>
-          </div>
-          <p class="text-[11px] text-slate-300 mt-0.5 truncate">"Quando scade la mozzarella?" • "Metti in dispensa 3 pacchi di pasta"</p>
-        </div>
-      </div>
-      <button type="button" onclick="openFrigoVoiceModal(true)" class="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-xs font-extrabold text-white shrink-0 shadow-sm transition cursor-pointer">Parla</button>
-    </div>
+    <button id="download-btn" type="button" onclick="generateAndDownloadZip()" class="w-full py-3.5 px-5 rounded-2xl bg-emerald-600 hover:bg-emerald-500 active:scale-98 text-white font-extrabold text-sm shadow-lg transition flex items-center justify-center gap-2 cursor-pointer">
+      <span>⬇ Scarica frigoscan-github-v14.1.zip</span>
+    </button>
 
-    <section id="view-fridge" class="tab-view space-y-3">
-      <div class="grid grid-cols-3 gap-2.5">
-        <button type="button" onclick="switchTab('expiring')" class="text-left p-3 rounded-2xl bg-rose-50/80 border border-rose-200 hover:border-rose-400 shadow-xs transition cursor-pointer">
-          <span class="text-[10px] font-bold uppercase text-rose-700">🚨 Scaduti</span>
-          <p id="stat-expired-total" class="text-xl font-extrabold text-rose-950 mt-0.5">0</p>
-        </button>
-        <button type="button" onclick="switchTab('expiring')" class="text-left p-3 rounded-2xl bg-amber-50/80 border border-amber-200 hover:border-amber-400 shadow-xs transition cursor-pointer">
-          <span id="stat-expiring-label" class="text-[10px] font-bold uppercase text-amber-800">⏰ Entro 3 gg</span>
-          <p id="stat-expiring-total" class="text-xl font-extrabold text-amber-950 mt-0.5">0</p>
-        </button>
-        <div class="p-3 rounded-2xl bg-white border border-slate-200 shadow-xs">
-          <span class="text-[10px] font-bold uppercase text-sky-700">❄️ In Frigo</span>
-          <p id="stat-fridge-total" class="text-xl font-extrabold text-slate-900 mt-0.5">0</p>
-        </div>
-      </div>
-      <div class="flex gap-2">
-        <div class="relative flex-1">
-          <input id="fridge-search" oninput="renderInventory('frigo')" type="search" placeholder="Cerca in frigo (es. latte, uova, mozzarella...)" class="w-full pl-9 pr-3 py-2.5 rounded-xl bg-white border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" />
-          <svg class="w-4 h-4 text-slate-400 absolute left-3 top-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-        </div>
-        <button type="button" onclick="openItemModal({ location: 'frigo' })" class="px-3.5 py-2.5 rounded-xl bg-sky-600 hover:bg-sky-700 text-white text-xs font-extrabold shadow-xs shrink-0 transition cursor-pointer">+ In Frigo</button>
-      </div>
-      <div id="fridge-list" class="space-y-2.5"></div>
-    </section>
-
-    <section id="view-pantry" class="tab-view hidden space-y-3">
-      <div class="flex items-center justify-between bg-amber-50 border border-amber-200 p-3.5 rounded-2xl gap-2">
-        <div>
-          <h2 class="text-sm font-extrabold text-amber-950">🥫 Scorte in Dispensa</h2>
-          <p class="text-xs text-amber-800">Pasta, conserve, olio, farine, bevande e scorte secche</p>
-        </div>
-        <button type="button" onclick="openItemModal({ location: 'dispensa' })" class="px-3 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-extrabold shadow-xs transition shrink-0 cursor-pointer">+ In Dispensa</button>
-      </div>
-      <div class="relative">
-        <input id="pantry-search" oninput="renderInventory('dispensa')" type="search" placeholder="Cerca in dispensa (es. pasta, passata, tonno...)" class="w-full pl-9 pr-3 py-2.5 rounded-xl bg-white border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500" />
-        <svg class="w-4 h-4 text-slate-400 absolute left-3 top-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-      </div>
-      <div id="pantry-list" class="space-y-2.5"></div>
-    </section>
-
-    <section id="view-expiring" class="tab-view hidden space-y-3">
-      <div class="bg-rose-50 border border-rose-200 p-3.5 rounded-2xl flex items-center justify-between gap-2">
-        <div>
-          <h2 class="text-sm font-extrabold text-rose-950">⏰ Prodotti Scaduti o in Scadenza</h2>
-          <p id="expiring-subtitle" class="text-xs text-rose-800">Soglia preavviso impostata a 3 giorni (modificabile da ⚙)</p>
-        </div>
-        <button type="button" onclick="openGearMenuModal()" class="px-2.5 py-1.5 rounded-xl bg-white border border-rose-200 text-rose-900 text-xs font-extrabold hover:bg-rose-100 transition shrink-0 cursor-pointer">⚙ Soglia</button>
-      </div>
-      <div id="expiring-list" class="space-y-2.5"></div>
-    </section>
-
-    <section id="view-shopping" class="tab-view hidden space-y-3">
-      <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs space-y-3">
-        <div class="flex items-center justify-between gap-2 flex-wrap">
-          <div>
-            <h2 class="text-base font-extrabold text-slate-900">🛒 Lista della Spesa</h2>
-            <p id="shopping-subtitle" class="text-xs text-slate-500">0 articoli da comprare • Sincronizzata con Alexa</p>
-          </div>
-          <div class="flex items-center gap-1.5">
-            <button type="button" onclick="openFrigoVoiceModal(true)" class="px-2.5 py-1.5 rounded-xl bg-emerald-100 hover:bg-emerald-200 text-emerald-900 text-xs font-extrabold transition cursor-pointer">🎙 Parla</button>
-            <button type="button" onclick="simulateAlexaSyncRefresh()" class="px-2.5 py-1.5 rounded-xl bg-sky-100 hover:bg-sky-200 text-sky-900 text-xs font-extrabold transition cursor-pointer">↻ Aggiorna</button>
-          </div>
-        </div>
-        <form onsubmit="addShoppingManual(event)" class="flex gap-2">
-          <input id="shopping-input" type="text" required placeholder="Es. Pane integrale, Parmigiano, Mele..." class="flex-1 px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" />
-          <button type="submit" class="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-extrabold shadow-xs cursor-pointer">+</button>
-        </form>
-      </div>
-      <div id="shopping-checked-bar" class="hidden p-3 rounded-2xl bg-emerald-50 border border-emerald-200 flex items-center justify-between gap-2 flex-wrap">
-        <span id="shopping-checked-label" class="text-xs font-extrabold text-emerald-950">0 articoli nel carrello</span>
-        <div class="flex gap-1.5">
-          <button type="button" onclick="moveCheckedToLocation('frigo')" class="px-3 py-1.5 rounded-xl bg-sky-600 hover:bg-sky-700 text-white text-xs font-bold shadow-xs cursor-pointer">❄️ Sposta in Frigo</button>
-          <button type="button" onclick="moveCheckedToLocation('dispensa')" class="px-3 py-1.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold shadow-xs cursor-pointer">🥫 Sposta in Dispensa</button>
-        </div>
-      </div>
-      <div id="shopping-list" class="space-y-2"></div>
-    </section>
-
-    <section id="view-recipes" class="tab-view hidden space-y-3">
-      <div class="bg-gradient-to-r from-amber-500 to-orange-600 text-white p-4 rounded-2xl shadow-sm">
-        <h2 class="text-base font-extrabold">🍳 Ricette Anti-Spreco</h2>
-        <p class="text-xs text-amber-100 mt-0.5">Abbinamento automatico con gli ingredienti di Frigo e Dispensa</p>
-      </div>
-      <div id="recipes-list" class="space-y-2.5"></div>
-    </section>
-
-    <section id="view-settings" class="tab-view hidden space-y-3">
-      <div class="bg-white p-4 rounded-2xl border-2 border-sky-200 shadow-xs space-y-3">
-        <div class="flex items-center justify-between gap-2">
-          <div>
-            <h3 class="text-sm font-extrabold text-slate-900">Codice Famiglia &amp; Bridge Alexa</h3>
-            <p class="text-[11px] text-slate-500">Sincronizzazione condivisa per Frigo, Dispensa e Lista Spesa</p>
-          </div>
-          <span class="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 shrink-0">Attivo</span>
-        </div>
-        <div class="p-3 rounded-xl bg-sky-50 border border-sky-200 flex items-center justify-between gap-2">
-          <div>
-            <span class="text-[10px] font-bold uppercase text-sky-700 block">Codice Famiglia</span>
-            <span id="settings-family-code" class="text-base font-mono font-extrabold text-sky-950">FRIGO-4829-CASA</span>
-          </div>
-          <button type="button" onclick="copyTextValue(state.familyCode, 'Codice Famiglia copiato!')" class="px-3 py-1.5 rounded-lg bg-white border border-sky-300 text-sky-900 text-xs font-bold cursor-pointer">Copia Codice</button>
-        </div>
-        <div class="space-y-1.5">
-          <label class="block text-[11px] font-extrabold text-slate-700">URL Cloudflare Worker</label>
-          <div class="flex gap-2">
-            <input id="worker-url-input" type="url" value="https://frigoscan-sync.tuo-account.workers.dev" onchange="saveWorkerUrl(this.value)" class="flex-1 px-3 py-2 rounded-xl border border-slate-200 text-xs font-mono text-slate-800 focus:outline-none focus:ring-2 focus:ring-sky-500" />
-            <button type="button" onclick="copyTextValue(document.getElementById('worker-url-input').value, 'URL Worker copiato!')" class="px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold cursor-pointer">Copia</button>
-          </div>
-        </div>
-        <div class="p-3 rounded-xl bg-slate-900 text-slate-200 text-xs space-y-2">
-          <div class="flex items-center justify-between gap-2">
-            <span class="text-[10px] font-bold uppercase text-sky-400">Endpoint List Events (Alexa)</span>
-            <button type="button" onclick="copyTextValue(document.getElementById('alexa-webhook-endpoint').textContent, 'Endpoint Alexa copiato!')" class="px-2 py-0.5 rounded bg-white/10 hover:bg-white/20 text-[10px] font-bold text-white cursor-pointer">Copia URL</button>
-          </div>
-          <code id="alexa-webhook-endpoint" class="block text-[11px] font-mono text-emerald-300 break-all">https://frigoscan-sync.tuo-account.workers.dev/alexa-webhook?family=FRIGO-4829-CASA</code>
-        </div>
-        <div class="p-3 rounded-xl bg-sky-50/70 border border-sky-200 flex items-center justify-between gap-2">
-          <div class="min-w-0">
-            <p class="text-xs font-extrabold text-sky-950">Simula evento vocale da Echo / Alexa</p>
-            <p class="text-[11px] text-sky-800 truncate">"Alexa, aggiungi alla lista della spesa..."</p>
-          </div>
-          <button type="button" onclick="simulateAlexaSyncRefresh()" class="px-3 py-2 rounded-xl bg-sky-600 hover:bg-sky-700 text-white text-xs font-extrabold shrink-0 cursor-pointer">Test Alexa</button>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <div id="item-modal" onclick="if(event.target===this) closeModal('item-modal')" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-end sm:items-center justify-center p-0 sm:p-4">
-    <div class="bg-white w-full max-w-md rounded-t-3xl sm:rounded-3xl p-5 space-y-3.5 max-h-[92vh] overflow-y-auto shadow-xl">
-      <div class="flex items-center justify-between">
-        <h3 id="item-modal-title" class="text-base font-extrabold text-slate-900">Nuovo Prodotto</h3>
-        <button type="button" onclick="closeModal('item-modal')" class="w-8 h-8 rounded-full bg-slate-100 text-slate-600 font-bold cursor-pointer">✕</button>
-      </div>
-      <form onsubmit="saveProductForm(event)" class="space-y-3">
-        <input type="hidden" id="prod-id" />
-        <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1">Nome Prodotto *</label>
-          <input id="prod-name" type="text" required placeholder="Es. Latte fresco, Pasta integrale, Uova..." class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" />
-        </div>
-        <div class="grid grid-cols-2 gap-2.5">
-          <div>
-            <label class="block text-xs font-bold text-slate-700 mb-1">Dove si trova *</label>
-            <select id="prod-location" class="w-full px-3 py-2 rounded-xl border border-slate-200 text-sm bg-white font-semibold">
-              <option value="frigo">❄️ In Frigo</option>
-              <option value="dispensa">🥫 In Dispensa</option>
-            </select>
-          </div>
-          <div>
-            <label class="block text-xs font-bold text-slate-700 mb-1">Scadenza</label>
-            <input id="prod-expiry" type="date" class="w-full px-3 py-2 rounded-xl border border-slate-200 text-sm" />
-          </div>
-        </div>
-        <div class="grid grid-cols-2 gap-2.5">
-          <div>
-            <label class="block text-xs font-bold text-slate-700 mb-1">Quantità *</label>
-            <input id="prod-qty" type="number" min="0" step="1" value="1" class="w-full px-3 py-2 rounded-xl border border-slate-200 text-sm" />
-          </div>
-          <div>
-            <label class="block text-xs font-bold text-slate-700 mb-1">Unità</label>
-            <select id="prod-unit" class="w-full px-3 py-2 rounded-xl border border-slate-200 text-sm bg-white">
-              <option value="pz">pz</option>
-              <option value="litri">litri</option>
-              <option value="pacchi">pacchi</option>
-              <option value="confezioni">confezioni</option>
-              <option value="g">g</option>
-            </select>
-          </div>
-        </div>
-        <div class="pt-2 flex gap-2">
-          <button type="submit" class="flex-1 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-extrabold shadow-sm cursor-pointer">Salva</button>
-          <button id="btn-delete-prod" type="button" onclick="deleteCurrentProduct()" class="hidden px-4 py-3 rounded-xl bg-rose-50 text-rose-600 text-xs font-bold cursor-pointer">Elimina</button>
-        </div>
-      </form>
-    </div>
+    <p id="status-msg" class="text-center text-xs text-emerald-300 font-semibold min-h-[18px]"></p>
   </div>
-
-  <div id="gear-menu-modal" onclick="if(event.target===this) closeModal('gear-menu-modal')" class="hidden fixed inset-0 z-50 bg-slate-950/65 backdrop-blur-xs flex items-end sm:items-center justify-center p-0 sm:p-4">
-    <div class="bg-white w-full max-w-md rounded-t-3xl sm:rounded-3xl p-5 space-y-4 max-h-[92vh] overflow-y-auto shadow-2xl">
-      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
-        <div class="flex items-center gap-2.5">
-          <div class="w-9 h-9 rounded-xl bg-emerald-600 text-white font-black text-xs flex items-center justify-center shadow-sm shrink-0">FS</div>
-          <div>
-            <h3 class="text-base font-extrabold text-slate-900">Menu &amp; Impostazioni</h3>
-            <p class="text-[11px] text-slate-500">Installazione, avvisi scadenza e suggerimenti</p>
-          </div>
-        </div>
-        <button type="button" onclick="closeModal('gear-menu-modal')" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold cursor-pointer">✕</button>
-      </div>
-
-      <div class="p-3.5 rounded-2xl bg-gradient-to-br from-emerald-50 to-teal-50 border border-emerald-200 space-y-2.5">
-        <div class="flex items-center justify-between gap-2">
-          <div class="flex items-center gap-2.5 min-w-0">
-            <div class="w-10 h-10 rounded-xl bg-emerald-600 text-white font-black text-sm flex items-center justify-center shrink-0 shadow-xs">FS</div>
-            <div class="min-w-0">
-              <span class="text-[10px] font-extrabold uppercase tracking-wider text-emerald-700 block">Web App (PWA)</span>
-              <h4 class="text-sm font-extrabold text-slate-900 truncate">Installa su Smartphone</h4>
-            </div>
-          </div>
-          <button type="button" onclick="triggerInstallFromGear()" class="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-extrabold shadow-xs transition shrink-0 cursor-pointer">Installa Ora</button>
-        </div>
-        <div class="grid grid-cols-2 gap-2 text-[11px] text-slate-700 pt-1">
-          <div class="p-2 rounded-xl bg-white/90 border border-emerald-100">
-            <strong class="block text-slate-900">🤖 Android (Chrome)</strong>
-            Menu <strong>⋮</strong> → <em>Installa app / Aggiungi a Home</em>.
-          </div>
-          <div class="p-2 rounded-xl bg-white/90 border border-emerald-100">
-            <strong class="block text-slate-900">🍎 iPhone (Safari)</strong>
-            Tasto <strong>Condividi</strong> → <em>Aggiungi alla schermata Home</em>.
-          </div>
-        </div>
-      </div>
-
-      <div class="p-3.5 rounded-2xl bg-amber-50/70 border border-amber-200 space-y-2.5">
-        <div class="flex items-center justify-between">
-          <div>
-            <span class="text-[10px] font-extrabold uppercase tracking-wider text-amber-800 block">Notifiche &amp; Badge</span>
-            <h4 class="text-sm font-extrabold text-slate-900">Avvisi Scadenza</h4>
-          </div>
-          <span id="expiry-threshold-badge" class="px-2.5 py-1 rounded-full bg-amber-500 text-white text-xs font-extrabold">3 giorni</span>
-        </div>
-        <div class="flex items-center gap-3">
-          <input id="expiry-threshold-range" type="range" min="1" max="14" value="3" oninput="setExpiryThreshold(this.value)" class="flex-1 min-w-0 accent-amber-600 cursor-pointer" />
-          <div class="flex gap-1 shrink-0">
-            <button type="button" onclick="setExpiryThreshold(2)" class="px-2 py-1 rounded-lg bg-white border border-amber-300 text-[11px] font-bold text-amber-900 cursor-pointer">2g</button>
-            <button type="button" onclick="setExpiryThreshold(3)" class="px-2 py-1 rounded-lg bg-white border border-amber-300 text-[11px] font-bold text-amber-900 cursor-pointer">3g</button>
-            <button type="button" onclick="setExpiryThreshold(7)" class="px-2 py-1 rounded-lg bg-white border border-amber-300 text-[11px] font-bold text-amber-900 cursor-pointer">7g</button>
-          </div>
-        </div>
-        <p class="text-[11px] text-slate-600">Evidenzia e mostra nella scheda <strong>In Scadenza</strong> gli alimenti a cui mancano fino a <strong id="expiry-threshold-desc">3 giorni</strong>.</p>
-      </div>
-
-      <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2.5">
-        <div class="flex items-center justify-between gap-2">
-          <div>
-            <span class="text-[10px] font-extrabold uppercase tracking-wider text-slate-500 block">Supporto &amp; Idee</span>
-            <h4 class="text-sm font-extrabold text-slate-900">Segnalazioni e Suggerimenti</h4>
-          </div>
-          <a href="mailto:frigoscanapp@gmail.com?subject=Feedback%20FrigoScan" class="px-2.5 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-[11px] font-extrabold transition shrink-0">✉ Scrivi Email</a>
-        </div>
-        <form onsubmit="sendFeedbackEmail(event)" class="space-y-2">
-          <textarea id="feedback-message-input" rows="2" required placeholder="Scrivi un suggerimento o segnala un problema..." class="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500"></textarea>
-          <div class="flex items-center justify-between gap-2">
-            <a href="mailto:frigoscanapp@gmail.com" class="text-[11px] font-bold text-emerald-700 underline truncate">frigoscanapp@gmail.com</a>
-            <button type="submit" class="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-extrabold transition shrink-0 cursor-pointer">Invia Suggerimento</button>
-          </div>
-        </form>
-      </div>
-
-      <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2.5">
-        <div class="flex items-center justify-between">
-          <span class="text-[10px] font-extrabold uppercase tracking-wider text-slate-500">Gestione Dati &amp; GitHub</span>
-          <span class="text-[10px] font-mono font-bold text-slate-400">v14 • SafeStorage</span>
-        </div>
-        <div class="grid grid-cols-2 gap-2">
-          <button type="button" onclick="exportBackupJSON()" class="py-2 px-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition cursor-pointer">⬇ Esporta Backup JSON</button>
-          <label class="py-2 px-3 rounded-xl bg-white hover:bg-slate-100 border border-slate-300 text-slate-800 text-xs font-bold text-center cursor-pointer transition">
-            ⬆ Importa Backup JSON
-            <input type="file" accept=".json,application/json" class="hidden" onchange="importBackupJSON(event)" />
-          </label>
-        </div>
-        <div class="grid grid-cols-2 gap-2">
-          <button type="button" onclick="closeModal('gear-menu-modal'); switchTab('settings')" class="py-2 px-2.5 rounded-xl bg-sky-50 hover:bg-sky-100 border border-sky-200 text-sky-900 text-xs font-extrabold transition cursor-pointer">🔊 Alexa &amp; Sync</button>
-          <button type="button" onclick="closeModal('gear-menu-modal'); showUpdateAvailableBanner()" class="py-2 px-2.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-emerald-900 text-xs font-extrabold transition cursor-pointer">↻ Verifica Update</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div id="floating-voice-widget" style="bottom: 20px; right: 16px; touch-action: none;" class="fixed z-40 flex items-center rounded-full bg-gradient-to-r from-slate-900 via-emerald-900 to-emerald-600 text-white shadow-2xl border border-white/20 select-none">
-    <div id="floating-voice-drag-handle" class="flex items-center gap-2 pl-3 pr-2.5 py-2.5 cursor-grab active:cursor-grabbing">
-      <span class="w-7 h-7 rounded-full bg-emerald-500/30 border border-emerald-300/40 flex items-center justify-center shrink-0">
-        <svg class="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line></svg>
-      </span>
-      <span class="text-xs font-extrabold tracking-tight">Parla</span>
-      <svg class="w-3.5 h-3.5 text-white/50 ml-0.5" viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.5"/><circle cx="15" cy="6" r="1.5"/><circle cx="9" cy="12" r="1.5"/><circle cx="15" cy="12" r="1.5"/><circle cx="9" cy="18" r="1.5"/><circle cx="15" cy="18" r="1.5"/></svg>
-    </div>
-    <button type="button" onclick="hideFloatingVoiceWidget(event)" aria-label="Chiudi" class="w-7 h-7 mr-1.5 rounded-full bg-black/25 hover:bg-black/45 text-white/80 hover:text-white text-xs font-bold flex items-center justify-center transition cursor-pointer">✕</button>
-  </div>
-
-  <div id="frigo-voice-modal" onclick="if(event.target===this) closeFrigoVoiceModal()" class="hidden fixed inset-0 z-50 bg-slate-950/75 backdrop-blur-xs flex items-end sm:items-center justify-center p-0 sm:p-4">
-    <div class="bg-slate-900 text-white w-full max-w-md rounded-t-3xl sm:rounded-3xl p-5 space-y-4 shadow-2xl border border-slate-700/80 max-h-[92vh] overflow-y-auto">
-      <div class="space-y-2.5">
-        <div class="flex items-center justify-between">
-          <div class="flex items-center gap-2">
-            <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
-            <h3 class="text-sm font-extrabold tracking-tight text-white">Assistente Vocale FrigoScan</h3>
-          </div>
-          <div class="flex items-center gap-2">
-            <button type="button" id="btn-frigo-tts-toggle" onclick="toggleFrigoTts()" class="px-2.5 py-1 rounded-full bg-white/10 hover:bg-white/20 text-[11px] font-bold text-emerald-300 transition cursor-pointer">🔊 Voce ON</button>
-            <button type="button" onclick="closeFrigoVoiceModal()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-slate-300 font-bold cursor-pointer">✕</button>
-          </div>
-        </div>
-        <div class="flex items-center justify-between gap-2 bg-slate-800/80 border border-slate-700/80 rounded-xl px-3 py-2">
-          <div class="flex items-center gap-2">
-            <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
-            <span class="text-xs font-extrabold text-slate-100">Voce: Italiano</span>
-          </div>
-          <button type="button" onclick="previewItalianVoice()" class="px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-[11px] font-extrabold text-white shrink-0 transition cursor-pointer">Prova voce</button>
-        </div>
-      </div>
-
-      <div class="py-2 flex flex-col items-center justify-center text-center space-y-3">
-        <button type="button" id="frigo-voice-orb" onclick="toggleFrigoListening()" class="w-20 h-20 rounded-full bg-gradient-to-br from-emerald-500 to-teal-700 flex items-center justify-center shadow-lg border-4 border-emerald-300/30 transition cursor-pointer">
-          <svg class="w-9 h-9 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
-        </button>
-        <div id="frigo-voice-eq" class="hidden items-center justify-center gap-1 h-7">
-          <span class="eq-bar w-1.5 bg-emerald-400 rounded-full"></span>
-          <span class="eq-bar w-1.5 bg-emerald-400 rounded-full"></span>
-          <span class="eq-bar w-1.5 bg-emerald-400 rounded-full"></span>
-          <span class="eq-bar w-1.5 bg-emerald-400 rounded-full"></span>
-          <span class="eq-bar w-1.5 bg-emerald-400 rounded-full"></span>
-        </div>
-        <div>
-          <p id="frigo-voice-status" class="text-xs font-extrabold text-emerald-300">Tocca il microfono e parla</p>
-          <p id="frigo-voice-transcript" class="text-sm font-semibold text-white mt-1 min-h-[22px] px-2">«...»</p>
-        </div>
-      </div>
-
-      <div id="frigo-voice-response" class="hidden p-3.5 rounded-2xl bg-slate-800/90 border border-slate-700 space-y-2">
-        <span id="frigo-res-badge" class="text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300">Eseguito</span>
-        <p id="frigo-res-text" class="text-xs font-bold text-white leading-relaxed"></p>
-      </div>
-
-      <div class="space-y-1.5">
-        <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Comandi rapidi (tocca per provare)</p>
-        <div class="flex flex-wrap gap-1.5">
-          <button type="button" onclick="runDemoVoiceCommand('Quando scade la mozzarella?')" class="text-left px-2.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/15 text-[11px] text-slate-200 cursor-pointer">"Quando scade la mozzarella?"</button>
-          <button type="button" onclick="runDemoVoiceCommand('Cosa sta per scadere?')" class="text-left px-2.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/15 text-[11px] text-slate-200 cursor-pointer">"Cosa sta per scadere?"</button>
-          <button type="button" onclick="runDemoVoiceCommand('Metti in dispensa 3 pacchi di pasta')" class="text-left px-2.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/15 text-[11px] text-slate-200 cursor-pointer">"Metti in dispensa 3 pacchi di pasta"</button>
-          <button type="button" onclick="runDemoVoiceCommand('Ho consumato 1 latte fresco')" class="text-left px-2.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/15 text-[11px] text-slate-200 cursor-pointer">"Ho consumato 1 latte fresco"</button>
-          <button type="button" onclick="runDemoVoiceCommand('Aggiungi alla lista della spesa uova e pomodori')" class="text-left px-2.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/15 text-[11px] text-slate-200 cursor-pointer">"Aggiungi alla lista spesa uova e pomodori"</button>
-        </div>
-      </div>
-
-      <form onsubmit="submitTypedCommand(event)" class="flex gap-2 pt-1 border-t border-slate-800">
-        <input id="frigo-voice-typed" type="text" placeholder="Oppure scrivi il comando qui..." class="flex-1 px-3 py-2 rounded-xl bg-slate-800 border border-slate-700 text-xs text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500" />
-        <button type="submit" class="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-extrabold cursor-pointer">Invia</button>
-      </form>
-    </div>
-  </div>
-
-  <div id="toast" class="hidden fixed top-20 left-1/2 -translate-x-1/2 z-[60] whitespace-nowrap px-4 py-2.5 rounded-full bg-slate-900 text-white text-xs font-bold shadow-lg"></div>
 
   <script>
-    const APP_VERSION = '14.0.0-github';
-    const addDaysIso = (days) => {
-      const d = new Date();
-      d.setDate(d.getDate() + days);
-      return d.toISOString().split('T')[0];
-    };
+    const SW_JS_CONTENT = `const CACHE_NAME = 'frigoscan-v14-1-cache';
+const STATIC_ASSETS = ['./', './index.html', './manifest.json', './icon.svg'];
 
-    const STORAGE_KEY = 'frigoscan_alexa_bridge_state_v1';
-    const BACKUP_KEY = 'frigoscan_auto_backup_v1';
-    const LEGACY_KEYS = ['frigoscan_preview_state_v1', 'frigoscan_data_v2', 'frigoscan_data_v1', 'frigoscan_state_v1'];
+self.addEventListener('install', (event) => {
+  event.waitUntil(
+    caches.open(CACHE_NAME).then((cache) => cache.addAll(STATIC_ASSETS)).catch(() => {})
+  );
+});
 
-    let state = {
-      familyCode: 'FRIGO-4829-CASA',
-      workerUrl: 'https://frigoscan-sync.tuo-account.workers.dev',
-      expiryThresholdDays: 3,
-      updatedAt: Date.now(),
-      items: [
-        { id: 'f1', name: 'Latte fresco intero', location: 'frigo', qty: 2, unit: 'litri', expiry: addDaysIso(2) },
-        { id: 'f2', name: 'Mozzarella di bufala', location: 'frigo', qty: 2, unit: 'pz', expiry: addDaysIso(1) },
-        { id: 'f3', name: 'Uova biologiche', location: 'frigo', qty: 6, unit: 'pz', expiry: addDaysIso(8) },
-        { id: 'f4', name: 'Yogurt greco naturale', location: 'frigo', qty: 4, unit: 'pz', expiry: addDaysIso(-1) },
-        { id: 'p1', name: 'Pasta di semola penne', location: 'dispensa', qty: 4, unit: 'pacchi', expiry: addDaysIso(180) },
-        { id: 'p2', name: 'Passata di pomodoro', location: 'dispensa', qty: 3, unit: 'pz', expiry: addDaysIso(240) },
-        { id: 'p3', name: 'Olio Extra Vergine Oliva', location: 'dispensa', qty: 1, unit: 'litri', expiry: addDaysIso(300) },
-        { id: 'p4', name: 'Tonno al naturale', location: 'dispensa', qty: 5, unit: 'pz', expiry: addDaysIso(150) }
-      ],
-      shopping: [
-        { id: 's1', name: 'Parmigiano Reggiano', checked: false, source: 'alexa' },
-        { id: 's2', name: 'Zucchine fresche', checked: false, source: 'manual' },
-        { id: 's3', name: 'Caffè macinato', checked: true, source: 'alexa' }
+self.addEventListener('activate', (event) => {
+  event.waitUntil(
+    caches.keys().then((keys) =>
+      Promise.all(keys.filter((k) => k !== CACHE_NAME).map((k) => caches.delete(k)))
+    ).then(() => self.clients.claim())
+  );
+});
+
+self.addEventListener('message', (event) => {
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
+});
+
+self.addEventListener('fetch', (event) => {
+  const req = event.request;
+  if (req.method !== 'GET') return;
+  event.respondWith(
+    fetch(req)
+      .then((res) => {
+        if (res && res.status === 200 && res.type === 'basic') {
+          const clone = res.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(req, clone));
+        }
+        return res;
+      })
+      .catch(() => caches.match(req).then((cached) => cached || caches.match('./index.html')))
+  );
+});
+`;
+
+    const MANIFEST_JSON_CONTENT = JSON.stringify({
+      name: "FrigoScan — Frigo, Dispensa & Alexa",
+      short_name: "FrigoScan",
+      description: "Gestione intelligente di frigo, dispensa, scadenze e lista spesa vocale.",
+      start_url: "./",
+      scope: "./",
+      display: "standalone",
+      background_color: "#f1f5f9",
+      theme_color: "#059669",
+      icons: [
+        { src: "./icon.svg", sizes: "192x192", type: "image/svg+xml", purpose: "any maskable" },
+        { src: "./icon.svg", sizes: "512x512", type: "image/svg+xml", purpose: "any maskable" }
       ]
+    }, null, 2);
+
+    const ICON_SVG_CONTENT = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#10b981"/>
+      <stop offset="100%" stop-color="#0f766e"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="115" fill="url(#bg)"/>
+  <text x="256" y="325" text-anchor="middle" fill="#ffffff" font-family="system-ui,-apple-system,sans-serif" font-size="225" font-weight="900" letter-spacing="-8">FS</text>
+</svg>`;
+
+    const WORKER_JS_CONTENT = `export default {
+  async fetch(request, env) {
+    const url = new URL(request.url);
+    const cors = {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type'
     };
+    if (request.method === 'OPTIONS') return new Response(null, { headers: cors });
 
-    function recoverAnyLocalState() {
-      const candidateKeys = [STORAGE_KEY, BACKUP_KEY, ...LEGACY_KEYS];
-      let bestCandidate = null;
-      let bestScore = -1;
-      candidateKeys.forEach((key) => {
-        try {
-          const raw = localStorage.getItem(key);
-          if (!raw) return;
-          const parsed = JSON.parse(raw);
-          if (!parsed || typeof parsed !== 'object') return;
-          const itemsArr = Array.isArray(parsed.items) ? parsed.items : [];
-          const shopArr = Array.isArray(parsed.shopping) ? parsed.shopping : [];
-          const score = itemsArr.length + shopArr.length + (parsed.updatedAt ? 1 : 0);
-          if (score > bestScore && (itemsArr.length > 0 || shopArr.length > 0 || parsed.familyCode)) {
-            bestScore = score;
-            bestCandidate = parsed;
-          }
-        } catch (e) {}
-      });
-      if (bestCandidate) {
-        if (Array.isArray(bestCandidate.items)) state.items = bestCandidate.items;
-        if (Array.isArray(bestCandidate.shopping)) state.shopping = bestCandidate.shopping;
-        if (bestCandidate.familyCode) state.familyCode = bestCandidate.familyCode;
-        if (bestCandidate.workerUrl) state.workerUrl = bestCandidate.workerUrl;
-        if (typeof bestCandidate.expiryThresholdDays === 'number') {
-          state.expiryThresholdDays = Math.min(14, Math.max(1, bestCandidate.expiryThresholdDays));
-        }
-        persistState();
-      }
+    const family = url.searchParams.get('family') || 'DEFAULT';
+    const key = 'family:' + family;
+
+    if (url.pathname === '/alexa-webhook' && request.method === 'POST') {
+      const payload = await request.json().catch(() => ({}));
+      const item = payload.item || payload.name || 'Articolo Alexa';
+      const existing = (await env.FRIGOSCAN_KV?.get(key, 'json')) || { items: [], shopping: [] };
+      existing.shopping.unshift({ id: 'alexa_' + Date.now(), name: item, checked: false, source: 'alexa' });
+      if (env.FRIGOSCAN_KV) await env.FRIGOSCAN_KV.put(key, JSON.stringify(existing));
+      return new Response(JSON.stringify({ ok: true, added: item }), { headers: { ...cors, 'Content-Type': 'application/json' } });
     }
 
-    function persistState() {
+    if (request.method === 'GET') {
+      const data = (await env.FRIGOSCAN_KV?.get(key, 'json')) || null;
+      return new Response(JSON.stringify({ ok: true, data }), { headers: { ...cors, 'Content-Type': 'application/json' } });
+    }
+
+    if (request.method === 'POST') {
+      const body = await request.json();
+      if (env.FRIGOSCAN_KV) await env.FRIGOSCAN_KV.put(key, JSON.stringify(body));
+      return new Response(JSON.stringify({ ok: true }), { headers: { ...cors, 'Content-Type': 'application/json' } });
+    }
+
+    return new Response('FrigoScan Sync Worker attivo', { headers: cors });
+  }
+};`;
+
+    const README_CONTENT = `# FrigoScan — Inventario Frigo, Dispensa & Assistente Vocale\n\nWeb App PWA per gestire frigo, dispensa, scadenze e lista spesa sincronizzata con Alexa.\n`;
+
+    async function generateAndDownloadZip() {
+      const status = document.getElementById('status-msg');
+      status.textContent = 'Generazione archivio ZIP pulito in corso...';
       try {
-        state.updatedAt = Date.now();
-        const serialized = JSON.stringify(state);
-        localStorage.setItem(STORAGE_KEY, serialized);
-        localStorage.setItem(BACKUP_KEY, serialized);
-      } catch (e) {}
-    }
-
-    let pendingServiceWorker = null;
-
-    function showUpdateAvailableBanner() {
-      const banner = document.getElementById('update-available-banner');
-      if (banner) banner.classList.remove('hidden');
-    }
-
-    function dismissUpdateBanner() {
-      const banner = document.getElementById('update-available-banner');
-      if (banner) banner.classList.add('hidden');
-    }
-
-    function applyPendingAppUpdate() {
-      persistState();
-      showToast('Aggiornamento applicato! Dati mantenuti al sicuro.');
-      if (pendingServiceWorker) {
-        try { pendingServiceWorker.postMessage({ type: 'SKIP_WAITING' }); } catch (e) {}
-      }
-      setTimeout(() => { window.location.reload(); }, 400);
-    }
-
-    function registerServiceWorkerAndUpdates() {
-      if (!('serviceWorker' in navigator) || !window.location.protocol.startsWith('http')) return;
-      navigator.serviceWorker.register('./sw.js').then((reg) => {
-        reg.update().catch(() => {});
-        if (reg.waiting) {
-          pendingServiceWorker = reg.waiting;
-          showUpdateAvailableBanner();
+        const zip = new JSZip();
+        const resp = await fetch('./index.html').catch(() => null);
+        let indexHtml = resp && resp.ok ? await resp.text() : '';
+        if (!indexHtml || indexHtml.includes('JSZip')) {
+          throw new Error('Scarica direttamente il file index.html dalla scheda accanto e caricalo su GitHub.');
         }
-        reg.addEventListener('updatefound', () => {
-          const newWorker = reg.installing;
-          if (!newWorker) return;
-          newWorker.addEventListener('statechange', () => {
-            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-              pendingServiceWorker = newWorker;
-              showUpdateAvailableBanner();
-            }
-          });
-        });
-      }).catch(() => {});
-    }
+        zip.file('index.html', indexHtml);
+        zip.file('sw.js', SW_JS_CONTENT);
+        zip.file('manifest.json', MANIFEST_JSON_CONTENT);
+        zip.file('icon.svg', ICON_SVG_CONTENT);
+        zip.file('worker.js', WORKER_JS_CONTENT);
+        zip.file('.nojekyll', '');
+        zip.file('README.md', README_CONTENT);
 
-    let currentTab = 'fridge';
-    let deferredPwaPrompt = null;
-
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      deferredPwaPrompt = e;
-    });
-
-    function showToast(msg) {
-      const el = document.getElementById('toast');
-      el.textContent = msg;
-      el.classList.remove('hidden');
-      clearTimeout(el._t);
-      el._t = setTimeout(() => el.classList.add('hidden'), 2600);
-    }
-
-    function copyTextValue(val, toastMsg) {
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(val).then(() => showToast(toastMsg)).catch(() => fallbackCopy(val, toastMsg));
-      } else {
-        fallbackCopy(val, toastMsg);
+        const blob = await zip.generateAsync({ type: 'blob' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'frigoscan-github-v14.1.zip';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(() => URL.revokeObjectURL(url), 2000);
+        status.textContent = '✓ Archivio frigoscan-github-v14.1.zip scaricato!';
+      } catch (err) {
+        status.textContent = err.message;
       }
     }
-
-    function fallbackCopy(val, toastMsg) {
-      const ta = document.createElement('textarea');
-      ta.value = val;
-      ta.style.position = 'fixed';
-      ta.style.opacity = '0';
-      document.body.appendChild(ta);
-      ta.select();
-      try { document.execCommand('copy'); } catch (e) {}
-      document.body.removeChild(ta);
-      showToast(toastMsg);
-    }
-
-    function escapeHtml(str) {
-      return String(str || '').replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
-    }
-
-    function daysUntil(isoDate) {
-      if (!isoDate) return 999;
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-      const target = new Date(isoDate + 'T00:00:00');
-      return Math.round((target - today) / 86400000);
-    }
-
-    function openGearMenuModal() {
-      syncExpiryThresholdUI();
-      document.getElementById('gear-menu-modal').classList.remove('hidden');
-    }
-
-    function syncExpiryThresholdUI() {
-      const days = state.expiryThresholdDays || 3;
-      const range = document.getElementById('expiry-threshold-range');
-      const badge = document.getElementById('expiry-threshold-badge');
-      const desc = document.getElementById('expiry-threshold-desc');
-      const statLabel = document.getElementById('stat-expiring-label');
-      const expSub = document.getElementById('expiring-subtitle');
-      const labelTxt = `${days} ${days === 1 ? 'giorno' : 'giorni'}`;
-      if (range) range.value = days;
-      if (badge) badge.textContent = labelTxt;
-      if (desc) desc.textContent = labelTxt;
-      if (statLabel) statLabel.textContent = `⏰ Entro ${days} gg`;
-      if (expSub) expSub.textContent = `Soglia preavviso impostata a ${labelTxt} (modificabile da ⚙)`;
-    }
-
-    function setExpiryThreshold(val) {
-      const n = Math.min(14, Math.max(1, parseInt(val, 10) || 3));
-      state.expiryThresholdDays = n;
-      persistState();
-      syncExpiryThresholdUI();
-      updateAllViews();
-    }
-
-    async function triggerInstallFromGear() {
-      if (deferredPwaPrompt) {
-        deferredPwaPrompt.prompt();
-        const { outcome } = await deferredPwaPrompt.userChoice;
-        if (outcome === 'accepted') {
-          deferredPwaPrompt = null;
-          showToast('FrigoScan installata nella schermata Home!');
-        }
-        return;
-      }
-      showToast('Segui i 2 passaggi Android o iPhone qui sotto per aggiungerla alla Home!');
-    }
-
-    function sendFeedbackEmail(e) {
-      e.preventDefault();
-      const input = document.getElementById('feedback-message-input');
-      const msg = (input.value || '').trim();
-      if (!msg) return;
-      const subject = encodeURIComponent('Suggerimento / Segnalazione FrigoScan');
-      const body = encodeURIComponent(msg + '\n\n---\nInviato da FrigoScan Web App (' + APP_VERSION + ')');
-      window.location.href = `mailto:frigoscanapp@gmail.com?subject=${subject}&body=${body}`;
-      input.value = '';
-      showToast('Apertura email verso frigoscanapp@gmail.com...');
-    }
-
-    function exportBackupJSON() {
-      const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `frigoscan-backup-${new Date().toISOString().split('T')[0]}.json`;
-      a.click();
-      URL.revokeObjectURL(url);
-      showToast('Backup JSON scaricato!');
-    }
-
-    function importBackupJSON(e) {
-      const file = e.target.files && e.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = () => {
-        try {
-          const parsed = JSON.parse(reader.result);
-          if (parsed && Array.isArray(parsed.items)) {
-            state.items = parsed.items;
-            state.shopping = Array.isArray(parsed.shopping) ? parsed.shopping : [];
-            if (typeof parsed.expiryThresholdDays === 'number') {
-              state.expiryThresholdDays = Math.min(14, Math.max(1, parsed.expiryThresholdDays));
-            }
-            persistState();
-            syncExpiryThresholdUI();
-            updateAllViews();
-            closeModal('gear-menu-modal');
-            showToast('Backup ripristinato con successo!');
-          } else {
-            showToast('File JSON non valido');
-          }
-        } catch (err) {
-          showToast('Errore durante la lettura del file');
-        }
-      };
-      reader.readAsText(file);
-    }
-
-    function saveWorkerUrl(val) {
-      const clean = (val || '').trim().replace(/\/+$/, '');
-      if (!clean) return;
-      state.workerUrl = clean;
-      persistState();
-      syncFamilyAndWorkerUI();
-      showToast('URL Worker aggiornato!');
-    }
-
-    function syncFamilyAndWorkerUI() {
-      const fc = state.familyCode || 'FRIGO-4829-CASA';
-      const wu = state.workerUrl || 'https://frigoscan-sync.tuo-account.workers.dev';
-      const headerBadge = document.getElementById('header-family-badge');
-      const settingsCode = document.getElementById('settings-family-code');
-      const workerInput = document.getElementById('worker-url-input');
-      const endpointEl = document.getElementById('alexa-webhook-endpoint');
-      if (headerBadge) headerBadge.textContent = fc;
-      if (settingsCode) settingsCode.textContent = fc;
-      if (workerInput) workerInput.value = wu;
-      if (endpointEl) endpointEl.textContent = `${wu}/alexa-webhook?family=${encodeURIComponent(fc)}`;
-    }
-
-    function switchTab(tab) {
-      currentTab = tab;
-      document.querySelectorAll('.tab-view').forEach(s => s.classList.add('hidden'));
-      const target = document.getElementById(`view-${tab}`);
-      if (target) target.classList.remove('hidden');
-
-      document.querySelectorAll('.nav-btn').forEach(btn => {
-        const active = btn.dataset.tab === tab;
-        btn.className = active
-          ? 'nav-btn active inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs sm:text-sm font-bold whitespace-nowrap transition bg-emerald-600 text-white shadow-sm cursor-pointer'
-          : 'nav-btn inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs sm:text-sm font-bold whitespace-nowrap transition bg-slate-100 text-slate-700 hover:bg-slate-200 cursor-pointer';
-        if (active) btn.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
-      });
-
-      const fridgeBadge = document.getElementById('badge-fridge');
-      if (fridgeBadge) {
-        fridgeBadge.className = tab === 'fridge'
-          ? 'text-[11px] font-extrabold px-1.5 py-0.5 rounded-full bg-white/25 text-white'
-          : 'text-[11px] font-extrabold px-1.5 py-0.5 rounded-full bg-emerald-100 text-emerald-900';
-      }
-
-      if (tab === 'fridge') renderInventory('frigo');
-      if (tab === 'pantry') renderInventory('dispensa');
-      if (tab === 'expiring') renderExpiring();
-      if (tab === 'shopping') renderShopping();
-      if (tab === 'recipes') renderRecipes();
-    }
-
-    function updateAllViews() {
-      const thresh = state.expiryThresholdDays || 3;
-      const fridgeItems = state.items.filter(i => i.location !== 'dispensa');
-      const pantryItems = state.items.filter(i => i.location === 'dispensa');
-      const expiredItems = state.items.filter(i => daysUntil(i.expiry) < 0);
-      const expiringSoonItems = state.items.filter(i => {
-        const d = daysUntil(i.expiry);
-        return d >= 0 && d <= thresh;
-      });
-      const allAlertItems = state.items.filter(i => daysUntil(i.expiry) <= thresh);
-      const shopPending = state.shopping.filter(i => !i.checked);
-
-      document.getElementById('badge-fridge').textContent = fridgeItems.length;
-      document.getElementById('badge-pantry').textContent = pantryItems.length;
-
-      const expBadge = document.getElementById('badge-expiring');
-      expBadge.textContent = allAlertItems.length;
-      expBadge.classList.toggle('hidden', allAlertItems.length === 0);
-
-      const shopBadge = document.getElementById('badge-shopping');
-      shopBadge.textContent = shopPending.length;
-      shopBadge.classList.toggle('hidden', shopPending.length === 0);
-
-      document.getElementById('stat-expired-total').textContent = expiredItems.length;
-      document.getElementById('stat-expiring-total').textContent = expiringSoonItems.length;
-      document.getElementById('stat-fridge-total').textContent = fridgeItems.length;
-
-      renderInventory('frigo');
-      renderInventory('dispensa');
-      renderExpiring();
-      renderShopping();
-      renderRecipes();
-    }
-
-    function buildProductCardHtml(item) {
-      const d = daysUntil(item.expiry);
-      const thresh = state.expiryThresholdDays || 3;
-      const isPantry = item.location === 'dispensa';
-      const locBadge = isPantry
-        ? `<span class="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-amber-100 text-amber-900">🥫 Dispensa</span>`
-        : `<span class="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-sky-100 text-sky-900">❄️ Frigo</span>`;
-
-      let expBadge = '';
-      if (item.expiry) {
-        if (d < 0) expBadge = `<span class="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-rose-600 text-white">Scaduto</span>`;
-        else if (d <= thresh) expBadge = `<span class="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-rose-100 text-rose-800">Scade tra ${d === 0 ? 'oggi' : d + ' gg'}</span>`;
-        else expBadge = `<span class="text-[10px] font-semibold text-slate-400">Scad. ${item.expiry}</span>`;
-      }
-
-      return `
-        <div class="p-3 rounded-2xl bg-white border ${d <= thresh ? 'border-amber-300' : 'border-slate-200'} shadow-xs flex items-center justify-between gap-2">
-          <div onclick="openItemModal('${item.id}')" class="min-w-0 flex-1 cursor-pointer">
-            <h4 class="text-sm font-extrabold text-slate-900 truncate">${escapeHtml(item.name)}</h4>
-            <div class="flex items-center gap-1.5 flex-wrap mt-1">
-              ${locBadge}
-              ${expBadge}
-            </div>
-          </div>
-          <div class="flex items-center gap-1 shrink-0">
-            <button type="button" onclick="changeQty('${item.id}', -1)" class="w-7 h-7 rounded-lg bg-slate-100 hover:bg-rose-100 text-slate-800 font-extrabold text-sm cursor-pointer">−</button>
-            <span class="min-w-[50px] text-center text-xs font-extrabold text-slate-800">${item.qty} <span class="font-normal text-slate-500">${escapeHtml(item.unit || 'pz')}</span></span>
-            <button type="button" onclick="changeQty('${item.id}', 1)" class="w-7 h-7 rounded-lg bg-slate-100 hover:bg-emerald-100 text-slate-800 font-extrabold text-sm cursor-pointer">+</button>
-            <button type="button" onclick="openItemModal('${item.id}')" title="Modifica" class="w-7 h-7 rounded-lg bg-slate-50 hover:bg-slate-200 text-slate-600 text-xs font-bold cursor-pointer">✎</button>
-          </div>
-        </div>
-      `;
-    }
-
-    function renderInventory(location) {
-      const searchId = location === 'dispensa' ? 'pantry-search' : 'fridge-search';
-      const listId = location === 'dispensa' ? 'pantry-list' : 'fridge-list';
-      const q = (document.getElementById(searchId)?.value || '').toLowerCase().trim();
-      const filtered = state.items.filter(i => {
-        const loc = i.location === 'dispensa' ? 'dispensa' : 'frigo';
-        if (loc !== location) return false;
-        return !q || i.name.toLowerCase().includes(q);
-      });
-      const container = document.getElementById(listId);
-      if (!container) return;
-      container.innerHTML = filtered.length
-        ? filtered.map(buildProductCardHtml).join('')
-        : `<div class="text-center py-8 bg-white rounded-2xl border border-dashed border-slate-300 text-xs text-slate-500">Nessun prodotto trovato qui.</div>`;
-    }
-
-    function renderExpiring() {
-      const thresh = state.expiryThresholdDays || 3;
-      const list = state.items
-        .filter(i => daysUntil(i.expiry) <= thresh)
-        .sort((a, b) => daysUntil(a.expiry) - daysUntil(b.expiry));
-      const container = document.getElementById('expiring-list');
-      if (!container) return;
-      container.innerHTML = list.length
-        ? list.map(buildProductCardHtml).join('')
-        : `<div class="text-center py-8 bg-white rounded-2xl border border-dashed border-slate-300 text-xs text-slate-500">Ottimo! Nessun prodotto in scadenza entro ${thresh} ${thresh === 1 ? 'giorno' : 'giorni'}.</div>`;
-    }
-
-    function addMissingToShopping(itemName) {
-      const cap = itemName.charAt(0).toUpperCase() + itemName.slice(1);
-      state.shopping.unshift({ id: 's_' + Date.now(), name: cap, checked: false, source: 'manual' });
-      persistState();
-      updateAllViews();
-      showToast(`"${cap}" aggiunto alla Lista Spesa!`);
-    }
-
-    function renderRecipes() {
-      const names = state.items.map(i => i.name.toLowerCase());
-      const has = (kw) => names.some(n => n.includes(kw));
-      const ideas = [
-        { title: 'Pasta al Pomodoro e Mozzarella Filante', needs: ['pasta', 'pomodoro', 'mozzarella'], time: '15 min' },
-        { title: 'Frittata Svuota-Frigo con Uova e Formaggio', needs: ['uova', 'latte', 'parmigiano'], time: '12 min' },
-        { title: 'Pasta Tonno e Olio Extra Vergine', needs: ['pasta', 'tonno', 'olio'], time: '12 min' }
-      ];
-      const container = document.getElementById('recipes-list');
-      if (!container) return;
-      container.innerHTML = ideas.map(r => {
-        const matched = r.needs.filter(has);
-        const missing = r.needs.filter(k => !has(k));
-        return `
-          <div class="p-3.5 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-2">
-            <div class="flex items-center justify-between gap-2">
-              <h4 class="text-sm font-extrabold text-slate-900">${r.title}</h4>
-              <span class="text-[11px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 shrink-0">⏱ ${r.time}</span>
-            </div>
-            <p class="text-xs text-slate-600">Ingredienti in casa: <strong class="text-emerald-700">${matched.length}/${r.needs.length}</strong> (${matched.join(', ') || 'nessuno'})</p>
-            ${missing.length ? `
-              <div class="flex items-center gap-1.5 flex-wrap pt-0.5">
-                <span class="text-[11px] text-slate-500">Manca:</span>
-                ${missing.map(m => `<button type="button" onclick="addMissingToShopping('${escapeHtml(m)}')" class="px-2 py-0.5 rounded-lg bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-[11px] font-bold text-emerald-800 cursor-pointer">+ ${escapeHtml(m)} in Lista</button>`).join('')}
-              </div>
-            ` : `<span class="inline-block text-[11px] font-extrabold text-emerald-700">✓ Hai tutti gli ingredienti in casa!</span>`}
-          </div>
-        `;
-      }).join('');
-    }
-
-    function changeQty(id, delta) {
-      const idx = state.items.findIndex(i => i.id === id);
-      if (idx === -1) return;
-      const next = Math.max(0, Number(state.items[idx].qty) + delta);
-      if (next === 0) {
-        const removed = state.items.splice(idx, 1)[0];
-        showToast(`${removed.name} terminato!`);
-      } else {
-        state.items[idx].qty = next;
-      }
-      persistState();
-      updateAllViews();
-    }
-
-    function openItemModal(itemOrPreset = null) {
-      const obj = typeof itemOrPreset === 'string'
-        ? state.items.find(i => i.id === itemOrPreset) || null
-        : itemOrPreset;
-      const isEdit = Boolean(obj && obj.id);
-      document.getElementById('item-modal-title').textContent = isEdit ? 'Modifica Prodotto' : 'Nuovo Prodotto';
-      document.getElementById('prod-id').value = isEdit ? obj.id : '';
-      document.getElementById('prod-name').value = obj?.name || '';
-      document.getElementById('prod-location').value = obj?.location === 'dispensa' ? 'dispensa' : 'frigo';
-      document.getElementById('prod-expiry').value = obj?.expiry || addDaysIso(5);
-      document.getElementById('prod-qty').value = obj?.qty ?? 1;
-      document.getElementById('prod-unit').value = obj?.unit || 'pz';
-      document.getElementById('btn-delete-prod').classList.toggle('hidden', !isEdit);
-      document.getElementById('item-modal').classList.remove('hidden');
-    }
-
-    function saveProductForm(e) {
-      e.preventDefault();
-      const id = document.getElementById('prod-id').value;
-      const payload = {
-        id: id || 'p_' + Date.now(),
-        name: document.getElementById('prod-name').value.trim(),
-        location: document.getElementById('prod-location').value,
-        expiry: document.getElementById('prod-expiry').value,
-        qty: parseInt(document.getElementById('prod-qty').value, 10) || 1,
-        unit: document.getElementById('prod-unit').value
-      };
-      if (id) {
-        const idx = state.items.findIndex(i => i.id === id);
-        if (idx !== -1) state.items[idx] = payload;
-      } else {
-        state.items.unshift(payload);
-      }
-      persistState();
-      closeModal('item-modal');
-      updateAllViews();
-      showToast(payload.location === 'dispensa' ? 'Salvato in Dispensa!' : 'Salvato in Frigo!');
-    }
-
-    function deleteCurrentProduct() {
-      const id = document.getElementById('prod-id').value;
-      state.items = state.items.filter(i => i.id !== id);
-      persistState();
-      closeModal('item-modal');
-      updateAllViews();
-      showToast('Prodotto eliminato');
-    }
-
-    function closeModal(id) {
-      document.getElementById(id).classList.add('hidden');
-    }
-
-    function addShoppingManual(e) {
-      e.preventDefault();
-      const input = document.getElementById('shopping-input');
-      const name = input.value.trim();
-      if (!name) return;
-      state.shopping.unshift({ id: 's_' + Date.now(), name, checked: false, source: 'manual' });
-      input.value = '';
-      persistState();
-      updateAllViews();
-    }
-
-    function simulateAlexaSyncRefresh() {
-      const samples = ['Pane fresco', 'Avocado maturi', 'Biscotti integrali', 'Acqua frizzante'];
-      const pick = samples[Math.floor(Math.random() * samples.length)];
-      state.shopping.unshift({ id: 's_' + Date.now(), name: pick, checked: false, source: 'alexa' });
-      persistState();
-      updateAllViews();
-      showToast(`Sync Alexa: aggiunto "${pick}"!`);
-    }
-
-    function toggleShoppingCheck(id) {
-      const item = state.shopping.find(i => i.id === id);
-      if (item) {
-        item.checked = !item.checked;
-        persistState();
-        updateAllViews();
-      }
-    }
-
-    function moveCheckedToLocation(loc) {
-      const checked = state.shopping.filter(i => i.checked);
-      if (!checked.length) return;
-      checked.forEach((c, idx) => {
-        state.items.unshift({
-          id: 'p_' + Date.now() + '_' + idx,
-          name: c.name,
-          location: loc,
-          qty: 1,
-          unit: 'pz',
-          expiry: addDaysIso(loc === 'dispensa' ? 90 : 5)
-        });
-      });
-      state.shopping = state.shopping.filter(i => !i.checked);
-      persistState();
-      updateAllViews();
-      showToast(`Spostati ${checked.length} prodotti ${loc === 'dispensa' ? 'in Dispensa' : 'in Frigo'}!`);
-    }
-
-    function renderShopping() {
-      const pending = state.shopping.filter(i => !i.checked);
-      const checked = state.shopping.filter(i => i.checked);
-      document.getElementById('shopping-subtitle').textContent = `${pending.length} da comprare • Sincronizzata con Alexa`;
-      const bar = document.getElementById('shopping-checked-bar');
-      bar.classList.toggle('hidden', checked.length === 0);
-      document.getElementById('shopping-checked-label').textContent = `${checked.length} nel carrello`;
-
-      const container = document.getElementById('shopping-list');
-      if (!container) return;
-      const sorted = [...state.shopping].sort((a, b) => (a.checked === b.checked ? 0 : a.checked ? 1 : -1));
-      container.innerHTML = sorted.map(item => `
-        <div onclick="toggleShoppingCheck('${item.id}')" class="cursor-pointer p-3 rounded-2xl border ${item.checked ? 'bg-slate-100 border-slate-200 opacity-60' : 'bg-white border-slate-200 shadow-xs'} flex items-center justify-between gap-2.5">
-          <div class="flex items-center gap-3 min-w-0">
-            <div class="w-6 h-6 rounded-lg border-2 flex items-center justify-center shrink-0 ${item.checked ? 'bg-emerald-600 border-emerald-600 text-white' : 'border-slate-300'}">${item.checked ? '✓' : ''}</div>
-            <p class="text-sm font-bold ${item.checked ? 'line-through text-slate-500' : 'text-slate-900'} truncate">${escapeHtml(item.name)}</p>
-          </div>
-          ${item.source === 'alexa' ? `<span class="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-sky-100 text-sky-800 shrink-0">Alexa</span>` : ''}
-        </div>
-      `).join('');
-    }
-
-    let frigoRecognition = null;
-    let isFrigoListening = false;
-    let frigoTtsEnabled = true;
-
-    function getFixedItalianVoice() {
-      if (!('speechSynthesis' in window)) return null;
-      const voices = window.speechSynthesis.getVoices() || [];
-      return (
-        voices.find(v => (v.name || '').trim().toLowerCase() === 'google italiano') ||
-        voices.find(v => (v.name || '').trim().toLowerCase() === 'italiano') ||
-        voices.find(v => (v.lang || '').toLowerCase().startsWith('it') && (v.name || '').toLowerCase().includes('italiano')) ||
-        voices.find(v => (v.lang || '').toLowerCase().startsWith('it')) ||
-        null
-      );
-    }
-
-    if ('speechSynthesis' in window) {
-      window.speechSynthesis.getVoices();
-      window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
-    }
-
-    function speakFrigoReply(text) {
-      if (!frigoTtsEnabled || !('speechSynthesis' in window)) return;
-      try {
-        window.speechSynthesis.cancel();
-        const runSpeak = () => {
-          const voiceIt = getFixedItalianVoice();
-          const utter = new SpeechSynthesisUtterance(String(text || ''));
-          utter.lang = 'it-IT';
-          if (voiceIt) utter.voice = voiceIt;
-          utter.rate = 0.96;
-          utter.pitch = 1.03;
-          window.speechSynthesis.speak(utter);
-        };
-        if (window.speechSynthesis.getVoices().length === 0) {
-          setTimeout(runSpeak, 140);
-        } else {
-          runSpeak();
-        }
-      } catch (e) {}
-    }
-
-    function previewItalianVoice() {
-      speakFrigoReply('Ciao! Sono pronto ad aiutarti con il frigo, la dispensa e la lista della spesa.');
-    }
-
-    function toggleFrigoTts() {
-      frigoTtsEnabled = !frigoTtsEnabled;
-      const btn = document.getElementById('btn-frigo-tts-toggle');
-      btn.textContent = frigoTtsEnabled ? '🔊 Voce ON' : '🔇 Voce OFF';
-      if (!frigoTtsEnabled && 'speechSynthesis' in window) window.speechSynthesis.cancel();
-    }
-
-    function openFrigoVoiceModal(autoStart = true) {
-      document.getElementById('frigo-voice-modal').classList.remove('hidden');
-      document.getElementById('frigo-voice-transcript').textContent = '«Parla ora...»';
-      if (autoStart) startFrigoListening();
-    }
-
-    function closeFrigoVoiceModal() {
-      if (frigoRecognition) { try { frigoRecognition.stop(); } catch (e) {} }
-      isFrigoListening = false;
-      if ('speechSynthesis' in window) window.speechSynthesis.cancel();
-      document.getElementById('frigo-voice-modal').classList.add('hidden');
-    }
-
-    function toggleFrigoListening() {
-      if (isFrigoListening) {
-        if (frigoRecognition) { try { frigoRecognition.stop(); } catch (e) {} }
-        isFrigoListening = false;
-        document.getElementById('frigo-voice-orb').classList.remove('voice-orb-listening');
-        document.getElementById('frigo-voice-eq').classList.add('hidden');
-        document.getElementById('frigo-voice-status').textContent = 'Tocca il microfono per parlare';
-      } else {
-        startFrigoListening();
-      }
-    }
-
-    function startFrigoListening() {
-      const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
-      if (!SpeechRec) {
-        document.getElementById('frigo-voice-status').textContent = 'Usa i comandi rapidi o scrivi sotto';
-        return;
-      }
-      let finalText = '';
-      frigoRecognition = new SpeechRec();
-      frigoRecognition.lang = 'it-IT';
-      frigoRecognition.interimResults = true;
-      frigoRecognition.onstart = () => {
-        isFrigoListening = true;
-        document.getElementById('frigo-voice-orb').classList.add('voice-orb-listening');
-        document.getElementById('frigo-voice-eq').classList.remove('hidden');
-        document.getElementById('frigo-voice-eq').classList.add('flex');
-        document.getElementById('frigo-voice-status').textContent = 'Ti ascolto...';
-      };
-      frigoRecognition.onresult = (e) => {
-        let txt = '';
-        for (let i = e.resultIndex; i < e.results.length; i++) txt += e.results[i][0].transcript;
-        if (txt.trim()) {
-          finalText = txt.trim();
-          document.getElementById('frigo-voice-transcript').textContent = `«${finalText}»`;
-        }
-      };
-      frigoRecognition.onend = () => {
-        isFrigoListening = false;
-        document.getElementById('frigo-voice-orb').classList.remove('voice-orb-listening');
-        document.getElementById('frigo-voice-eq').classList.add('hidden');
-        document.getElementById('frigo-voice-status').textContent = 'Tocca il microfono per parlare di nuovo';
-        if (finalText) processFrigoVoiceCommand(finalText);
-      };
-      try { frigoRecognition.start(); } catch (e) {}
-    }
-
-    function runDemoVoiceCommand(cmd) {
-      document.getElementById('frigo-voice-transcript').textContent = `«${cmd}»`;
-      processFrigoVoiceCommand(cmd);
-    }
-
-    function submitTypedCommand(e) {
-      e.preventDefault();
-      const inp = document.getElementById('frigo-voice-typed');
-      const val = inp.value.trim();
-      if (!val) return;
-      inp.value = '';
-      runDemoVoiceCommand(val);
-    }
-
-    function showFrigoVoiceResponse(badge, reply) {
-      document.getElementById('frigo-res-badge').textContent = badge;
-      document.getElementById('frigo-res-text').textContent = reply;
-      document.getElementById('frigo-voice-response').classList.remove('hidden');
-      speakFrigoReply(reply);
-    }
-
-    function extractQtyAndName(rawText) {
-      const wordNums = { un: 1, uno: 1, una: 1, due: 2, tre: 3, quattro: 4, cinque: 5, sei: 6, sette: 7, otto: 8, nove: 9, dieci: 10 };
-      let qty = null;
-      const digitMatch = rawText.match(/\b(\d{1,3})\b/);
-      if (digitMatch) {
-        qty = parseInt(digitMatch[1], 10);
-      } else {
-        for (const w of rawText.toLowerCase().split(/\s+/)) {
-          if (wordNums[w] !== undefined) { qty = wordNums[w]; break; }
-        }
-      }
-      let unit = 'pz';
-      if (/\blitr[io]\b/i.test(rawText)) unit = 'litri';
-      else if (/\bpacch[io]\b/i.test(rawText)) unit = 'pacchi';
-      else if (/\bconfezion[ei]\b/i.test(rawText)) unit = 'confezioni';
-
-      let cleaned = rawText
-        .replace(/^(?:aggiungi|metti|inserisci|ho\s+consumato|consumato|ho\s+usato|usato|ho\s+finito|finito|finita|togli|rimuovi|scala|scarica)\b\s*/i, '')
-        .replace(/\b(?:nella\s+dispensa|in\s+dispensa|dalla\s+dispensa|dispensa|nel\s+frigo|in\s+frigo|dal\s+frigo|frigo)\b/gi, ' ')
-        .replace(/\b(?:litri|litro|pacchi|pacco|confezioni|confezione|pezzi|pezzo|pz)\b\s*(?:di\s+)?/gi, ' ');
-
-      if (qty !== null) {
-        cleaned = cleaned.replace(new RegExp('^\\b(?:' + qty + '|un|uno|una|due|tre|quattro|cinque|sei|sette|otto|nove|dieci)\\b\\s*(?:di\\s+)?', 'i'), '');
-      }
-      cleaned = cleaned.replace(/^(?:il|lo|la|i|gli|le|del|dello|della|dei|degli|delle|un|uno|una)\b\s*/i, '');
-      cleaned = cleaned.replace(/\s+/g, ' ').replace(/[?.!]+$/, '').trim();
-      return { qty, unit, name: cleaned };
-    }
-
-    function processFrigoVoiceCommand(cmd) {
-      const rawTrimmed = String(cmd || '').trim();
-      const l = rawTrimmed.toLowerCase();
-      const mentionsPantry = /\b(?:in\s+dispensa|nella\s+dispensa|dalla\s+dispensa|dispensa)\b/.test(l);
-      const mentionsFridge = /\b(?:in\s+frigo|nel\s+frigo|dal\s+frigo|frigo)\b/.test(l);
-
-      const formatItalianExpiry = (isoDate) => {
-        if (!isoDate) return 'senza data di scadenza impostata';
-        const d = daysUntil(isoDate);
-        const [y, m, day] = isoDate.split('-');
-        const dateStr = `${day}/${m}/${y}`;
-        if (d < 0) return `è scaduto il ${dateStr} (${Math.abs(d)} ${Math.abs(d) === 1 ? 'giorno' : 'giorni'} fa)`;
-        if (d === 0) return `scade oggi (${dateStr})`;
-        if (d === 1) return `scade domani (${dateStr})`;
-        return `scade il ${dateStr}, tra ${d} giorni`;
-      };
-
-      const findMatchingProducts = (queryText) => {
-        const stopWords = new Set([
-          'quando', 'scade', 'scadono', 'scadenza', 'data', 'cosa', 'che', 'quale', 'quali',
-          'abbiamo', 'hai', 'sono', 'ce', 'cè', 'ci', 'quanto', 'quanta', 'quanti', 'quante',
-          'dove', 'sta', 'stanno', 'per', 'scadere', 'scaduti', 'scaduto', 'dimmi', 'controlla',
-          'verifica', 'guarda', 'vedi', 'nel', 'nella', 'nei', 'nelle', 'del', 'dello', 'della',
-          'dei', 'degli', 'delle', 'al', 'allo', 'alla', 'frigo', 'dispensa', 'casa', 'in', 'a',
-          'il', 'lo', 'la', 'i', 'gli', 'le', 'un', 'uno', 'una', 'di', 'da', 'con', 'su', 'o', 'e'
-        ]);
-        const tokens = queryText
-          .toLowerCase()
-          .replace(/[?.!,;:'"’]+/g, ' ')
-          .split(/\s+/)
-          .filter(w => w.length >= 3 && !stopWords.has(w));
-
-        if (!tokens.length) return [];
-        return state.items.filter(item => {
-          const itemName = item.name.toLowerCase();
-          return tokens.some(tok => {
-            const stem = tok.length > 4 ? tok.slice(0, -1) : tok;
-            return itemName.includes(tok) || itemName.includes(stem);
-          });
-        });
-      };
-
-      if (/\b(?:lista\s+(?:della\s+)?spesa|compra|comprare|devo\s+prendere)\b/.test(l)) {
-        const cleaned = rawTrimmed
-          .replace(/^(?:aggiungi|metti|inserisci|devo\s+comprare|compra|devo\s+prendere)\b\s*(?:alla\s+lista\s+(?:della\s+)?spesa|in\s+lista)?\s*/i, '')
-          .replace(/[?.!]+$/, '')
-          .trim();
-        if (!cleaned) {
-          showFrigoVoiceResponse('Lista Spesa', 'Dimmi pure cosa vuoi aggiungere alla lista della spesa.');
-          return;
-        }
-        const items = cleaned.split(/\s+e\s+|,\s*/i).map(s => s.trim()).filter(Boolean);
-        items.forEach((it, idx) => {
-          state.shopping.unshift({ id: 's_' + Date.now() + '_' + idx, name: it.charAt(0).toUpperCase() + it.slice(1), checked: false, source: 'manual' });
-        });
-        persistState();
-        updateAllViews();
-        const reply = items.length > 1
-          ? `Perfetto! Ho aggiunto ${items.join(' e ')} alla lista della spesa.`
-          : `Perfetto! Ho aggiunto ${items[0]} alla lista della spesa.`;
-        showFrigoVoiceResponse('Lista Spesa', reply);
-        return;
-      }
-
-      if (/^(?:ho\s+consumato|consumato|ho\s+usato|usato|ho\s+finito|finito|finita|togli|rimuovi|scala|scarica)\b/.test(l)) {
-        const isFinishedAll = /^(?:ho\s+finito|finito|finita)\b/.test(l);
-        const parsed = extractQtyAndName(rawTrimmed);
-        const amountToRemove = parsed.qty !== null ? parsed.qty : 1;
-        const searchKey = parsed.name.toLowerCase();
-
-        const candidates = state.items.filter(it => {
-          const matchName = it.name.toLowerCase().includes(searchKey) || searchKey.includes(it.name.toLowerCase());
-          if (!matchName) return false;
-          if (mentionsPantry) return it.location === 'dispensa';
-          if (mentionsFridge) return it.location !== 'dispensa';
-          return true;
-        });
-
-        if (candidates.length === 0) {
-          const placeTxt = mentionsPantry ? 'in dispensa' : (mentionsFridge ? 'in frigo' : 'in casa');
-          showFrigoVoiceResponse('Non trovato', `Non ho trovato ${parsed.name || 'questo prodotto'} ${placeTxt}.`);
-          return;
-        }
-
-        const target = candidates[0];
-        const fromWhere = target.location === 'dispensa' ? 'dalla dispensa' : 'dal frigo';
-        const remaining = isFinishedAll ? 0 : Math.max(0, Number(target.qty) - amountToRemove);
-
-        if (remaining === 0) {
-          state.items = state.items.filter(it => it.id !== target.id);
-          persistState();
-          updateAllViews();
-          showFrigoVoiceResponse(
-            target.location === 'dispensa' ? 'Terminato in Dispensa' : 'Terminato in Frigo',
-            `Ho rimosso ${target.name} ${fromWhere} perché è finito. Vuoi che lo aggiunga alla lista della spesa?`
-          );
-        } else {
-          target.qty = remaining;
-          persistState();
-          updateAllViews();
-          const unitTxt = remaining === 1 && target.unit === 'litri' ? 'litro' : (target.unit || 'pz');
-          showFrigoVoiceResponse(
-            target.location === 'dispensa' ? 'Scalato dalla Dispensa' : 'Scalato dal Frigo',
-            `Aggiornato! Ho tolto ${amountToRemove} di ${target.name} ${fromWhere}. Te ne restano ancora ${remaining} ${unitTxt}.`
-          );
-        }
-        return;
-      }
-
-      const isExpiryQuestion = /\b(?:quando\s+scad|scade|scadono|scadenza|in\s+scadenza|sta\s+per\s+scadere|stanno\s+per\s+scadere|scadut[oiae])\b/.test(l);
-      if (isExpiryQuestion) {
-        const matches = findMatchingProducts(rawTrimmed);
-        if (matches.length > 0) {
-          const details = matches.map(m => {
-            const whereTxt = m.location === 'dispensa' ? 'in dispensa' : 'in frigo';
-            return `${m.name} (${whereTxt}) ${formatItalianExpiry(m.expiry)}`;
-          }).join('; ');
-          showFrigoVoiceResponse('Info Scadenza', `${details}.`);
-          return;
-        }
-
-        const thresh = state.expiryThresholdDays || 3;
-        const urgent = state.items
-          .filter(i => daysUntil(i.expiry) <= thresh)
-          .sort((a, b) => daysUntil(a.expiry) - daysUntil(b.expiry));
-
-        if (!/\b(?:cosa|che|quali|prodotti|cibo|alimenti)\b/.test(l)) {
-          showFrigoVoiceResponse('Non in inventario', 'Non ho trovato questo prodotto né in frigo né in dispensa.');
-          return;
-        }
-        if (urgent.length === 0) {
-          showFrigoVoiceResponse('Tutto ok', `Ottime notizie! Non hai nessun prodotto scaduto o in scadenza nei prossimi ${thresh} giorni.`);
-        } else {
-          const listTxt = urgent.slice(0, 4).map(u => `${u.name} (${formatItalianExpiry(u.expiry)})`).join(', ');
-          showFrigoVoiceResponse('In Scadenza', `Ecco cosa controllare: ${listTxt}.`);
-        }
-        return;
-      }
-
-      const isGeneralQuestion =
-        rawTrimmed.endsWith('?') ||
-        /^(?:quando|cosa|che|quale|quali|quanto|quanta|quanti|quante|dove|come|perché|perche|abbiamo|c['’]è|ci\s+sono|hai|dimmi|controlla|verifica|guarda|vedi|elenca|lista)\b/.test(l);
-
-      if (isGeneralQuestion) {
-        if (/\b(?:cosa\s+c['’]è|cosa\s+abbiamo|elenca|contenuto)\b/.test(l) && (mentionsFridge || mentionsPantry)) {
-          const locTarget = mentionsPantry ? 'dispensa' : 'frigo';
-          const list = state.items.filter(i => (i.location === 'dispensa' ? 'dispensa' : 'frigo') === locTarget);
-          if (list.length === 0) {
-            showFrigoVoiceResponse('Vuoto', `Al momento non hai nulla ${locTarget === 'dispensa' ? 'in dispensa' : 'in frigo'}.`);
-          } else {
-            const summary = list.slice(0, 5).map(i => `${i.name} (${i.qty} ${i.unit})`).join(', ');
-            showFrigoVoiceResponse(locTarget === 'dispensa' ? 'In Dispensa' : 'In Frigo', `Hai ${list.length} prodotti: ${summary}.`);
-          }
-          return;
-        }
-
-        const matches = findMatchingProducts(rawTrimmed);
-        if (matches.length > 0) {
-          const descr = matches.map(m => {
-            const whereTxt = m.location === 'dispensa' ? 'in dispensa' : 'in frigo';
-            const expTxt = m.expiry ? ` e ${formatItalianExpiry(m.expiry)}` : '';
-            return `${m.name}: ne hai ${m.qty} ${m.unit} ${whereTxt}${expTxt}`;
-          }).join('. ');
-          showFrigoVoiceResponse('Trovato', `${descr}.`);
-        } else {
-          showFrigoVoiceResponse('Non trovato', 'Non risulta né in frigo né in dispensa. Se vuoi aggiungerlo alla spesa, dimmi "Aggiungi alla lista spesa" seguito dal nome.');
-        }
-        return;
-      }
-
-      const explicitAdd = /^(?:aggiungi|metti|inserisci|salva|ho\s+comprato|comprato|riponi)\b/.test(l);
-      const wordCount = rawTrimmed.split(/\s+/).length;
-      if (!explicitAdd && wordCount > 5) {
-        showFrigoVoiceResponse('Non ho capito bene', 'Non ho aggiunto nulla per sicurezza. Puoi chiedermi ad esempio "Quando scade la mozzarella?" oppure dire "Metti in frigo 2 mozzarelle".');
-        return;
-      }
-
-      const parsed = extractQtyAndName(rawTrimmed);
-      const qty = parsed.qty !== null ? parsed.qty : 1;
-      const targetLoc = mentionsPantry ? 'dispensa' : 'frigo';
-      const capName = parsed.name ? parsed.name.charAt(0).toUpperCase() + parsed.name.slice(1) : 'Prodotto';
-
-      state.items.unshift({
-        id: 'p_' + Date.now(),
-        name: capName,
-        location: targetLoc,
-        qty,
-        unit: parsed.unit,
-        expiry: addDaysIso(targetLoc === 'dispensa' ? 90 : 5)
-      });
-      persistState();
-      updateAllViews();
-
-      const whereLabel = targetLoc === 'dispensa' ? 'in dispensa' : 'nel frigo';
-      const badgeLabel = targetLoc === 'dispensa' ? 'Aggiunto in Dispensa' : 'Aggiunto in Frigo';
-      const reply = `Ho aggiunto ${qty} ${parsed.unit} di ${capName} ${whereLabel}.`;
-      showFrigoVoiceResponse(badgeLabel, reply);
-    }
-
-    (function initDraggableWidget() {
-      const widget = document.getElementById('floating-voice-widget');
-      const handle = document.getElementById('floating-voice-drag-handle');
-      let dragging = false, moved = false, sx = 0, sy = 0, ol = 0, ot = 0;
-
-      handle.addEventListener('pointerdown', (e) => {
-        const r = widget.getBoundingClientRect();
-        dragging = true; moved = false; sx = e.clientX; sy = e.clientY; ol = r.left; ot = r.top;
-        widget.style.right = 'auto'; widget.style.bottom = 'auto';
-        widget.style.left = ol + 'px'; widget.style.top = ot + 'px';
-        try { handle.setPointerCapture(e.pointerId); } catch (err) {}
-      });
-      handle.addEventListener('pointermove', (e) => {
-        if (!dragging) return;
-        const dx = e.clientX - sx, dy = e.clientY - sy;
-        if (Math.abs(dx) > 5 || Math.abs(dy) > 5) moved = true;
-        if (!moved) return;
-        widget.style.left = Math.min(Math.max(8, ol + dx), window.innerWidth - widget.offsetWidth - 8) + 'px';
-        widget.style.top = Math.min(Math.max(8, ot + dy), window.innerHeight - widget.offsetHeight - 8) + 'px';
-      });
-      handle.addEventListener('pointerup', (e) => {
-        if (!dragging) return;
-        dragging = false;
-        try { handle.releasePointerCapture(e.pointerId); } catch (err) {}
-        if (!moved) openFrigoVoiceModal(true);
-      });
-    })();
-
-    function hideFloatingVoiceWidget(e) {
-      if (e) e.stopPropagation();
-      document.getElementById('floating-voice-widget').classList.add('hidden');
-      showToast('Tasto vocale nascosto');
-    }
-
-    recoverAnyLocalState();
-    syncFamilyAndWorkerUI();
-    syncExpiryThresholdUI();
-    updateAllViews();
-    registerServiceWorkerAndUpdates();
-  </scr` + `ipt>
+  </script>
 </body>
 </html>
