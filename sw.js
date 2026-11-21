@@ -1,38 +1,56 @@
-const CACHE_NAME = 'frigoscan-v14-cache';
-const STATIC_ASSETS = ['./', './index.html', './manifest.json', './icon.svg'];
+const CACHE_NAME = 'frigoscan-v14-6-cache';
+const STATIC_ASSETS = [
+  './',
+  './index.html',
+  './manifest.json',
+  './icon.svg'
+];
 
+// 1. Installazione: attiva immediatamente il nuovo Service Worker senza attendere
 self.addEventListener('install', (event) => {
+  self.skipWaiting();
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(STATIC_ASSETS)).catch(() => {})
+    caches.open(CACHE_NAME)
+      .then((cache) => cache.addAll(STATIC_ASSETS))
+      .catch(() => {})
   );
 });
 
+// 2. Attivazione: pulisce le vecchie cache dei file e prende subito il controllo
 self.addEventListener('activate', (event) => {
   event.waitUntil(
-    caches.keys().then((keys) =>
-      Promise.all(keys.filter((k) => k !== CACHE_NAME).map((k) => caches.delete(k)))
-    ).then(() => self.clients.claim())
+    caches.keys()
+      .then((keys) =>
+        Promise.all(
+          keys
+            .filter((key) => key !== CACHE_NAME)
+            .map((oldKey) => caches.delete(oldKey))
+        )
+      )
+      .then(() => self.clients.claim())
   );
 });
 
-self.addEventListener('message', (event) => {
-  if (event.data && event.data.type === 'SKIP_WAITING') {
-    self.skipWaiting();
-  }
-});
-
+// 3. Strategia Network-First: scarica sempre l'ultima versione da GitHub;
+//    usa la cache locale solo se il telefono è offline.
 self.addEventListener('fetch', (event) => {
   const req = event.request;
   if (req.method !== 'GET') return;
+
+  const url = new URL(req.url);
+  if (url.origin !== self.location.origin) return;
+
   event.respondWith(
-    fetch(req)
-      .then((res) => {
-        if (res && res.status === 200 && res.type === 'basic') {
-          const clone = res.clone();
-          caches.open(CACHE_NAME).then((cache) => cache.put(req, clone));
+    fetch(req, { cache: 'no-store' })
+      .then((networkResponse) => {
+        if (networkResponse && networkResponse.status === 200) {
+          const responseClone = networkResponse.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(req, responseClone));
         }
-        return res;
+        return networkResponse;
       })
-      .catch(() => caches.match(req).then((cached) => cached || caches.match('./index.html')))
+      .catch(() => {
+        return caches.match(req).then((cached) => cached || caches.match('./index.html'));
+      })
   );
 });
