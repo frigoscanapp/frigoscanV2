@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>FrigoScan v14.4 — Inventario Frigo, Dispensa & Assistente Vocale</title>
+  <title>FrigoScan v14.5 — Inventario Frigo, Dispensa & Assistente Vocale</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     * { -webkit-tap-highlight-color: transparent; }
@@ -403,7 +403,7 @@
       <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2.5">
         <div class="flex items-center justify-between">
           <span class="text-[10px] font-extrabold uppercase tracking-wider text-slate-500">Gestione Dati &amp; Aggiornamenti</span>
-          <span class="text-[10px] font-mono font-bold text-slate-400">v14.4 • SafeStorage</span>
+          <span class="text-[10px] font-mono font-bold text-slate-400">v14.5 • SafeStorage</span>
         </div>
         <div class="grid grid-cols-2 gap-2">
           <button type="button" onclick="exportBackupJSON()" class="py-2 px-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition cursor-pointer">
@@ -491,7 +491,7 @@
           <button type="button" onclick="runDemoVoiceCommand('Aggiungi un litro di latte')" class="text-left px-2.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/15 text-[11px] text-slate-200 cursor-pointer">"Aggiungi un litro di latte"</button>
           <button type="button" onclick="runDemoVoiceCommand('Quando scade la mozzarella?')" class="text-left px-2.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/15 text-[11px] text-slate-200 cursor-pointer">"Quando scade la mozzarella?"</button>
           <button type="button" onclick="runDemoVoiceCommand('Metti in dispensa 3 pacchi di pasta')" class="text-left px-2.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/15 text-[11px] text-slate-200 cursor-pointer">"Metti in dispensa 3 pacchi di pasta"</button>
-          <button type="button" onclick="runDemoVoiceCommand('Ho consumato 1 latte fresco')" class="text-left px-2.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/15 text-[11px] text-slate-200 cursor-pointer">"Ho consumato 1 latte fresco"</button>
+          <button type="button" onclick="runDemoVoiceCommand('Rimuovi tutto lo yogurt naturale')" class="text-left px-2.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/15 text-[11px] text-slate-200 cursor-pointer">"Rimuovi tutto lo yogurt naturale"</button>
           <button type="button" onclick="runDemoVoiceCommand('Aggiungi alla lista della spesa uova e pomodori')" class="text-left px-2.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/15 text-[11px] text-slate-200 cursor-pointer">"Aggiungi alla lista spesa uova e pomodori"</button>
         </div>
       </div>
@@ -1292,14 +1292,15 @@
       else if (/\bconfezion[ei]\b/i.test(rawText)) unit = 'confezioni';
 
       let cleaned = rawText
-        .replace(/^(?:aggiungi|metti|inserisci|salva|ho\s+comprato|comprato|riponi|ho\s+consumato|consumato|ho\s+usato|usato|ho\s+finito|finito|finita|togli|rimuovi|scala|scarica)\b\s*/i, '')
+        .replace(/^(?:aggiungi|metti|inserisci|salva|ho\s+comprato|comprato|riponi|ho\s+consumato|consumato|ho\s+usato|usato|ho\s+finito|finito|finita|togli|rimuovi|elimina|cancella|butta|ho\s+buttato|scala|scarica)\b\s*/i, '')
+        .replace(/\b(?:tutto|tutta|tutti|tutte|interamente|completamente)\b\s*/gi, ' ')
         .replace(/\b(?:nella\s+dispensa|in\s+dispensa|dalla\s+dispensa|dispensa|nel\s+frigo|in\s+frigo|dal\s+frigo|frigo)\b/gi, ' ')
         .replace(/\b(?:litri|litro|pacchi|pacco|confezioni|confezione|pezzi|pezzo|pz)\b\s*(?:di\s+)?/gi, ' ');
 
       if (qty !== null) {
         cleaned = cleaned.replace(new RegExp('^\\b(?:' + qty + '|un|uno|una|due|tre|quattro|cinque|sei|sette|otto|nove|dieci)\\b\\s*(?:di\\s+)?', 'i'), '');
       }
-      cleaned = cleaned.replace(/^(?:il|lo|la|i|gli|le|del|dello|della|dei|degli|delle|un|uno|una)\b\s*/i, '');
+      cleaned = cleaned.replace(/^(?:il|lo|la|i|gli|le|del|dello|della|dei|degli|delle|un|uno|una|l['’])\s*/i, '');
       cleaned = cleaned.replace(/\s+/g, ' ').replace(/[?.!]+$/, '').trim();
       return { qty, unit, name: cleaned };
     }
@@ -1409,47 +1410,48 @@
         return;
       }
 
-      // 2. TOGLI / CONSUMA / FINITO
-      if (/^(?:ho\s+consumato|consumato|ho\s+usato|usato|ho\s+finito|finito|finita|togli|rimuovi|scala|scarica)\b/.test(l)) {
-        const isFinishedAll = /^(?:ho\s+finito|finito|finita)\b/.test(l);
+      // 2. TOGLI / CONSUMA / FINITO / RIMUOVI TUTTO
+      if (/^(?:ho\s+consumato|consumato|ho\s+usato|usato|ho\s+finito|finito|finita|togli|rimuovi|elimina|cancella|butta|ho\s+buttato|scala|scarica)\b/.test(l)) {
+        const explicitLoc = mentionsPantry ? 'dispensa' : (mentionsFridge ? 'frigo' : null);
+        const removeEverything = /\b(?:tutto|tutta|tutti|tutte|interamente|completamente|ho\s+finito|finito|finita)\b/.test(l);
         const parsed = extractQtyAndName(rawTrimmed);
         const amountToRemove = parsed.qty !== null ? parsed.qty : 1;
-        const searchKey = parsed.name.toLowerCase();
 
-        const candidates = state.items.filter(it => {
-          const matchName = it.name.toLowerCase().includes(searchKey) || searchKey.includes(it.name.toLowerCase());
-          if (!matchName) return false;
-          if (mentionsPantry) return it.location === 'dispensa';
-          if (mentionsFridge) return it.location !== 'dispensa';
-          return true;
-        });
-
-        if (candidates.length === 0) {
-          const placeTxt = mentionsPantry ? 'in dispensa' : (mentionsFridge ? 'in frigo' : 'in casa');
-          showFrigoVoiceResponse('Non trovato', `Non ho trovato ${parsed.name || 'questo prodotto'} ${placeTxt}.`);
+        if (!parsed.name) {
+          showFrigoVoiceResponse('Rimozione', 'Dimmi quale prodotto vuoi togliere o consumare.');
           return;
         }
 
-        const target = candidates[0];
-        const fromWhere = target.location === 'dispensa' ? 'dalla dispensa' : 'dal frigo';
-        const remaining = isFinishedAll ? 0 : Math.max(0, Number(target.qty) - amountToRemove);
+        const matchedItem = findExistingItemForMerge(parsed.name, explicitLoc) || (!explicitLoc ? findExistingItemForMerge(parsed.name, null) : null);
+
+        if (!matchedItem) {
+          const placeTxt = mentionsPantry ? 'in dispensa' : (mentionsFridge ? 'in frigo' : 'in casa');
+          showFrigoVoiceResponse('Non trovato', `Non ho trovato ${parsed.name} ${placeTxt}.`);
+          return;
+        }
+
+        const fromWhere = matchedItem.location === 'dispensa' ? 'dalla dispensa' : 'dal frigo';
+        const removedQty = Number(matchedItem.qty) || 1;
+        const remaining = removeEverything ? 0 : Math.max(0, removedQty - amountToRemove);
 
         if (remaining === 0) {
-          state.items = state.items.filter(it => it.id !== target.id);
+          state.items = state.items.filter(it => it.id !== matchedItem.id);
           persistState();
           updateAllViews();
+          const unitTxt = removedQty === 1 && matchedItem.unit === 'litri' ? 'litro' : (matchedItem.unit || 'pz');
+          const qtyDetail = removedQty > 1 ? ` (tutti e ${removedQty} ${unitTxt})` : '';
           showFrigoVoiceResponse(
-            target.location === 'dispensa' ? 'Terminato in Dispensa' : 'Terminato in Frigo',
-            `Ho rimosso ${target.name} ${fromWhere} perché è finito. Vuoi che lo aggiunga alla lista della spesa?`
+            matchedItem.location === 'dispensa' ? 'Rimosso dalla Dispensa' : 'Rimosso dal Frigo',
+            `Fatto! Ho rimosso completamente ${matchedItem.name}${qtyDetail} ${fromWhere}.`
           );
         } else {
-          target.qty = remaining;
+          matchedItem.qty = remaining;
           persistState();
           updateAllViews();
-          const unitTxt = remaining === 1 && target.unit === 'litri' ? 'litro' : (target.unit || 'pz');
+          const unitTxt = remaining === 1 && matchedItem.unit === 'litri' ? 'litro' : (matchedItem.unit || 'pz');
           showFrigoVoiceResponse(
-            target.location === 'dispensa' ? 'Scalato dalla Dispensa' : 'Scalato dal Frigo',
-            `Aggiornato! Ho tolto ${amountToRemove} di ${target.name} ${fromWhere}. Te ne restano ancora ${remaining} ${unitTxt}.`
+            matchedItem.location === 'dispensa' ? 'Scalato dalla Dispensa' : 'Scalato dal Frigo',
+            `Aggiornato! Ho tolto ${amountToRemove} di ${matchedItem.name} ${fromWhere}. Te ne restano ancora ${remaining} ${unitTxt}.`
           );
         }
         return;
