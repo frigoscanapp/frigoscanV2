@@ -3,18 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <meta name="theme-color" content="#059669" />
-  <meta name="mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="FrigoScan" />
-  <meta name="description" content="FrigoScan — Inventario Frigo, Dispensa, Lista Spesa Alexa & Assistente Vocale" />
-  <title>FrigoScan — Inventario Frigo, Dispensa & Assistente Vocale</title>
-
-  <link rel="manifest" href="./manifest.json" />
-  <link rel="icon" type="image/svg+xml" href="./icon.svg" />
-  <link rel="apple-touch-icon" href="./icon.svg" />
-
+  <title>FrigoScan v14.4 — Inventario Frigo, Dispensa & Assistente Vocale</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     * { -webkit-tap-highlight-color: transparent; }
@@ -124,23 +113,6 @@
           ✕
         </button>
       </div>
-    </div>
-
-    <!-- VOICE ASSISTANT HERO BANNER -->
-    <div class="p-3.5 rounded-2xl bg-gradient-to-r from-slate-900 via-emerald-950 to-slate-900 text-white shadow-md flex items-center justify-between gap-3">
-      <div onclick="openFrigoVoiceModal(true)" class="flex items-center gap-3 cursor-pointer flex-1 min-w-0">
-        <div class="w-11 h-11 rounded-2xl bg-emerald-600 flex items-center justify-center shrink-0 shadow-inner">
-          <svg class="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
-        </div>
-        <div class="min-w-0">
-          <div class="flex items-center gap-1.5 flex-wrap">
-            <span class="text-xs font-extrabold text-white">Assistente Vocale FrigoScan</span>
-            <span class="text-[9px] font-extrabold uppercase px-1.5 py-0.5 rounded bg-emerald-500/30 text-emerald-300 border border-emerald-400/30">Voce: Italiano</span>
-          </div>
-          <p class="text-[11px] text-slate-300 mt-0.5 truncate">"Quando scade la mozzarella?" • "Aggiungi un litro di latte"</p>
-        </div>
-      </div>
-      <button type="button" onclick="openFrigoVoiceModal(true)" class="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-xs font-extrabold text-white shrink-0 shadow-sm transition cursor-pointer">Parla</button>
     </div>
 
     <!-- ==================== TAB 1: IN FRIGO ==================== -->
@@ -430,8 +402,8 @@
 
       <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2.5">
         <div class="flex items-center justify-between">
-          <span class="text-[10px] font-extrabold uppercase tracking-wider text-slate-500">Gestione Dati &amp; GitHub</span>
-          <span class="text-[10px] font-mono font-bold text-slate-400">v14.3 • SafeStorage</span>
+          <span class="text-[10px] font-extrabold uppercase tracking-wider text-slate-500">Gestione Dati &amp; Aggiornamenti</span>
+          <span class="text-[10px] font-mono font-bold text-slate-400">v14.4 • SafeStorage</span>
         </div>
         <div class="grid grid-cols-2 gap-2">
           <button type="button" onclick="exportBackupJSON()" class="py-2 px-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition cursor-pointer">
@@ -447,7 +419,7 @@
             🔊 Alexa &amp; Sync
           </button>
           <button type="button" onclick="closeModal('gear-menu-modal'); showUpdateAvailableBanner()" class="py-2 px-2.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-emerald-900 text-xs font-extrabold transition cursor-pointer">
-            ↻ Verifica Update
+            ↻ Simula avviso update
           </button>
         </div>
       </div>
@@ -456,14 +428,13 @@
 
   <!-- ==================== FLOATING DRAGGABLE VOICE BUTTON ==================== -->
   <div id="floating-voice-widget" style="bottom: 20px; right: 16px; touch-action: none;" class="fixed z-40 flex items-center rounded-full bg-gradient-to-r from-slate-900 via-emerald-900 to-emerald-600 text-white shadow-2xl border border-white/20 select-none">
-    <div id="floating-voice-drag-handle" class="flex items-center gap-2 pl-3 pr-2.5 py-2.5 cursor-grab active:cursor-grabbing">
+    <div id="floating-voice-drag-handle" class="flex items-center gap-2 pl-3.5 pr-3.5 py-2.5 cursor-grab active:cursor-grabbing">
       <span class="w-7 h-7 rounded-full bg-emerald-500/30 border border-emerald-300/40 flex items-center justify-center shrink-0">
         <svg class="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line></svg>
       </span>
       <span class="text-xs font-extrabold tracking-tight">Parla</span>
       <svg class="w-3.5 h-3.5 text-white/50 ml-0.5" viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.5"/><circle cx="15" cy="6" r="1.5"/><circle cx="9" cy="12" r="1.5"/><circle cx="15" cy="12" r="1.5"/><circle cx="9" cy="18" r="1.5"/><circle cx="15" cy="18" r="1.5"/></svg>
     </div>
-    <button type="button" onclick="hideFloatingVoiceWidget(event)" aria-label="Chiudi" class="w-7 h-7 mr-1.5 rounded-full bg-black/25 hover:bg-black/45 text-white/80 hover:text-white text-xs font-bold flex items-center justify-center transition cursor-pointer">✕</button>
   </div>
 
   <!-- ==================== MODAL ASSISTENTE VOCALE FRIGOSCAN ==================== -->
@@ -525,10 +496,16 @@
         </div>
       </div>
 
-      <form onsubmit="submitTypedCommand(event)" class="flex gap-2 pt-1 border-t border-slate-800">
-        <input id="frigo-voice-typed" type="text" placeholder="Oppure scrivi il comando qui..." class="flex-1 px-3 py-2 rounded-xl bg-slate-800 border border-slate-700 text-xs text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500" />
-        <button type="submit" class="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-extrabold cursor-pointer">Invia</button>
-      </form>
+      <div class="pt-1 border-t border-slate-800">
+        <button type="button" id="btn-show-voice-keyboard" onclick="revealVoiceTypedInput()" class="w-full py-2 px-3 rounded-xl bg-slate-800/80 hover:bg-slate-800 border border-slate-700/80 text-xs font-bold text-slate-300 flex items-center justify-center gap-2 transition cursor-pointer">
+          <span>⌨️</span>
+          <span>Preferisci scrivere il comando? Tocca qui</span>
+        </button>
+        <form id="frigo-voice-typed-form" onsubmit="submitTypedCommand(event)" class="hidden flex gap-2 pt-2">
+          <input id="frigo-voice-typed" type="text" tabindex="-1" placeholder="Scrivi il comando qui..." class="flex-1 px-3 py-2 rounded-xl bg-slate-800 border border-slate-700 text-xs text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+          <button type="submit" class="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-extrabold cursor-pointer">Invia</button>
+        </form>
+      </div>
     </div>
   </div>
 
@@ -536,7 +513,6 @@
   <div id="toast" class="hidden fixed top-20 left-1/2 -translate-x-1/2 z-[60] whitespace-nowrap px-4 py-2.5 rounded-full bg-slate-900 text-white text-xs font-bold shadow-lg"></div>
 
   <script>
-    const APP_VERSION = '14.3.0-github';
     const addDaysIso = (days) => {
       const d = new Date();
       d.setDate(d.getDate() + days);
@@ -634,13 +610,23 @@
       if (pendingServiceWorker) {
         try { pendingServiceWorker.postMessage({ type: 'SKIP_WAITING' }); } catch (e) {}
       }
-      setTimeout(() => { window.location.reload(); }, 400);
+      setTimeout(() => {
+        try {
+          if (window.location.protocol.startsWith('http')) {
+            window.location.reload();
+          } else {
+            dismissUpdateBanner();
+          }
+        } catch (e) {
+          dismissUpdateBanner();
+        }
+      }, 450);
     }
 
-    function registerServiceWorkerAndUpdates() {
+    function setupUpdateDetection() {
       if (!('serviceWorker' in navigator) || !window.location.protocol.startsWith('http')) return;
-      navigator.serviceWorker.register('./sw.js').then((reg) => {
-        reg.update().catch(() => {});
+      navigator.serviceWorker.getRegistration().then((reg) => {
+        if (!reg) return;
         if (reg.waiting) {
           pendingServiceWorker = reg.waiting;
           showUpdateAvailableBanner();
@@ -754,7 +740,7 @@
       const msg = (input.value || '').trim();
       if (!msg) return;
       const subject = encodeURIComponent('Suggerimento / Segnalazione FrigoScan');
-      const body = encodeURIComponent(msg + '\n\n---\nInviato da FrigoScan Web App (' + APP_VERSION + ')');
+      const body = encodeURIComponent(msg + '\n\n---\nInviato da FrigoScan Web App');
       window.location.href = `mailto:frigoscanapp@gmail.com?subject=${subject}&body=${body}`;
       input.value = '';
       showToast('Apertura email verso frigoscanapp@gmail.com...');
@@ -1174,7 +1160,35 @@
       if (!frigoTtsEnabled && 'speechSynthesis' in window) window.speechSynthesis.cancel();
     }
 
+    function hideVoiceTypedInput() {
+      const form = document.getElementById('frigo-voice-typed-form');
+      const btn = document.getElementById('btn-show-voice-keyboard');
+      const inp = document.getElementById('frigo-voice-typed');
+      if (inp) {
+        inp.blur();
+        inp.setAttribute('tabindex', '-1');
+      }
+      if (form) form.classList.add('hidden');
+      if (btn) btn.classList.remove('hidden');
+    }
+
+    function revealVoiceTypedInput() {
+      const form = document.getElementById('frigo-voice-typed-form');
+      const btn = document.getElementById('btn-show-voice-keyboard');
+      const inp = document.getElementById('frigo-voice-typed');
+      if (btn) btn.classList.add('hidden');
+      if (form) form.classList.remove('hidden');
+      if (inp) {
+        inp.removeAttribute('tabindex');
+        inp.focus();
+      }
+    }
+
     function openFrigoVoiceModal(autoStart = true) {
+      if (document.activeElement && typeof document.activeElement.blur === 'function') {
+        document.activeElement.blur();
+      }
+      hideVoiceTypedInput();
       document.getElementById('frigo-voice-modal').classList.remove('hidden');
       document.getElementById('frigo-voice-transcript').textContent = '«Parla ora...»';
       if (autoStart) startFrigoListening();
@@ -1183,6 +1197,10 @@
     function closeFrigoVoiceModal() {
       if (frigoRecognition) { try { frigoRecognition.stop(); } catch (e) {} }
       isFrigoListening = false;
+      hideVoiceTypedInput();
+      if (document.activeElement && typeof document.activeElement.blur === 'function') {
+        document.activeElement.blur();
+      }
       if ('speechSynthesis' in window) window.speechSynthesis.cancel();
       document.getElementById('frigo-voice-modal').classList.add('hidden');
     }
@@ -1202,7 +1220,7 @@
     function startFrigoListening() {
       const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
       if (!SpeechRec) {
-        document.getElementById('frigo-voice-status').textContent = 'Usa i comandi rapidi o scrivi sotto';
+        document.getElementById('frigo-voice-status').textContent = 'Usa i comandi rapidi o tocca in basso per scrivere';
         return;
       }
       let finalText = '';
@@ -1245,6 +1263,7 @@
       const val = inp.value.trim();
       if (!val) return;
       inp.value = '';
+      hideVoiceTypedInput();
       runDemoVoiceCommand(val);
     }
 
@@ -1302,18 +1321,15 @@
         ? state.items.filter(it => (it.location === 'dispensa' ? 'dispensa' : 'frigo') === preferredLocation)
         : state.items;
 
-      // 1. Corrispondenza esatta
       let match = pool.find(it => normalize(it.name) === target);
       if (match) return match;
 
-      // 2. Il nome esistente inizia con il nome cercato (es. "latte" -> "Latte fresco intero", "pasta" -> "Pasta di semola penne")
       match = pool.find(it => {
         const n = normalize(it.name);
         return n.startsWith(target + ' ') || target.startsWith(n + ' ');
       });
       if (match) return match;
 
-      // 3. Corrispondenza per parole chiave principali
       if (targetTokens.length > 0) {
         match = pool.find(it => {
           const itemWords = normalize(it.name).split(' ').filter(w => w.length >= 3);
@@ -1515,7 +1531,6 @@
       const explicitLoc = mentionsPantry ? 'dispensa' : (mentionsFridge ? 'frigo' : null);
       const capName = parsed.name ? parsed.name.charAt(0).toUpperCase() + parsed.name.slice(1) : 'Prodotto';
 
-      // Cerca se il prodotto esiste già (prima nella posizione richiesta se specificata, altrimenti in tutto l'inventario)
       const existingItem = findExistingItemForMerge(parsed.name, explicitLoc) || (!explicitLoc ? findExistingItemForMerge(parsed.name, null) : null);
 
       if (existingItem) {
@@ -1581,18 +1596,12 @@
       });
     })();
 
-    function hideFloatingVoiceWidget(e) {
-      if (e) e.stopPropagation();
-      document.getElementById('floating-voice-widget').classList.add('hidden');
-      showToast('Tasto vocale nascosto');
-    }
-
     // Boot
     recoverAnyLocalState();
     syncFamilyAndWorkerUI();
     syncExpiryThresholdUI();
     updateAllViews();
-    registerServiceWorkerAndUpdates();
+    setupUpdateDetection();
   </script>
 </body>
 </html>
