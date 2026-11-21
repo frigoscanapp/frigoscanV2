@@ -3,18 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <meta name="theme-color" content="#059669" />
-  <meta name="mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="FrigoScan" />
-  <meta name="description" content="FrigoScan — Inventario Frigo, Dispensa, Lista Spesa Alexa & Assistente Vocale" />
-  <title>FrigoScan — Inventario Frigo, Dispensa & Assistente Vocale</title>
-
-  <link rel="manifest" href="./manifest.json" />
-  <link rel="icon" type="image/svg+xml" href="./icon.svg" />
-  <link rel="apple-touch-icon" href="./icon.svg" />
-
+  <title>FrigoScan v14.5 — Inventario Frigo, Dispensa & Assistente Vocale</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <style>
@@ -49,18 +38,8 @@
   <header class="sticky top-0 z-40 bg-white/95 backdrop-blur border-b border-slate-200 shadow-sm">
     <div class="max-w-2xl mx-auto px-4 pt-3 pb-2 flex items-center justify-between gap-2">
       <div class="flex items-center gap-2.5 min-w-0">
-        <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-emerald-600 via-teal-600 to-sky-600 flex items-center justify-center shadow-sm shrink-0 border border-white/20">
-          <svg class="w-6 h-6" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M11 19V14C11 11.8 12.8 10 15 10H20" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity="0.65"/>
-            <path d="M44 10H49C51.2 10 53 11.8 53 14V19" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity="0.65"/>
-            <path d="M11 45V50C11 52.2 12.8 54 15 54H20" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity="0.65"/>
-            <path d="M44 54H49C51.2 54 53 52.2 53 50V45" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity="0.65"/>
-            <path d="M20 16C20 13.8 21.8 12 24 12H40C42.2 12 44 13.8 44 16V26H20V16Z" fill="#fff"/>
-            <path d="M20 29H44V48C44 50.2 42.2 52 40 52H24C21.8 52 20 50.2 20 48V29Z" fill="#fff" fill-opacity="0.95"/>
-            <rect x="38" y="17" width="2.5" height="6" rx="1.25" fill="#0d9488"/>
-            <rect x="38" y="33" width="2.5" height="10" rx="1.25" fill="#0d9488"/>
-            <rect x="14" y="26.5" width="36" height="2" rx="1" fill="#34d399"/>
-          </svg>
+        <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-700 flex items-center justify-center text-white font-black text-base tracking-tighter shadow-sm shrink-0">
+          FS
         </div>
         <div class="min-w-0">
           <div class="flex items-center gap-1.5 flex-wrap">
@@ -117,6 +96,10 @@
         <span>🛒 Lista Spesa</span>
         <span id="badge-shopping" class="hidden text-[11px] font-extrabold px-1.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800">0</span>
       </button>
+      <button type="button" data-tab="cards" onclick="switchTab('cards')" class="nav-btn inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs sm:text-sm font-bold whitespace-nowrap transition bg-slate-100 text-slate-700 hover:bg-slate-200 cursor-pointer">
+        <span>💳 Carte Fedeltà</span>
+        <span id="badge-cards" class="text-[11px] font-extrabold px-1.5 py-0.5 rounded-full bg-indigo-100 text-indigo-900">0</span>
+      </button>
       <button type="button" data-tab="recipes" onclick="switchTab('recipes')" class="nav-btn inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs sm:text-sm font-bold whitespace-nowrap transition bg-slate-100 text-slate-700 hover:bg-slate-200 cursor-pointer">
         <span>🍳 Ricette Anti-Spreco</span>
       </button>
@@ -131,12 +114,8 @@
     <!-- ==================== BANNER INSTALLAZIONE PWA (ANDROID & iOS) ==================== -->
     <div id="pwa-install-banner" class="p-3 rounded-2xl bg-gradient-to-r from-emerald-900 via-teal-900 to-slate-900 text-white border border-emerald-500/40 shadow-md flex items-center justify-between gap-2.5">
       <div class="flex items-center gap-2.5 min-w-0">
-        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-500 to-sky-600 flex items-center justify-center shadow-xs shrink-0 border border-white/20">
-          <svg class="w-5 h-5" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M20 16C20 13.8 21.8 12 24 12H40C42.2 12 44 13.8 44 16V26H20V16Z" fill="#fff"/>
-            <path d="M20 29H44V48C44 50.2 42.2 52 40 52H24C21.8 52 20 50.2 20 48V29Z" fill="#fff" fill-opacity="0.95"/>
-            <rect x="13" y="26.5" width="38" height="2.2" rx="1.1" fill="#34d399"/>
-          </svg>
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-500 to-sky-600 flex items-center justify-center shadow-xs shrink-0 border border-white/20 font-black text-xs text-white">
+          FS
         </div>
         <div class="min-w-0">
           <p class="text-xs font-extrabold text-white truncate">Installa FrigoScan sul telefono</p>
@@ -280,7 +259,22 @@
       <div id="shopping-list" class="space-y-2"></div>
     </section>
 
-    <!-- ==================== TAB 5: RICETTE ANTI-SPRECO ==================== -->
+    <!-- ==================== TAB 5: CARTE FEDELTÀ ==================== -->
+    <section id="view-cards" class="tab-view hidden space-y-3">
+      <div class="p-3.5 rounded-2xl bg-indigo-50 border border-indigo-200 flex items-center justify-between gap-2">
+        <div>
+          <h2 class="text-sm font-extrabold text-indigo-950">💳 Carte Fedeltà Supermercato</h2>
+          <p class="text-xs text-indigo-800">Tocca una carta per mostrare il codice alla cassa</p>
+        </div>
+        <button type="button" onclick="openLoyaltyCardModal()" class="px-3 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-extrabold shadow-xs shrink-0 transition cursor-pointer">
+          + Carta
+        </button>
+      </div>
+
+      <div id="loyalty-cards-list" class="grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
+    </section>
+
+    <!-- ==================== TAB 6: RICETTE ANTI-SPRECO ==================== -->
     <section id="view-recipes" class="tab-view hidden space-y-3">
       <div class="p-3.5 rounded-2xl bg-amber-50 border border-amber-200">
         <h2 class="text-sm font-extrabold text-amber-950">🍳 Idee Svuota-Frigo &amp; Dispensa</h2>
@@ -289,7 +283,7 @@
       <div id="recipes-list" class="space-y-2.5"></div>
     </section>
 
-    <!-- ==================== TAB 6: ALEXA & SYNC FAMIGLIA ==================== -->
+    <!-- ==================== TAB 7: ALEXA & SYNC FAMIGLIA ==================== -->
     <section id="view-settings" class="tab-view hidden space-y-3">
       <div class="p-4 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-3">
         <div class="flex items-start justify-between gap-3">
@@ -338,26 +332,87 @@
 
   </main>
 
-  <!-- ==================== MODAL SCANSIONE QR CODICE FAMIGLIA ==================== -->
-  <div id="qr-scanner-modal" onclick="if(event.target===this) closeQrScannerModal()" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-xs flex items-end sm:items-center justify-center p-0 sm:p-4">
-    <div class="bg-slate-900 text-white w-full max-w-md rounded-t-3xl sm:rounded-3xl p-5 space-y-3.5 shadow-2xl border border-slate-700">
+  <!-- ==================== MODAL AGGIUNGI / MODIFICA CARTA FEDELTÀ ==================== -->
+  <div id="loyalty-card-modal" onclick="if(event.target===this) closeModal('loyalty-card-modal')" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-end sm:items-center justify-center p-0 sm:p-4">
+    <div class="bg-white w-full max-w-md rounded-t-3xl sm:rounded-3xl p-5 space-y-3.5 max-h-[92vh] overflow-y-auto shadow-xl">
       <div class="flex items-center justify-between">
+        <h3 id="card-modal-title" class="text-base font-extrabold text-slate-900">Nuova Carta Fedeltà</h3>
+        <button type="button" onclick="closeModal('loyalty-card-modal')" class="w-8 h-8 rounded-full bg-slate-100 text-slate-600 font-bold cursor-pointer">✕</button>
+      </div>
+
+      <form onsubmit="saveLoyaltyCardForm(event)" class="space-y-3">
+        <input type="hidden" id="card-id" />
         <div>
-          <h3 class="text-base font-extrabold text-white">📷 Scansiona QR Famiglia</h3>
-          <p class="text-[11px] text-slate-400">Inquadra il QR Code dell'altro telefono FrigoScan</p>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Supermercato / Negozio *</label>
+          <input id="card-store" type="text" required placeholder="Es. Esselunga, Coop, Conad, Carrefour, Lidl..." class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
         </div>
-        <button type="button" onclick="closeQrScannerModal()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-slate-300 font-bold cursor-pointer">✕</button>
-      </div>
-      <div class="relative rounded-2xl overflow-hidden bg-black aspect-square max-h-[260px] mx-auto border-2 border-sky-500/60 flex items-center justify-center">
-        <video id="qr-scanner-video" playsinline muted class="w-full h-full object-cover"></video>
-        <p id="qr-scanner-status" class="absolute bottom-2.5 left-2.5 right-2.5 text-center text-[11px] font-bold bg-slate-950/85 text-sky-300 px-3 py-1.5 rounded-xl">
-          Avvio fotocamera...
-        </p>
-      </div>
-      <form onsubmit="applyScannedQrManual(event)" class="flex gap-2">
-        <input id="qr-manual-fallback-input" type="text" placeholder="Oppure incolla Codice o Link invito..." class="flex-1 px-3 py-2 rounded-xl bg-slate-800 border border-slate-600 text-xs text-white" />
-        <button type="submit" class="px-3.5 py-2 rounded-xl bg-emerald-600 text-white text-xs font-extrabold cursor-pointer">Collega</button>
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Numero Carta / Codice a Barre *</label>
+          <div class="flex gap-2">
+            <input id="card-code" type="text" required placeholder="Es. 2001234567890" class="flex-1 px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+            <button type="button" onclick="scanLoyaltyCardBarcode()" title="Scansiona codice tessera con fotocamera" class="px-3 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-extrabold shrink-0 cursor-pointer">
+              📷 Scan
+            </button>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-2.5">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Formato Codice</label>
+            <select id="card-format" class="w-full px-3 py-2 rounded-xl border border-slate-200 text-sm bg-white">
+              <option value="barcode">Codice a Barre (EAN/Code128)</option>
+              <option value="qr">QR Code</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Colore Tessera</label>
+            <select id="card-color" class="w-full px-3 py-2 rounded-xl border border-slate-200 text-sm bg-white">
+              <option value="emerald">Verde Smeraldo</option>
+              <option value="sky">Blu Oceano</option>
+              <option value="rose">Rosso Rubino</option>
+              <option value="amber">Arancio Ambra</option>
+              <option value="indigo">Indaco</option>
+              <option value="slate">Nero Antracite</option>
+            </select>
+          </div>
+        </div>
+        <div class="pt-2 flex gap-2">
+          <button type="submit" class="flex-1 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-extrabold shadow-sm cursor-pointer">Salva Carta</button>
+          <button id="btn-delete-card" type="button" onclick="deleteCurrentLoyaltyCard()" class="hidden px-4 py-3 rounded-xl bg-rose-50 text-rose-600 text-xs font-bold cursor-pointer">Elimina</button>
+        </div>
       </form>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL MOSTRA CARTA FEDELTÀ ALLA CASSA ==================== -->
+  <div id="loyalty-card-show-modal" onclick="if(event.target===this) closeModal('loyalty-card-show-modal')" class="hidden fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white w-full max-w-sm rounded-3xl overflow-hidden shadow-2xl border border-slate-200">
+      <div id="show-card-header" class="p-4 bg-gradient-to-r from-emerald-600 to-teal-700 text-white flex items-center justify-between">
+        <div>
+          <span class="text-[10px] font-extrabold uppercase tracking-wider text-white/80 block">Carta Fedeltà</span>
+          <h3 id="show-card-store" class="text-lg font-black tracking-tight">Esselunga</h3>
+        </div>
+        <button type="button" onclick="closeModal('loyalty-card-show-modal')" class="w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 text-white font-bold cursor-pointer">✕</button>
+      </div>
+
+      <div class="p-6 bg-white flex flex-col items-center justify-center text-center space-y-4">
+        <p class="text-[11px] font-bold text-slate-500">Mostra questo codice al lettore della cassa</p>
+        <div id="show-card-code-graphic" class="w-full p-4 rounded-2xl bg-white border-2 border-slate-200 flex items-center justify-center min-h-[140px]"></div>
+        <div class="space-y-1">
+          <p id="show-card-number" class="text-base font-mono font-black tracking-widest text-slate-900 select-all">2001234567890</p>
+          <button type="button" onclick="copyTextValue(document.getElementById('show-card-number').textContent, 'Numero carta copiato!')" class="text-[11px] font-bold text-indigo-600 hover:underline cursor-pointer">
+            📋 Copia numero tessera
+          </button>
+        </div>
+      </div>
+
+      <div class="px-5 pb-5 flex gap-2">
+        <button type="button" id="show-card-edit-btn" class="flex-1 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-extrabold cursor-pointer">
+          ✎ Modifica
+        </button>
+        <button type="button" onclick="closeModal('loyalty-card-show-modal')" class="flex-1 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-extrabold cursor-pointer">
+          Chiudi
+        </button>
+      </div>
     </div>
   </div>
 
@@ -415,6 +470,31 @@
           <button type="submit" class="px-3.5 py-2 rounded-xl bg-sky-600 hover:bg-sky-500 text-white text-xs font-extrabold cursor-pointer">Cerca</button>
         </form>
       </div>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL SCANNER QR FAMIGLIA ==================== -->
+  <div id="qr-scanner-modal" onclick="if(event.target===this) closeQrScannerModal()" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-xs flex items-end sm:items-center justify-center p-0 sm:p-4">
+    <div class="bg-slate-900 text-white w-full max-w-md rounded-t-3xl sm:rounded-3xl p-5 space-y-3.5 shadow-2xl border border-slate-700">
+      <div class="flex items-center justify-between">
+        <div>
+          <h3 class="text-base font-extrabold text-white">📷 Scansiona QR Famiglia</h3>
+          <p class="text-[11px] text-slate-400">Inquadra il QR Code dell'altro telefono FrigoScan</p>
+        </div>
+        <button type="button" onclick="closeQrScannerModal()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-slate-300 font-bold cursor-pointer">✕</button>
+      </div>
+
+      <div class="relative rounded-2xl overflow-hidden bg-black aspect-[4/3] max-h-[240px] mx-auto border-2 border-sky-500/60 flex items-center justify-center">
+        <video id="qr-scanner-video" playsinline muted class="w-full h-full object-cover"></video>
+        <p id="qr-scanner-status" class="absolute bottom-2.5 left-2.5 right-2.5 text-center text-[11px] font-bold bg-slate-950/85 text-sky-300 px-3 py-1.5 rounded-xl">
+          Avvio fotocamera...
+        </p>
+      </div>
+
+      <form onsubmit="applyScannedQrManual(event)" class="flex gap-2">
+        <input id="qr-manual-fallback-input" type="text" placeholder="Oppure incolla codice FRIGO-XXXX..." class="flex-1 px-3 py-2 rounded-xl bg-slate-800 border border-slate-700 text-xs font-mono text-white uppercase" />
+        <button type="submit" class="px-3.5 py-2 rounded-xl bg-emerald-600 text-white text-xs font-extrabold cursor-pointer">Collega</button>
+      </form>
     </div>
   </div>
 
@@ -493,13 +573,7 @@
     <div class="bg-white w-full max-w-md rounded-t-3xl sm:rounded-3xl p-5 space-y-4 max-h-[92vh] overflow-y-auto shadow-2xl">
       <div class="flex items-center justify-between border-b border-slate-100 pb-3">
         <div class="flex items-center gap-2.5">
-          <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-600 via-teal-600 to-sky-600 flex items-center justify-center shadow-sm shrink-0">
-            <svg class="w-5 h-5" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M20 16C20 13.8 21.8 12 24 12H40C42.2 12 44 13.8 44 16V26H20V16Z" fill="#fff"/>
-              <path d="M20 29H44V48C44 50.2 42.2 52 40 52H24C21.8 52 20 50.2 20 48V29Z" fill="#fff" fill-opacity="0.95"/>
-              <rect x="13" y="26.5" width="38" height="2.2" rx="1.1" fill="#34d399"/>
-            </svg>
-          </div>
+          <div class="w-9 h-9 rounded-xl bg-emerald-600 text-white font-black text-xs flex items-center justify-center shadow-sm shrink-0">FS</div>
           <div>
             <h3 class="text-base font-extrabold text-slate-900">Menu &amp; Impostazioni</h3>
             <p class="text-[11px] text-slate-500">Installazione, avvisi scadenza e suggerimenti</p>
@@ -511,13 +585,7 @@
       <div class="p-3.5 rounded-2xl bg-gradient-to-br from-emerald-50 to-teal-50 border border-emerald-200 space-y-2.5">
         <div class="flex items-center justify-between gap-2">
           <div class="flex items-center gap-2.5 min-w-0">
-            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-600 via-teal-600 to-sky-600 flex items-center justify-center shrink-0 shadow-xs">
-              <svg class="w-6 h-6" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M20 16C20 13.8 21.8 12 24 12H40C42.2 12 44 13.8 44 16V26H20V16Z" fill="#fff"/>
-                <path d="M20 29H44V48C44 50.2 42.2 52 40 52H24C21.8 52 20 50.2 20 48V29Z" fill="#fff" fill-opacity="0.95"/>
-                <rect x="13" y="26.5" width="38" height="2.2" rx="1.1" fill="#34d399"/>
-              </svg>
-            </div>
+            <div class="w-10 h-10 rounded-xl bg-emerald-600 text-white font-black text-sm flex items-center justify-center shrink-0 shadow-xs">FS</div>
             <div class="min-w-0">
               <span class="text-[10px] font-extrabold uppercase tracking-wider text-emerald-700 block">Web App (PWA)</span>
               <h4 class="text-sm font-extrabold text-slate-900 truncate">Installa su Smartphone</h4>
@@ -581,7 +649,7 @@
 
       <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2.5">
         <div class="flex items-center justify-between">
-          <span class="text-[10px] font-extrabold uppercase tracking-wider text-slate-500">Gestione Dati &amp; GitHub</span>
+          <span class="text-[10px] font-extrabold uppercase tracking-wider text-slate-500">Gestione Dati &amp; Aggiornamenti</span>
           <span class="text-[10px] font-mono font-bold text-slate-400">v14.5 • SafeStorage</span>
         </div>
         <div class="grid grid-cols-2 gap-2">
@@ -598,7 +666,7 @@
             🔊 Alexa &amp; Sync
           </button>
           <button type="button" onclick="closeModal('gear-menu-modal'); showUpdateAvailableBanner()" class="py-2 px-2.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-emerald-900 text-xs font-extrabold transition cursor-pointer">
-            ↻ Verifica Update
+            ↻ Simula avviso update
           </button>
         </div>
       </div>
@@ -610,13 +678,7 @@
     <div class="bg-white w-full max-w-md rounded-t-3xl sm:rounded-3xl p-5 space-y-4 shadow-2xl max-h-[90vh] overflow-y-auto">
       <div class="flex items-center justify-between border-b border-slate-100 pb-3">
         <div class="flex items-center gap-2.5">
-          <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-emerald-600 via-teal-600 to-sky-600 flex items-center justify-center shadow-sm shrink-0">
-            <svg class="w-6 h-6" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M20 16C20 13.8 21.8 12 24 12H40C42.2 12 44 13.8 44 16V26H20V16Z" fill="#fff"/>
-              <path d="M20 29H44V48C44 50.2 42.2 52 40 52H24C21.8 52 20 50.2 20 48V29Z" fill="#fff" fill-opacity="0.95"/>
-              <rect x="13" y="26.5" width="38" height="2.2" rx="1.1" fill="#34d399"/>
-            </svg>
-          </div>
+          <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-700 text-white font-black text-sm flex items-center justify-center shadow-sm shrink-0">FS</div>
           <div>
             <h3 class="text-base font-extrabold text-slate-900">Installa FrigoScan</h3>
             <p class="text-[11px] text-slate-500">Aggiungi l'icona alla schermata Home</p>
@@ -768,7 +830,6 @@
   <div id="toast" class="hidden fixed top-20 left-1/2 -translate-x-1/2 z-[60] whitespace-nowrap px-4 py-2.5 rounded-full bg-slate-900 text-white text-xs font-bold shadow-lg"></div>
 
   <script>
-    const APP_VERSION = '14.5.0-github';
     const addDaysIso = (days) => {
       const d = new Date();
       d.setDate(d.getDate() + days);
@@ -803,6 +864,10 @@
         { id: 's1', name: 'Parmigiano Reggiano', checked: false, source: 'alexa' },
         { id: 's2', name: 'Zucchine fresche', checked: false, source: 'manual' },
         { id: 's3', name: 'Caffè macinato', checked: true, source: 'alexa' }
+      ],
+      loyaltyCards: [
+        { id: 'c1', store: 'Esselunga Fìdaty', code: '2004819204512', format: 'barcode', color: 'rose' },
+        { id: 'c2', store: 'Coop Socio', code: '2901847291048', format: 'barcode', color: 'emerald' }
       ]
     };
 
@@ -830,6 +895,7 @@
       if (bestCandidate) {
         if (Array.isArray(bestCandidate.items)) state.items = bestCandidate.items;
         if (Array.isArray(bestCandidate.shopping)) state.shopping = bestCandidate.shopping;
+        if (Array.isArray(bestCandidate.loyaltyCards)) state.loyaltyCards = bestCandidate.loyaltyCards;
         if (bestCandidate.familyCode) state.familyCode = bestCandidate.familyCode;
         if (bestCandidate.workerUrl) state.workerUrl = bestCandidate.workerUrl;
         if (typeof bestCandidate.expiryThresholdDays === 'number') {
@@ -866,13 +932,23 @@
       if (pendingServiceWorker) {
         try { pendingServiceWorker.postMessage({ type: 'SKIP_WAITING' }); } catch (e) {}
       }
-      setTimeout(() => { window.location.reload(); }, 400);
+      setTimeout(() => {
+        try {
+          if (window.location.protocol.startsWith('http')) {
+            window.location.reload();
+          } else {
+            dismissUpdateBanner();
+          }
+        } catch (e) {
+          dismissUpdateBanner();
+        }
+      }, 450);
     }
 
-    function registerServiceWorkerAndUpdates() {
+    function setupUpdateDetection() {
       if (!('serviceWorker' in navigator) || !window.location.protocol.startsWith('http')) return;
-      navigator.serviceWorker.register('./sw.js').then((reg) => {
-        reg.update().catch(() => {});
+      navigator.serviceWorker.getRegistration().then((reg) => {
+        if (!reg) return;
         if (reg.waiting) {
           pendingServiceWorker = reg.waiting;
           showUpdateAvailableBanner();
@@ -1059,7 +1135,7 @@
       const msg = (input.value || '').trim();
       if (!msg) return;
       const subject = encodeURIComponent('Suggerimento / Segnalazione FrigoScan');
-      const body = encodeURIComponent(msg + '\n\n---\nInviato da FrigoScan Web App (' + APP_VERSION + ')');
+      const body = encodeURIComponent(msg + '\n\n---\nInviato da FrigoScan Web App');
       window.location.href = `mailto:frigoscanapp@gmail.com?subject=${subject}&body=${body}`;
       input.value = '';
       showToast('Apertura email verso frigoscanapp@gmail.com...');
@@ -1321,6 +1397,7 @@
       if (tab === 'pantry') renderInventory('dispensa');
       if (tab === 'expiring') renderExpiring();
       if (tab === 'shopping') renderShopping();
+      if (tab === 'cards') renderLoyaltyCards();
       if (tab === 'recipes') renderRecipes();
       if (tab === 'settings') renderFamilyQrCode();
     }
@@ -1336,9 +1413,12 @@
       });
       const allAlertItems = state.items.filter(i => daysUntil(i.expiry) <= thresh);
       const shopPending = state.shopping.filter(i => !i.checked);
+      const cardsList = Array.isArray(state.loyaltyCards) ? state.loyaltyCards : [];
 
       document.getElementById('badge-fridge').textContent = fridgeItems.length;
       document.getElementById('badge-pantry').textContent = pantryItems.length;
+      const cardsBadge = document.getElementById('badge-cards');
+      if (cardsBadge) cardsBadge.textContent = cardsList.length;
 
       const expBadge = document.getElementById('badge-expiring');
       expBadge.textContent = allAlertItems.length;
@@ -1356,6 +1436,7 @@
       renderInventory('dispensa');
       renderExpiring();
       renderShopping();
+      renderLoyaltyCards();
       renderRecipes();
     }
 
@@ -1434,6 +1515,153 @@
       persistState();
       updateAllViews();
       showToast(`"${cap}" aggiunto alla Lista Spesa!`);
+    }
+
+    // ==================== CARTE FEDELTÀ ====================
+    const CARD_GRADIENTS = {
+      emerald: 'from-emerald-600 to-teal-700',
+      sky: 'from-sky-600 to-blue-700',
+      rose: 'from-rose-600 to-red-700',
+      amber: 'from-amber-500 to-orange-600',
+      indigo: 'from-indigo-600 to-violet-700',
+      slate: 'from-slate-800 to-slate-950'
+    };
+
+    function buildBarcodeSvgHtml(codeStr) {
+      const clean = String(codeStr || '00000000').trim();
+      let bars = '';
+      let x = 8;
+      const drawBar = (w, black) => {
+        if (black) bars += `<rect x="${x}" y="4" width="${w}" height="68" fill="#0f172a"/>`;
+        x += w;
+      };
+      drawBar(2, true); drawBar(2, false); drawBar(2, true); drawBar(3, false);
+      for (let i = 0; i < clean.length; i++) {
+        const ch = clean.charCodeAt(i);
+        const w1 = (ch % 3) + 1;
+        const w2 = ((ch >> 2) % 3) + 1;
+        const w3 = ((ch >> 4) % 2) + 1;
+        const w4 = ((ch >> 5) % 2) + 1;
+        drawBar(w1, true);
+        drawBar(w2, false);
+        drawBar(w3, true);
+        drawBar(w4, false);
+      }
+      drawBar(2, true); drawBar(2, false); drawBar(2, true);
+      const totalWidth = Math.max(160, x + 8);
+      return `<svg viewBox="0 0 ${totalWidth} 76" class="w-full max-w-[270px] h-24 mx-auto" preserveAspectRatio="none">${bars}</svg>`;
+    }
+
+    function renderLoyaltyCards() {
+      const container = document.getElementById('loyalty-cards-list');
+      if (!container) return;
+      const cards = Array.isArray(state.loyaltyCards) ? state.loyaltyCards : [];
+      if (!cards.length) {
+        container.innerHTML = `<div class="col-span-full text-center py-8 bg-white rounded-2xl border border-dashed border-slate-300 text-xs text-slate-500">Nessuna carta fedeltà salvata. Tocca <strong>+ Carta</strong> per aggiungerne una!</div>`;
+        return;
+      }
+      container.innerHTML = cards.map(c => {
+        const grad = CARD_GRADIENTS[c.color] || CARD_GRADIENTS.emerald;
+        return `
+          <div onclick="openShowLoyaltyCardModal('${c.id}')" class="cursor-pointer rounded-2xl bg-gradient-to-br ${grad} text-white p-4 shadow-md hover:shadow-lg active:scale-[0.99] transition flex flex-col justify-between min-h-[124px] relative overflow-hidden">
+            <div class="flex items-start justify-between gap-2">
+              <div class="min-w-0">
+                <span class="text-[10px] font-extrabold uppercase tracking-wider text-white/75 block">Tessera Fedeltà</span>
+                <h4 class="text-base font-black tracking-tight truncate mt-0.5">${escapeHtml(c.store)}</h4>
+              </div>
+              <button type="button" onclick="event.stopPropagation(); openLoyaltyCardModal('${c.id}')" title="Modifica carta" class="w-7 h-7 rounded-lg bg-white/15 hover:bg-white/25 text-white text-xs font-bold flex items-center justify-center shrink-0 cursor-pointer">✎</button>
+            </div>
+            <div class="pt-4 flex items-end justify-between gap-2">
+              <span class="text-xs font-mono font-bold tracking-wider text-white/90 truncate">${escapeHtml(c.code)}</span>
+              <span class="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-white/20 text-white shrink-0">${c.format === 'qr' ? 'QR Code' : 'Mostra Cassa'}</span>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function openLoyaltyCardModal(cardId = null) {
+      if (!Array.isArray(state.loyaltyCards)) state.loyaltyCards = [];
+      const card = cardId ? state.loyaltyCards.find(c => c.id === cardId) : null;
+      document.getElementById('card-modal-title').textContent = card ? 'Modifica Carta Fedeltà' : 'Nuova Carta Fedeltà';
+      document.getElementById('card-id').value = card ? card.id : '';
+      document.getElementById('card-store').value = card ? card.store : '';
+      document.getElementById('card-code').value = card ? card.code : '';
+      document.getElementById('card-format').value = card?.format || 'barcode';
+      document.getElementById('card-color').value = card?.color || 'emerald';
+      document.getElementById('btn-delete-card').classList.toggle('hidden', !card);
+      document.getElementById('loyalty-card-modal').classList.remove('hidden');
+    }
+
+    function saveLoyaltyCardForm(e) {
+      e.preventDefault();
+      if (!Array.isArray(state.loyaltyCards)) state.loyaltyCards = [];
+      const id = document.getElementById('card-id').value;
+      const payload = {
+        id: id || 'card_' + Date.now(),
+        store: document.getElementById('card-store').value.trim(),
+        code: document.getElementById('card-code').value.trim(),
+        format: document.getElementById('card-format').value,
+        color: document.getElementById('card-color').value
+      };
+      if (id) {
+        const idx = state.loyaltyCards.findIndex(c => c.id === id);
+        if (idx !== -1) state.loyaltyCards[idx] = payload;
+      } else {
+        state.loyaltyCards.unshift(payload);
+      }
+      persistState();
+      closeModal('loyalty-card-modal');
+      updateAllViews();
+      showToast(`Carta "${payload.store}" salvata!`);
+    }
+
+    function deleteCurrentLoyaltyCard() {
+      const id = document.getElementById('card-id').value;
+      state.loyaltyCards = (state.loyaltyCards || []).filter(c => c.id !== id);
+      persistState();
+      closeModal('loyalty-card-modal');
+      updateAllViews();
+      showToast('Carta fedeltà eliminata');
+    }
+
+    function openShowLoyaltyCardModal(cardId) {
+      const card = (state.loyaltyCards || []).find(c => c.id === cardId);
+      if (!card) return;
+      const header = document.getElementById('show-card-header');
+      const grad = CARD_GRADIENTS[card.color] || CARD_GRADIENTS.emerald;
+      header.className = `p-4 bg-gradient-to-r ${grad} text-white flex items-center justify-between`;
+      document.getElementById('show-card-store').textContent = card.store;
+      document.getElementById('show-card-number').textContent = card.code;
+
+      const graphicBox = document.getElementById('show-card-code-graphic');
+      graphicBox.innerHTML = '';
+      if (card.format === 'qr' && typeof QRCode !== 'undefined') {
+        new QRCode(graphicBox, {
+          text: card.code,
+          width: 150,
+          height: 150,
+          colorDark: '#0f172a',
+          colorLight: '#ffffff',
+          correctLevel: QRCode.CorrectLevel.M
+        });
+      } else {
+        graphicBox.innerHTML = buildBarcodeSvgHtml(card.code);
+      }
+
+      document.getElementById('show-card-edit-btn').onclick = () => {
+        closeModal('loyalty-card-show-modal');
+        openLoyaltyCardModal(card.id);
+      };
+      document.getElementById('loyalty-card-show-modal').classList.remove('hidden');
+    }
+
+    let prodScanModePurpose = 'product';
+
+    function scanLoyaltyCardBarcode() {
+      prodScanModePurpose = 'loyalty';
+      closeModal('loyalty-card-modal');
+      openProductScannerModal('barcode');
     }
 
     function renderRecipes() {
@@ -1635,6 +1863,13 @@
     }
 
     async function resolveScannedProductCode(rawCode) {
+      if (prodScanModePurpose === 'loyalty') {
+        prodScanModePurpose = 'product';
+        openLoyaltyCardModal();
+        document.getElementById('card-code').value = rawCode;
+        showToast('Codice tessera acquisito! Inserisci il nome del negozio.');
+        return;
+      }
       if (/FRIGO-[A-Z0-9-]+/i.test(rawCode) || rawCode.includes('family=')) {
         applyFamilyCode(rawCode);
         return;
@@ -2363,7 +2598,7 @@
     syncExpiryThresholdUI();
     updateInstallButtonsVisibility();
     updateAllViews();
-    registerServiceWorkerAndUpdates();
+    setupUpdateDetection();
   </script>
 </body>
 </html>
