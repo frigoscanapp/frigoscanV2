@@ -16,6 +16,7 @@
   <link rel="apple-touch-icon" href="./icon.svg" />
 
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <style>
     * { -webkit-tap-highlight-color: transparent; }
     body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
@@ -86,9 +87,14 @@
           </svg>
         </button>
 
-        <button type="button" onclick="openItemModal()" class="inline-flex items-center gap-1 bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white text-xs sm:text-sm font-bold px-3 py-2 rounded-xl shadow-sm transition cursor-pointer">
+        <button type="button" onclick="openProductScannerModal('barcode')" aria-label="Scansiona Prodotto o Foto" title="Scansiona Codice a Barre, QR o Foto Prodotto" class="inline-flex items-center gap-1 bg-sky-600 hover:bg-sky-700 active:scale-95 text-white text-xs sm:text-sm font-extrabold px-2.5 py-2 rounded-xl shadow-sm transition cursor-pointer">
+          <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><line x1="7" y1="12" x2="17" y2="12"/></svg>
+          <span>Scansiona</span>
+        </button>
+
+        <button type="button" onclick="openItemModal()" class="inline-flex items-center gap-1 bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white text-xs sm:text-sm font-bold px-2.5 sm:px-3 py-2 rounded-xl shadow-sm transition cursor-pointer">
           <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-          <span>Prodotto</span>
+          <span class="hidden sm:inline">Prodotto</span>
         </button>
       </div>
     </div>
@@ -188,8 +194,12 @@
           <input id="fridge-search" oninput="renderInventory('frigo')" type="search" placeholder="Cerca in frigo (es. latte, uova, mozzarella...)" class="w-full pl-9 pr-3 py-2.5 rounded-xl bg-white border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" />
           <svg class="w-4 h-4 text-slate-400 absolute left-3 top-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
         </div>
-        <button type="button" onclick="openItemModal({ location: 'frigo' })" class="px-3.5 py-2.5 rounded-xl bg-sky-600 hover:bg-sky-700 text-white text-xs font-extrabold shadow-xs shrink-0 transition cursor-pointer">
-          + In Frigo
+        <button type="button" onclick="openProductScannerModal('barcode', 'frigo')" title="Scansiona codice o foto per il Frigo" class="px-3 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-extrabold shadow-xs shrink-0 transition flex items-center gap-1 cursor-pointer">
+          <span>📷</span>
+          <span>Scan</span>
+        </button>
+        <button type="button" onclick="openItemModal({ location: 'frigo' })" class="px-3 py-2.5 rounded-xl bg-sky-600 hover:bg-sky-700 text-white text-xs font-extrabold shadow-xs shrink-0 transition cursor-pointer">
+          + Frigo
         </button>
       </div>
 
@@ -203,13 +213,18 @@
           <h2 class="text-sm font-extrabold text-amber-950">🥫 Scorte in Dispensa</h2>
           <p class="text-xs text-amber-800">Pasta, conserve, olio, farine, bevande e scorte secche</p>
         </div>
-        <button type="button" onclick="openItemModal({ location: 'dispensa' })" class="px-3 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-extrabold shadow-xs transition shrink-0 cursor-pointer">
-          + In Dispensa
-        </button>
+        <div class="flex items-center gap-1.5 shrink-0">
+          <button type="button" onclick="openProductScannerModal('barcode', 'dispensa')" class="px-2.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-extrabold shadow-xs transition cursor-pointer">
+            📷 Scan
+          </button>
+          <button type="button" onclick="openItemModal({ location: 'dispensa' })" class="px-3 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-extrabold shadow-xs transition cursor-pointer">
+            + Dispensa
+          </button>
+        </div>
       </div>
 
       <div class="relative">
-        <input id="pantry-search" oninput="renderInventory('dispensa')" type="search" placeholder="Cerca in dispensa (es. pasta, passata, tonno...)" class="w-full pl-9 pr-3 py-2.5 rounded-xl bg-white border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500" />
+        <input id="pantry-search" oninput="renderInventory('dispensa')" type="search" placeholder="Cerca in dispensa (es. pasta, tonno, olio...)" class="w-full pl-9 pr-3 py-2.5 rounded-xl bg-white border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500" />
         <svg class="w-4 h-4 text-slate-400 absolute left-3 top-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
       </div>
 
@@ -218,46 +233,47 @@
 
     <!-- ==================== TAB 3: IN SCADENZA ==================== -->
     <section id="view-expiring" class="tab-view hidden space-y-3">
-      <div class="bg-rose-50 border border-rose-200 p-3.5 rounded-2xl flex items-center justify-between gap-2">
+      <div class="p-3.5 rounded-2xl bg-rose-50 border border-rose-200 flex items-center justify-between gap-2">
         <div>
-          <h2 class="text-sm font-extrabold text-rose-950">⏰ Prodotti Scaduti o in Scadenza</h2>
+          <h2 class="text-sm font-extrabold text-rose-950">⏰ Alimenti Scaduti o in Scadenza</h2>
           <p id="expiring-subtitle" class="text-xs text-rose-800">Soglia preavviso impostata a 3 giorni (modificabile da ⚙)</p>
         </div>
-        <button type="button" onclick="openGearMenuModal()" class="px-2.5 py-1.5 rounded-xl bg-white border border-rose-200 text-rose-900 text-xs font-extrabold hover:bg-rose-100 transition shrink-0 cursor-pointer">
+        <button type="button" onclick="openGearMenuModal()" class="px-2.5 py-1.5 rounded-xl bg-white border border-rose-200 text-xs font-bold text-rose-800 hover:bg-rose-100 shrink-0 cursor-pointer">
           ⚙ Soglia
         </button>
       </div>
+
       <div id="expiring-list" class="space-y-2.5"></div>
     </section>
 
     <!-- ==================== TAB 4: LISTA SPESA ==================== -->
     <section id="view-shopping" class="tab-view hidden space-y-3">
-      <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs space-y-3">
-        <div class="flex items-center justify-between gap-2 flex-wrap">
-          <div>
-            <h2 class="text-base font-extrabold text-slate-900">🛒 Lista della Spesa</h2>
-            <p id="shopping-subtitle" class="text-xs text-slate-500">0 articoli da comprare • Sincronizzata con Alexa</p>
-          </div>
-          <div class="flex items-center gap-1.5">
-            <button type="button" onclick="openFrigoVoiceModal(true)" class="px-2.5 py-1.5 rounded-xl bg-emerald-100 hover:bg-emerald-200 text-emerald-900 text-xs font-extrabold transition cursor-pointer">
-              🎙 Parla
-            </button>
-            <button type="button" onclick="simulateAlexaSyncRefresh()" class="px-2.5 py-1.5 rounded-xl bg-sky-100 hover:bg-sky-200 text-sky-900 text-xs font-extrabold transition cursor-pointer">
-              ↻ Aggiorna
-            </button>
-          </div>
+      <div class="p-3.5 rounded-2xl bg-emerald-50 border border-emerald-200 flex items-center justify-between gap-2">
+        <div>
+          <h2 class="text-sm font-extrabold text-emerald-950">🛒 Lista della Spesa</h2>
+          <p id="shopping-subtitle" class="text-xs text-emerald-800">0 da comprare • Sincronizzata con Alexa</p>
         </div>
-        <form onsubmit="addShoppingManual(event)" class="flex gap-2">
-          <input id="shopping-input" type="text" required placeholder="Es. Pane integrale, Parmigiano, Mele..." class="flex-1 px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" />
-          <button type="submit" class="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-extrabold shadow-xs cursor-pointer">+</button>
-        </form>
+        <button type="button" onclick="simulateAlexaSyncRefresh()" class="px-3 py-1.5 rounded-xl bg-sky-600 hover:bg-sky-700 text-white text-xs font-extrabold shadow-xs shrink-0 cursor-pointer">
+          ↻ Sync Alexa
+        </button>
       </div>
 
-      <div id="shopping-checked-bar" class="hidden p-3 rounded-2xl bg-emerald-50 border border-emerald-200 flex items-center justify-between gap-2 flex-wrap">
-        <span id="shopping-checked-label" class="text-xs font-extrabold text-emerald-950">0 articoli nel carrello</span>
-        <div class="flex gap-1.5">
-          <button type="button" onclick="moveCheckedToLocation('frigo')" class="px-3 py-1.5 rounded-xl bg-sky-600 hover:bg-sky-700 text-white text-xs font-bold shadow-xs cursor-pointer">❄️ Sposta in Frigo</button>
-          <button type="button" onclick="moveCheckedToLocation('dispensa')" class="px-3 py-1.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold shadow-xs cursor-pointer">🥫 Sposta in Dispensa</button>
+      <form onsubmit="addShoppingManual(event)" class="flex gap-2">
+        <input id="shopping-input" type="text" placeholder="Aggiungi articolo alla lista spesa..." class="flex-1 px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+        <button type="submit" class="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-extrabold shadow-xs shrink-0 cursor-pointer">
+          + Aggiungi
+        </button>
+      </form>
+
+      <div id="shopping-checked-bar" class="hidden p-3 rounded-2xl bg-slate-900 text-white flex items-center justify-between gap-2">
+        <span id="shopping-checked-label" class="text-xs font-bold">0 nel carrello</span>
+        <div class="flex items-center gap-1.5">
+          <button type="button" onclick="moveCheckedToLocation('frigo')" class="px-2.5 py-1.5 rounded-xl bg-sky-500 hover:bg-sky-400 text-slate-950 text-xs font-extrabold cursor-pointer">
+            ❄️ Metti in Frigo
+          </button>
+          <button type="button" onclick="moveCheckedToLocation('dispensa')" class="px-2.5 py-1.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs font-extrabold cursor-pointer">
+            🥫 Metti in Dispensa
+          </button>
         </div>
       </div>
 
@@ -266,61 +282,141 @@
 
     <!-- ==================== TAB 5: RICETTE ANTI-SPRECO ==================== -->
     <section id="view-recipes" class="tab-view hidden space-y-3">
-      <div class="bg-gradient-to-r from-amber-500 to-orange-600 text-white p-4 rounded-2xl shadow-sm">
-        <h2 class="text-base font-extrabold">🍳 Ricette Anti-Spreco</h2>
-        <p class="text-xs text-amber-100 mt-0.5">Abbinamento automatico con gli ingredienti di Frigo e Dispensa</p>
+      <div class="p-3.5 rounded-2xl bg-amber-50 border border-amber-200">
+        <h2 class="text-sm font-extrabold text-amber-950">🍳 Idee Svuota-Frigo &amp; Dispensa</h2>
+        <p class="text-xs text-amber-800">Suggerimenti basati sugli ingredienti che hai già in casa</p>
       </div>
       <div id="recipes-list" class="space-y-2.5"></div>
     </section>
 
-    <!-- ==================== TAB 6: ALEXA & SYNC ==================== -->
+    <!-- ==================== TAB 6: ALEXA & SYNC FAMIGLIA ==================== -->
     <section id="view-settings" class="tab-view hidden space-y-3">
-      <div class="bg-white p-4 rounded-2xl border-2 border-sky-200 shadow-xs space-y-3">
-        <div class="flex items-center justify-between gap-2">
-          <div>
-            <h3 class="text-sm font-extrabold text-slate-900">Codice Famiglia &amp; Bridge Alexa</h3>
-            <p class="text-[11px] text-slate-500">Sincronizzazione condivisa per Frigo, Dispensa e Lista Spesa</p>
+      <div class="p-4 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-3">
+        <div class="flex items-start justify-between gap-3">
+          <div class="space-y-1">
+            <span class="text-[10px] font-extrabold uppercase tracking-wider text-sky-700">Condivisione Famiglia</span>
+            <h2 class="text-base font-extrabold text-slate-900">Codice Famiglia Attivo</h2>
+            <p id="settings-family-code" class="text-lg font-mono font-black text-emerald-700 tracking-wide">FRIGO-4829-CASA</p>
+            <div class="flex flex-wrap gap-1.5 pt-1">
+              <button type="button" onclick="copyTextValue(state.familyCode, 'Codice Famiglia copiato!')" class="px-2.5 py-1.5 rounded-xl bg-slate-900 text-white text-xs font-bold cursor-pointer">
+                📋 Copia Codice
+              </button>
+              <button type="button" onclick="shareFamilyInviteLink()" class="px-2.5 py-1.5 rounded-xl bg-emerald-600 text-white text-xs font-bold cursor-pointer">
+                🔗 Invita
+              </button>
+              <button type="button" onclick="createNewFamilyCode()" class="px-2.5 py-1.5 rounded-xl bg-slate-100 text-slate-700 text-xs font-bold cursor-pointer">
+                ↻ Nuovo
+              </button>
+            </div>
           </div>
-          <span class="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 shrink-0">Attivo</span>
+          <div id="family-qr-box" class="w-[116px] h-[116px] rounded-2xl border border-slate-200 bg-white p-1 flex items-center justify-center shrink-0"></div>
         </div>
 
-        <div class="p-3 rounded-xl bg-sky-50 border border-sky-200 flex items-center justify-between gap-2">
-          <div>
-            <span class="text-[10px] font-bold uppercase text-sky-700 block">Codice Famiglia</span>
-            <span id="settings-family-code" class="text-base font-mono font-extrabold text-sky-950">FRIGO-4829-CASA</span>
-          </div>
-          <button type="button" onclick="copyTextValue(state.familyCode, 'Codice Famiglia copiato!')" class="px-3 py-1.5 rounded-lg bg-white border border-sky-300 text-sky-900 text-xs font-bold cursor-pointer">Copia Codice</button>
+        <div class="pt-2 border-t border-slate-100 space-y-2">
+          <p class="text-xs font-bold text-slate-700">Unisciti a una famiglia esistente:</p>
+          <form onsubmit="joinFamilyCodeForm(event)" class="flex gap-2">
+            <input id="join-family-code-input" type="text" placeholder="Es. FRIGO-1234-CASA" class="flex-1 px-3 py-2 rounded-xl border border-slate-200 text-xs font-mono uppercase" />
+            <button type="submit" class="px-3 py-2 rounded-xl bg-sky-600 text-white text-xs font-extrabold cursor-pointer">Collega</button>
+            <button type="button" onclick="openQrScannerModal()" class="px-3 py-2 rounded-xl bg-slate-900 text-white text-xs font-extrabold cursor-pointer">📷 QR</button>
+          </form>
         </div>
+      </div>
 
-        <div class="space-y-1.5">
-          <label class="block text-[11px] font-extrabold text-slate-700">URL Cloudflare Worker</label>
-          <div class="flex gap-2">
-            <input id="worker-url-input" type="url" value="https://frigoscan-sync.tuo-account.workers.dev" onchange="saveWorkerUrl(this.value)" class="flex-1 px-3 py-2 rounded-xl border border-slate-200 text-xs font-mono text-slate-800 focus:outline-none focus:ring-2 focus:ring-sky-500" />
-            <button type="button" onclick="copyTextValue(document.getElementById('worker-url-input').value, 'URL Worker copiato!')" class="px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold cursor-pointer">Copia</button>
-          </div>
+      <div class="p-4 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-2.5">
+        <span class="text-[10px] font-extrabold uppercase tracking-wider text-emerald-700">Cloudflare Worker &amp; Amazon Alexa</span>
+        <h3 class="text-sm font-extrabold text-slate-900">URL Bridge Sync</h3>
+        <div class="flex gap-2">
+          <input id="worker-url-input" type="url" placeholder="https://frigoscan-sync.tuo-account.workers.dev" class="flex-1 px-3 py-2 rounded-xl border border-slate-200 text-xs font-mono" />
+          <button type="button" onclick="saveWorkerUrl(document.getElementById('worker-url-input').value)" class="px-3 py-2 rounded-xl bg-emerald-600 text-white text-xs font-extrabold cursor-pointer">Salva</button>
         </div>
-
-        <div class="p-3 rounded-xl bg-slate-900 text-slate-200 text-xs space-y-2">
-          <div class="flex items-center justify-between gap-2">
-            <span class="text-[10px] font-bold uppercase text-sky-400">Endpoint List Events (Alexa)</span>
-            <button type="button" onclick="copyTextValue(document.getElementById('alexa-webhook-endpoint').textContent, 'Endpoint Alexa copiato!')" class="px-2 py-0.5 rounded bg-white/10 hover:bg-white/20 text-[10px] font-bold text-white cursor-pointer">Copia URL</button>
-          </div>
-          <code id="alexa-webhook-endpoint" class="block text-[11px] font-mono text-emerald-300 break-all">https://frigoscan-sync.tuo-account.workers.dev/alexa-webhook?family=FRIGO-4829-CASA</code>
-        </div>
-
-        <div class="p-3 rounded-xl bg-sky-50/70 border border-sky-200 flex items-center justify-between gap-2">
-          <div class="min-w-0">
-            <p class="text-xs font-extrabold text-sky-950">Simula evento vocale da Echo / Alexa</p>
-            <p class="text-[11px] text-sky-800 truncate">"Alexa, aggiungi alla lista della spesa..."</p>
-          </div>
-          <button type="button" onclick="simulateAlexaSyncRefresh()" class="px-3 py-2 rounded-xl bg-sky-600 hover:bg-sky-700 text-white text-xs font-extrabold shrink-0 cursor-pointer">
-            Test Alexa
-          </button>
+        <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
+          <p class="text-[10px] font-bold uppercase text-slate-500">Webhook Endpoint per Alexa / IFTTT:</p>
+          <p id="alexa-webhook-endpoint" class="text-[11px] font-mono text-slate-800 break-all"></p>
         </div>
       </div>
     </section>
 
   </main>
+
+  <!-- ==================== MODAL SCANSIONE QR CODICE FAMIGLIA ==================== -->
+  <div id="qr-scanner-modal" onclick="if(event.target===this) closeQrScannerModal()" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-xs flex items-end sm:items-center justify-center p-0 sm:p-4">
+    <div class="bg-slate-900 text-white w-full max-w-md rounded-t-3xl sm:rounded-3xl p-5 space-y-3.5 shadow-2xl border border-slate-700">
+      <div class="flex items-center justify-between">
+        <div>
+          <h3 class="text-base font-extrabold text-white">📷 Scansiona QR Famiglia</h3>
+          <p class="text-[11px] text-slate-400">Inquadra il QR Code dell'altro telefono FrigoScan</p>
+        </div>
+        <button type="button" onclick="closeQrScannerModal()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-slate-300 font-bold cursor-pointer">✕</button>
+      </div>
+      <div class="relative rounded-2xl overflow-hidden bg-black aspect-square max-h-[260px] mx-auto border-2 border-sky-500/60 flex items-center justify-center">
+        <video id="qr-scanner-video" playsinline muted class="w-full h-full object-cover"></video>
+        <p id="qr-scanner-status" class="absolute bottom-2.5 left-2.5 right-2.5 text-center text-[11px] font-bold bg-slate-950/85 text-sky-300 px-3 py-1.5 rounded-xl">
+          Avvio fotocamera...
+        </p>
+      </div>
+      <form onsubmit="applyScannedQrManual(event)" class="flex gap-2">
+        <input id="qr-manual-fallback-input" type="text" placeholder="Oppure incolla Codice o Link invito..." class="flex-1 px-3 py-2 rounded-xl bg-slate-800 border border-slate-600 text-xs text-white" />
+        <button type="submit" class="px-3.5 py-2 rounded-xl bg-emerald-600 text-white text-xs font-extrabold cursor-pointer">Collega</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL SCANSIONE BARCODE / QR / FOTO PRODOTTO ==================== -->
+  <div id="product-scanner-modal" onclick="if(event.target===this) closeProductScannerModal()" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-xs flex items-end sm:items-center justify-center p-0 sm:p-4">
+    <div class="bg-slate-900 text-white w-full max-w-md rounded-t-3xl sm:rounded-3xl p-5 space-y-3.5 shadow-2xl border border-slate-700 max-h-[94vh] overflow-y-auto">
+      <div class="flex items-center justify-between">
+        <div>
+          <h3 class="text-base font-extrabold text-white">📷 Scansiona o Fotografa Prodotto</h3>
+          <p class="text-[11px] text-slate-400">Codice a barre, QR code oppure foto confezione/scadenza</p>
+        </div>
+        <button type="button" onclick="closeProductScannerModal()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-slate-300 font-bold cursor-pointer">✕</button>
+      </div>
+
+      <!-- SELETTORE MODALITÀ -->
+      <div class="grid grid-cols-2 gap-1.5 p-1 rounded-2xl bg-slate-800 border border-slate-700">
+        <button type="button" id="scan-mode-btn-barcode" onclick="setProductScanMode('barcode')" class="py-2 px-3 rounded-xl bg-emerald-600 text-white text-xs font-extrabold transition cursor-pointer">
+          ║▌║ Codice a Barre / QR
+        </button>
+        <button type="button" id="scan-mode-btn-photo" onclick="setProductScanMode('photo')" class="py-2 px-3 rounded-xl text-slate-300 hover:text-white text-xs font-extrabold transition cursor-pointer">
+          📸 Foto Prodotto / AI
+        </button>
+      </div>
+
+      <!-- ANTEPRIMA FOTOCAMERA LIVE -->
+      <div class="relative rounded-2xl overflow-hidden bg-black aspect-[4/3] max-h-[260px] mx-auto border-2 border-emerald-500/60 flex items-center justify-center">
+        <video id="product-scanner-video" playsinline muted class="w-full h-full object-cover"></video>
+        <canvas id="product-scanner-canvas" class="hidden"></canvas>
+        <div id="product-scan-reticle" class="pointer-events-none absolute inset-6 border-2 border-emerald-400/80 rounded-2xl flex items-center justify-center">
+          <div class="w-full h-0.5 bg-emerald-400/80 shadow-[0_0_8px_#34d399]"></div>
+        </div>
+        <p id="product-scanner-status" class="absolute bottom-2.5 left-2.5 right-2.5 text-center text-[11px] font-bold bg-slate-950/85 text-emerald-300 px-3 py-1.5 rounded-xl">
+          Avvio fotocamera...
+        </p>
+      </div>
+
+      <!-- CONTROLLI SCATTO FOTO / GALLERIA -->
+      <div class="grid grid-cols-2 gap-2">
+        <button type="button" onclick="captureProductPhotoFromCamera()" class="py-2.5 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 active:scale-98 text-white text-xs font-extrabold shadow-sm flex items-center justify-center gap-1.5 cursor-pointer">
+          <span>📸</span>
+          <span>Scatta Foto Ora</span>
+        </button>
+        <label class="py-2.5 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-600 text-slate-100 text-xs font-extrabold flex items-center justify-center gap-1.5 cursor-pointer transition">
+          <span>🖼️</span>
+          <span>Carica Foto</span>
+          <input type="file" accept="image/*" capture="environment" class="hidden" onchange="handleUploadedProductPhoto(event)" />
+        </label>
+      </div>
+
+      <!-- INSERIMENTO MANUALE CODICE A BARRE / EAN -->
+      <div class="p-3 rounded-2xl bg-slate-800/90 border border-slate-700 space-y-2">
+        <p class="text-[11px] text-slate-300">Oppure digita il codice a barre (EAN / QR):</p>
+        <form onsubmit="submitManualBarcodeLookup(event)" class="flex gap-2">
+          <input id="manual-barcode-input" type="text" inputmode="numeric" placeholder="Es. 8000500037560..." class="flex-1 px-3 py-2 rounded-xl bg-slate-900 border border-slate-600 text-xs font-mono text-white focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+          <button type="submit" class="px-3.5 py-2 rounded-xl bg-sky-600 hover:bg-sky-500 text-white text-xs font-extrabold cursor-pointer">Cerca</button>
+        </form>
+      </div>
+    </div>
+  </div>
 
   <!-- ==================== MODAL AGGIUNGI / MODIFICA PRODOTTO ==================== -->
   <div id="item-modal" onclick="if(event.target===this) closeModal('item-modal')" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-end sm:items-center justify-center p-0 sm:p-4">
@@ -329,8 +425,28 @@
         <h3 id="item-modal-title" class="text-base font-extrabold text-slate-900">Nuovo Prodotto</h3>
         <button type="button" onclick="closeModal('item-modal')" class="w-8 h-8 rounded-full bg-slate-100 text-slate-600 font-bold cursor-pointer">✕</button>
       </div>
+
+      <!-- SCORCIATOIE RAPIDE SCANNER E FOTO DENTRO IL MODAL -->
+      <div class="grid grid-cols-2 gap-2">
+        <button type="button" onclick="closeModal('item-modal'); openProductScannerModal('barcode')" class="py-2 px-3 rounded-xl bg-sky-50 hover:bg-sky-100 border border-sky-200 text-sky-900 text-xs font-extrabold flex items-center justify-center gap-1.5 cursor-pointer">
+          <span>║▌║</span>
+          <span>Scansiona Codice</span>
+        </button>
+        <button type="button" onclick="closeModal('item-modal'); openProductScannerModal('photo')" class="py-2 px-3 rounded-xl bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-emerald-900 text-xs font-extrabold flex items-center justify-center gap-1.5 cursor-pointer">
+          <span>📸</span>
+          <span>Foto Prodotto</span>
+        </button>
+      </div>
+
+      <!-- ANTEPRIMA FOTO ACQUISITA -->
+      <div id="prod-photo-preview-box" class="hidden relative rounded-2xl overflow-hidden border border-slate-200 bg-slate-50">
+        <img id="prod-photo-preview-img" src="" alt="Anteprima prodotto" class="w-full max-h-36 object-cover" />
+        <button type="button" onclick="clearProductPhotoPreview()" class="absolute top-2 right-2 px-2 py-1 rounded-lg bg-slate-900/80 text-white text-[10px] font-extrabold cursor-pointer">✕ Rimuovi foto</button>
+      </div>
+
       <form onsubmit="saveProductForm(event)" class="space-y-3">
         <input type="hidden" id="prod-id" />
+        <input type="hidden" id="prod-photo-data" />
         <div>
           <label class="block text-xs font-bold text-slate-700 mb-1">Nome Prodotto *</label>
           <input id="prod-name" type="text" required placeholder="Es. Latte fresco, Pasta integrale, Uova..." class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" />
@@ -1009,6 +1125,175 @@
       if (settingsCode) settingsCode.textContent = fc;
       if (workerInput) workerInput.value = wu;
       if (endpointEl) endpointEl.textContent = `${wu}/alexa-webhook?family=${encodeURIComponent(fc)}`;
+      renderFamilyQrCode();
+    }
+
+    function buildFamilyInviteUrl() {
+      const fc = encodeURIComponent(state.familyCode || 'FRIGO-4829-CASA');
+      const base = window.location.protocol.startsWith('http')
+        ? `${window.location.origin}${window.location.pathname}`
+        : 'https://frigoscanapp.github.io/frigoscanV2/';
+      return `${base}?family=${fc}`;
+    }
+
+    function renderFamilyQrCode() {
+      const box = document.getElementById('family-qr-box');
+      if (!box) return;
+      const inviteUrl = buildFamilyInviteUrl();
+      box.innerHTML = '';
+      if (typeof QRCode !== 'undefined') {
+        try {
+          new QRCode(box, {
+            text: inviteUrl,
+            width: 110,
+            height: 110,
+            colorDark: '#0f172a',
+            colorLight: '#ffffff',
+            correctLevel: QRCode.CorrectLevel.M
+          });
+          return;
+        } catch (e) {}
+      }
+      box.innerHTML = `<div class="text-center p-2"><span class="text-[10px] font-mono font-extrabold text-slate-700 break-all">${escapeHtml(state.familyCode)}</span></div>`;
+    }
+
+    function createNewFamilyCode() {
+      const num = Math.floor(1000 + Math.random() * 9000);
+      const suffixes = ['CASA', 'FAM', 'HOME', 'SYNC'];
+      const suf = suffixes[Math.floor(Math.random() * suffixes.length)];
+      const nextCode = `FRIGO-${num}-${suf}`;
+      state.familyCode = nextCode;
+      persistState();
+      syncFamilyAndWorkerUI();
+      showToast(`Nuovo Codice Famiglia creato: ${nextCode}`);
+    }
+
+    function extractFamilyCodeFromText(raw) {
+      const txt = String(raw || '').trim();
+      if (!txt) return '';
+      try {
+        if (txt.includes('family=')) {
+          const u = new URL(txt.startsWith('http') ? txt : `https://example.com/?${txt.split('?').pop()}`);
+          const param = u.searchParams.get('family');
+          if (param) return param.trim().toUpperCase();
+        }
+      } catch (e) {}
+      const cleaned = txt.toUpperCase().replace(/[^A-Z0-9-]/g, '');
+      return cleaned.length >= 4 ? cleaned : '';
+    }
+
+    function applyFamilyCode(rawCode) {
+      const code = extractFamilyCodeFromText(rawCode);
+      if (!code) {
+        showToast('Inserisci un Codice Famiglia valido');
+        return false;
+      }
+      state.familyCode = code;
+      persistState();
+      syncFamilyAndWorkerUI();
+      showToast(`Collegato al gruppo famiglia ${code}!`);
+      return true;
+    }
+
+    function joinFamilyCodeForm(e) {
+      e.preventDefault();
+      const inp = document.getElementById('join-family-code-input');
+      if (applyFamilyCode(inp?.value || '')) {
+        inp.value = '';
+      }
+    }
+
+    function shareFamilyInviteLink() {
+      const url = buildFamilyInviteUrl();
+      if (navigator.share) {
+        navigator.share({
+          title: 'Unisciti al mio FrigoScan',
+          text: `Usa il Codice Famiglia ${state.familyCode} per condividere frigo, dispensa e lista spesa:`,
+          url
+        }).catch(() => copyTextValue(url, 'Link invito famiglia copiato!'));
+      } else {
+        copyTextValue(url, 'Link invito famiglia copiato!');
+      }
+    }
+
+    let qrVideoStream = null;
+    let qrScanTimer = null;
+
+    async function openQrScannerModal() {
+      const modal = document.getElementById('qr-scanner-modal');
+      const video = document.getElementById('qr-scanner-video');
+      const status = document.getElementById('qr-scanner-status');
+      modal.classList.remove('hidden');
+      status.textContent = 'Richiesta accesso alla fotocamera...';
+
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        status.textContent = 'Fotocamera non disponibile: incolla il codice qui sotto.';
+        return;
+      }
+
+      try {
+        qrVideoStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
+        video.srcObject = qrVideoStream;
+        await video.play();
+
+        if ('BarcodeDetector' in window) {
+          const detector = new BarcodeDetector({ formats: ['qr_code'] });
+          status.textContent = 'Inquadra il QR Code di FrigoScan...';
+          qrScanTimer = setInterval(async () => {
+            try {
+              const codes = await detector.detect(video);
+              if (codes && codes.length > 0 && codes[0].rawValue) {
+                const ok = applyFamilyCode(codes[0].rawValue);
+                if (ok) closeQrScannerModal();
+              }
+            } catch (err) {}
+          }, 450);
+        } else {
+          status.textContent = 'Scanner automatico non supportato su questo browser: usa il campo qui sotto.';
+        }
+      } catch (err) {
+        status.textContent = 'Permesso fotocamera negato o non disponibile: incolla il codice qui sotto.';
+      }
+    }
+
+    function closeQrScannerModal() {
+      if (qrScanTimer) {
+        clearInterval(qrScanTimer);
+        qrScanTimer = null;
+      }
+      if (qrVideoStream) {
+        try { qrVideoStream.getTracks().forEach(t => t.stop()); } catch (e) {}
+        qrVideoStream = null;
+      }
+      const video = document.getElementById('qr-scanner-video');
+      if (video) video.srcObject = null;
+      document.getElementById('qr-scanner-modal').classList.add('hidden');
+    }
+
+    function applyScannedQrManual(e) {
+      e.preventDefault();
+      const inp = document.getElementById('qr-manual-fallback-input');
+      if (applyFamilyCode(inp?.value || '')) {
+        inp.value = '';
+        closeQrScannerModal();
+      }
+    }
+
+    function checkUrlFamilyInviteParam() {
+      try {
+        const params = new URLSearchParams(window.location.search || '');
+        const invitedFamily = params.get('family');
+        if (invitedFamily) {
+          const clean = extractFamilyCodeFromText(invitedFamily);
+          if (clean && clean !== state.familyCode) {
+            state.familyCode = clean;
+            persistState();
+            showToast(`Collegato automaticamente alla famiglia ${clean}!`);
+          }
+          const cleanUrl = `${window.location.origin}${window.location.pathname}`;
+          window.history.replaceState({}, document.title, cleanUrl);
+        }
+      } catch (e) {}
     }
 
     function switchTab(tab) {
@@ -1037,6 +1322,7 @@
       if (tab === 'expiring') renderExpiring();
       if (tab === 'shopping') renderShopping();
       if (tab === 'recipes') renderRecipes();
+      if (tab === 'settings') renderFamilyQrCode();
     }
 
     function updateAllViews() {
@@ -1088,13 +1374,20 @@
         else expBadge = `<span class="text-[10px] font-semibold text-slate-400">Scad. ${item.expiry}</span>`;
       }
 
+      const thumbHtml = item.photo
+        ? `<img src="${item.photo}" alt="${escapeHtml(item.name)}" class="w-11 h-11 rounded-xl object-cover border border-slate-200 shrink-0" />`
+        : '';
+
       return `
         <div class="p-3 rounded-2xl bg-white border ${d <= thresh ? 'border-amber-300' : 'border-slate-200'} shadow-xs flex items-center justify-between gap-2">
-          <div onclick="openItemModal('${item.id}')" class="min-w-0 flex-1 cursor-pointer">
-            <h4 class="text-sm font-extrabold text-slate-900 truncate">${escapeHtml(item.name)}</h4>
-            <div class="flex items-center gap-1.5 flex-wrap mt-1">
-              ${locBadge}
-              ${expBadge}
+          <div onclick="openItemModal('${item.id}')" class="min-w-0 flex-1 flex items-center gap-2.5 cursor-pointer">
+            ${thumbHtml}
+            <div class="min-w-0 flex-1">
+              <h4 class="text-sm font-extrabold text-slate-900 truncate">${escapeHtml(item.name)}</h4>
+              <div class="flex items-center gap-1.5 flex-wrap mt-1">
+                ${locBadge}
+                ${expBadge}
+              </div>
             </div>
           </div>
           <div class="flex items-center gap-1 shrink-0">
@@ -1200,20 +1493,41 @@
       document.getElementById('prod-expiry').value = obj?.expiry || addDaysIso(5);
       document.getElementById('prod-qty').value = obj?.qty ?? 1;
       document.getElementById('prod-unit').value = obj?.unit || 'pz';
+
+      const photoVal = obj?.photo || '';
+      document.getElementById('prod-photo-data').value = photoVal;
+      const previewBox = document.getElementById('prod-photo-preview-box');
+      const previewImg = document.getElementById('prod-photo-preview-img');
+      if (photoVal) {
+        previewImg.src = photoVal;
+        previewBox.classList.remove('hidden');
+      } else {
+        previewImg.src = '';
+        previewBox.classList.add('hidden');
+      }
+
       document.getElementById('btn-delete-prod').classList.toggle('hidden', !isEdit);
       document.getElementById('item-modal').classList.remove('hidden');
+    }
+
+    function clearProductPhotoPreview() {
+      document.getElementById('prod-photo-data').value = '';
+      document.getElementById('prod-photo-preview-img').src = '';
+      document.getElementById('prod-photo-preview-box').classList.add('hidden');
     }
 
     function saveProductForm(e) {
       e.preventDefault();
       const id = document.getElementById('prod-id').value;
+      const photo = document.getElementById('prod-photo-data').value || '';
       const payload = {
         id: id || 'p_' + Date.now(),
         name: document.getElementById('prod-name').value.trim(),
         location: document.getElementById('prod-location').value,
         expiry: document.getElementById('prod-expiry').value,
         qty: parseInt(document.getElementById('prod-qty').value, 10) || 1,
-        unit: document.getElementById('prod-unit').value
+        unit: document.getElementById('prod-unit').value,
+        ...(photo ? { photo } : {})
       };
       if (id) {
         const idx = state.items.findIndex(i => i.id === id);
@@ -1225,6 +1539,247 @@
       closeModal('item-modal');
       updateAllViews();
       showToast(payload.location === 'dispensa' ? 'Salvato in Dispensa!' : 'Salvato in Frigo!');
+    }
+
+    // ==================== SCANNER BARCODE / QR / FOTO PRODOTTO ====================
+    let prodScanStream = null;
+    let prodScanTimer = null;
+    let prodScanMode = 'barcode';
+    let prodScanTargetLocation = 'frigo';
+
+    function setProductScanMode(mode) {
+      prodScanMode = mode === 'photo' ? 'photo' : 'barcode';
+      const btnBar = document.getElementById('scan-mode-btn-barcode');
+      const btnPho = document.getElementById('scan-mode-btn-photo');
+      const reticle = document.getElementById('product-scan-reticle');
+      const status = document.getElementById('product-scanner-status');
+
+      if (prodScanMode === 'barcode') {
+        btnBar.className = 'py-2 px-3 rounded-xl bg-emerald-600 text-white text-xs font-extrabold transition cursor-pointer';
+        btnPho.className = 'py-2 px-3 rounded-xl text-slate-300 hover:text-white text-xs font-extrabold transition cursor-pointer';
+        if (reticle) reticle.classList.remove('hidden');
+        if (status) status.textContent = 'Inquadra il codice a barre o QR del prodotto...';
+      } else {
+        btnPho.className = 'py-2 px-3 rounded-xl bg-emerald-600 text-white text-xs font-extrabold transition cursor-pointer';
+        btnBar.className = 'py-2 px-3 rounded-xl text-slate-300 hover:text-white text-xs font-extrabold transition cursor-pointer';
+        if (reticle) reticle.classList.add('hidden');
+        if (status) status.textContent = 'Inquadra il prodotto o la data di scadenza e tocca "Scatta Foto Ora"';
+      }
+    }
+
+    async function openProductScannerModal(mode = 'barcode', defaultLocation = null) {
+      prodScanTargetLocation = defaultLocation || (currentTab === 'pantry' ? 'dispensa' : 'frigo');
+      setProductScanMode(mode);
+      const modal = document.getElementById('product-scanner-modal');
+      const video = document.getElementById('product-scanner-video');
+      const status = document.getElementById('product-scanner-status');
+      modal.classList.remove('hidden');
+
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        status.textContent = 'Fotocamera live non disponibile: usa "Carica Foto" o inserisci il codice.';
+        return;
+      }
+
+      try {
+        prodScanStream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: { ideal: 'environment' } }
+        });
+        video.srcObject = prodScanStream;
+        await video.play();
+
+        if ('BarcodeDetector' in window) {
+          const detector = new BarcodeDetector({
+            formats: ['ean_13', 'ean_8', 'upc_a', 'upc_e', 'qr_code', 'code_128']
+          });
+          prodScanTimer = setInterval(async () => {
+            if (prodScanMode !== 'barcode') return;
+            try {
+              const codes = await detector.detect(video);
+              if (codes && codes.length > 0 && codes[0].rawValue) {
+                const rawCode = codes[0].rawValue.trim();
+                closeProductScannerModal();
+                await resolveScannedProductCode(rawCode);
+              }
+            } catch (err) {}
+          }, 420);
+        } else if (prodScanMode === 'barcode') {
+          status.textContent = 'Inquadra e scatta una foto, oppure inserisci il codice EAN qui sotto.';
+        }
+      } catch (err) {
+        status.textContent = 'Permesso fotocamera non attivo: usa "Carica Foto" o digita il codice.';
+      }
+    }
+
+    function closeProductScannerModal() {
+      if (prodScanTimer) {
+        clearInterval(prodScanTimer);
+        prodScanTimer = null;
+      }
+      if (prodScanStream) {
+        try { prodScanStream.getTracks().forEach(t => t.stop()); } catch (e) {}
+        prodScanStream = null;
+      }
+      const video = document.getElementById('product-scanner-video');
+      if (video) video.srcObject = null;
+      document.getElementById('product-scanner-modal').classList.add('hidden');
+    }
+
+    async function submitManualBarcodeLookup(e) {
+      e.preventDefault();
+      const inp = document.getElementById('manual-barcode-input');
+      const code = (inp.value || '').trim();
+      if (!code) return;
+      inp.value = '';
+      closeProductScannerModal();
+      await resolveScannedProductCode(code);
+    }
+
+    async function resolveScannedProductCode(rawCode) {
+      if (/FRIGO-[A-Z0-9-]+/i.test(rawCode) || rawCode.includes('family=')) {
+        applyFamilyCode(rawCode);
+        return;
+      }
+
+      showToast(`Ricerca prodotto per codice ${rawCode}...`);
+      let detectedName = '';
+      let detectedLocation = prodScanTargetLocation;
+
+      if (/^\d{8,14}$/.test(rawCode)) {
+        try {
+          const res = await fetch(`https://world.openfoodfacts.org/api/v2/product/${encodeURIComponent(rawCode)}.json`);
+          if (res.ok) {
+            const data = await res.json();
+            const p = data && data.product;
+            if (p) {
+              const brand = (p.brands || '').split(',')[0].trim();
+              const pname = p.product_name_it || p.product_name || p.generic_name_it || p.generic_name || '';
+              detectedName = [pname, brand].filter(Boolean).join(' - ').trim();
+              const cats = (p.categories || '').toLowerCase();
+              if (/pasta|riso|conserve|biscotti|olio|farina|tonno|legumi|cereali/.test(cats)) {
+                detectedLocation = 'dispensa';
+              } else if (/latte|yogurt|formaggi|mozzarella|freschi|salumi|carne/.test(cats)) {
+                detectedLocation = 'frigo';
+              }
+            }
+          }
+        } catch (err) {}
+      } else if (!/^https?:\/\//i.test(rawCode)) {
+        detectedName = rawCode;
+      }
+
+      openItemModal({
+        name: detectedName || `Prodotto (${rawCode})`,
+        location: detectedLocation,
+        qty: 1,
+        unit: 'pz',
+        expiry: addDaysIso(detectedLocation === 'dispensa' ? 90 : 7)
+      });
+      showToast(detectedName ? `Trovato: ${detectedName}` : 'Codice letto! Completa i dettagli del prodotto.');
+    }
+
+    function compressCanvasToDataUrl(sourceCanvas, maxSide = 480) {
+      const w = sourceCanvas.width;
+      const h = sourceCanvas.height;
+      const scale = Math.min(1, maxSide / Math.max(w, h));
+      const out = document.createElement('canvas');
+      out.width = Math.max(1, Math.round(w * scale));
+      out.height = Math.max(1, Math.round(h * scale));
+      const ctx = out.getContext('2d');
+      ctx.drawImage(sourceCanvas, 0, 0, out.width, out.height);
+      return out.toDataURL('image/jpeg', 0.72);
+    }
+
+    async function captureProductPhotoFromCamera() {
+      const video = document.getElementById('product-scanner-video');
+      const canvas = document.getElementById('product-scanner-canvas');
+      if (!video || !video.videoWidth) {
+        showToast('Fotocamera non attiva: usa "Carica Foto"');
+        return;
+      }
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+
+      let detectedCode = '';
+      if ('BarcodeDetector' in window) {
+        try {
+          const detector = new BarcodeDetector({ formats: ['ean_13', 'ean_8', 'upc_a', 'upc_e', 'qr_code'] });
+          const found = await detector.detect(canvas);
+          if (found && found.length > 0 && found[0].rawValue) {
+            detectedCode = found[0].rawValue.trim();
+          }
+        } catch (e) {}
+      }
+
+      const photoDataUrl = compressCanvasToDataUrl(canvas, 480);
+      closeProductScannerModal();
+
+      if (detectedCode) {
+        await resolveScannedProductCode(detectedCode);
+        document.getElementById('prod-photo-data').value = photoDataUrl;
+        document.getElementById('prod-photo-preview-img').src = photoDataUrl;
+        document.getElementById('prod-photo-preview-box').classList.remove('hidden');
+        return;
+      }
+
+      openItemModal({
+        name: '',
+        location: prodScanTargetLocation,
+        qty: 1,
+        unit: 'pz',
+        expiry: addDaysIso(prodScanTargetLocation === 'dispensa' ? 90 : 5),
+        photo: photoDataUrl
+      });
+      showToast('Foto acquisita! Inserisci il nome del prodotto.');
+    }
+
+    function handleUploadedProductPhoto(e) {
+      const file = e.target.files && e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        const img = new Image();
+        img.onload = async () => {
+          const canvas = document.createElement('canvas');
+          canvas.width = img.width;
+          canvas.height = img.height;
+          canvas.getContext('2d').drawImage(img, 0, 0);
+
+          let detectedCode = '';
+          if ('BarcodeDetector' in window) {
+            try {
+              const detector = new BarcodeDetector({ formats: ['ean_13', 'ean_8', 'upc_a', 'upc_e', 'qr_code'] });
+              const found = await detector.detect(canvas);
+              if (found && found.length > 0 && found[0].rawValue) {
+                detectedCode = found[0].rawValue.trim();
+              }
+            } catch (err) {}
+          }
+
+          const photoDataUrl = compressCanvasToDataUrl(canvas, 480);
+          closeProductScannerModal();
+
+          if (detectedCode) {
+            await resolveScannedProductCode(detectedCode);
+            document.getElementById('prod-photo-data').value = photoDataUrl;
+            document.getElementById('prod-photo-preview-img').src = photoDataUrl;
+            document.getElementById('prod-photo-preview-box').classList.remove('hidden');
+            return;
+          }
+
+          openItemModal({
+            name: '',
+            location: prodScanTargetLocation,
+            qty: 1,
+            unit: 'pz',
+            expiry: addDaysIso(prodScanTargetLocation === 'dispensa' ? 90 : 5),
+            photo: photoDataUrl
+          });
+          showToast('Foto caricata! Inserisci il nome del prodotto.');
+        };
+        img.src = reader.result;
+      };
+      reader.readAsDataURL(file);
     }
 
     function deleteCurrentProduct() {
@@ -1803,6 +2358,7 @@
 
     // Boot
     recoverAnyLocalState();
+    checkUrlFamilyInviteParam();
     syncFamilyAndWorkerUI();
     syncExpiryThresholdUI();
     updateInstallButtonsVisibility();

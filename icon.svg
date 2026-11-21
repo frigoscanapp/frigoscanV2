@@ -1,10 +1,77 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
   <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#10b981"/>
-      <stop offset="100%" stop-color="#0f766e"/>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#059669"/>
+      <stop offset="52%" stop-color="#0d9488"/>
+      <stop offset="100%" stop-color="#0284c7"/>
     </linearGradient>
+
+    <radialGradient id="topGlow" cx="24%" cy="18%" r="65%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.32"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+
+    <linearGradient id="fridgeBody" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.98"/>
+      <stop offset="100%" stop-color="#e0f2fe" stop-opacity="0.90"/>
+    </linearGradient>
+
+    <linearGradient id="scanLaser" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#34d399" stop-opacity="0"/>
+      <stop offset="20%" stop-color="#34d399" stop-opacity="1"/>
+      <stop offset="50%" stop-color="#ffffff" stop-opacity="1"/>
+      <stop offset="80%" stop-color="#38bdf8" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#38bdf8" stop-opacity="0"/>
+    </linearGradient>
+
+    <filter id="dropShadow" x="-15%" y="-15%" width="130%" height="135%">
+      <feDropShadow dx="0" dy="16" stdDeviation="16" flood-color="#022c22" flood-opacity="0.30"/>
+    </filter>
+
+    <filter id="laserGlow" x="-20%" y="-80%" width="140%" height="260%">
+      <feGaussianBlur stdDeviation="6" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
   </defs>
-  <rect width="512" height="512" rx="115" fill="url(#bg)"/>
-  <text x="256" y="325" text-anchor="middle" fill="#ffffff" font-family="system-ui,-apple-system,sans-serif" font-size="225" font-weight="900" letter-spacing="-8">FS</text>
+
+  <!-- Squircle background -->
+  <rect width="512" height="512" rx="116" fill="url(#bgGrad)"/>
+  <rect width="512" height="512" rx="116" fill="url(#topGlow)"/>
+  <rect x="6" y="6" width="500" height="500" rx="110" fill="none" stroke="#ffffff" stroke-opacity="0.22" stroke-width="4"/>
+
+  <!-- Subtle scanner viewfinder brackets -->
+  <g stroke="#ffffff" stroke-width="11" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.48">
+    <path d="M 96 146 V 114 A 24 24 0 0 1 120 90 H 152"/>
+    <path d="M 360 90 H 392 A 24 24 0 0 1 416 114 V 146"/>
+    <path d="M 96 366 V 398 A 24 24 0 0 0 120 422 H 152"/>
+    <path d="M 360 422 H 392 A 24 24 0 0 0 416 398 V 366"/>
+  </g>
+
+  <!-- Modern minimalist fridge silhouette -->
+  <g filter="url(#dropShadow)">
+    <!-- Upper freezer / fridge door -->
+    <path d="M 164 134 C 164 114.118 180.118 98 200 98 H 312 C 331.882 98 348 114.118 348 134 V 214 H 164 Z" fill="url(#fridgeBody)"/>
+    <!-- Lower main compartment door -->
+    <path d="M 164 226 H 348 V 378 C 348 397.882 331.882 414 312 414 H 200 C 180.118 414 164 397.882 164 378 Z" fill="url(#fridgeBody)"/>
+
+    <!-- Sleek vertical handles -->
+    <rect x="314" y="138" width="11" height="48" rx="5.5" fill="#0d9488"/>
+    <rect x="314" y="254" width="11" height="72" rx="5.5" fill="#0d9488"/>
+
+    <!-- Minimalist snowflake / freshness emblem -->
+    <g stroke="#0ea5e9" stroke-width="8" stroke-linecap="round" opacity="0.88">
+      <line x1="238" y1="138" x2="238" y2="174"/>
+      <line x1="222" y1="147" x2="254" y2="165"/>
+      <line x1="254" y1="147" x2="222" y2="165"/>
+    </g>
+    <circle cx="238" cy="156" r="4.5" fill="#ffffff"/>
+  </g>
+
+  <!-- Smart scan beam across the fridge -->
+  <g filter="url(#laserGlow)">
+    <rect x="116" y="216" width="280" height="8" rx="4" fill="url(#scanLaser)"/>
+  </g>
 </svg>
