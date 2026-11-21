@@ -3,7 +3,18 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>FrigoScan v14.5 — Inventario Frigo, Dispensa & Assistente Vocale</title>
+  <meta name="theme-color" content="#059669" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="FrigoScan" />
+  <meta name="description" content="FrigoScan — Inventario Frigo, Dispensa, Lista Spesa Alexa & Assistente Vocale" />
+  <title>FrigoScan — Inventario Frigo, Dispensa & Assistente Vocale</title>
+
+  <link rel="manifest" href="./manifest.json" />
+  <link rel="icon" type="image/svg+xml" href="./icon.svg" />
+  <link rel="apple-touch-icon" href="./icon.svg" />
+
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     * { -webkit-tap-highlight-color: transparent; }
@@ -37,8 +48,18 @@
   <header class="sticky top-0 z-40 bg-white/95 backdrop-blur border-b border-slate-200 shadow-sm">
     <div class="max-w-2xl mx-auto px-4 pt-3 pb-2 flex items-center justify-between gap-2">
       <div class="flex items-center gap-2.5 min-w-0">
-        <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-700 flex items-center justify-center text-white font-black text-base tracking-tighter shadow-sm shrink-0">
-          FS
+        <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-emerald-600 via-teal-600 to-sky-600 flex items-center justify-center shadow-sm shrink-0 border border-white/20">
+          <svg class="w-6 h-6" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M11 19V14C11 11.8 12.8 10 15 10H20" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity="0.65"/>
+            <path d="M44 10H49C51.2 10 53 11.8 53 14V19" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity="0.65"/>
+            <path d="M11 45V50C11 52.2 12.8 54 15 54H20" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity="0.65"/>
+            <path d="M44 54H49C51.2 54 53 52.2 53 50V45" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity="0.65"/>
+            <path d="M20 16C20 13.8 21.8 12 24 12H40C42.2 12 44 13.8 44 16V26H20V16Z" fill="#fff"/>
+            <path d="M20 29H44V48C44 50.2 42.2 52 40 52H24C21.8 52 20 50.2 20 48V29Z" fill="#fff" fill-opacity="0.95"/>
+            <rect x="38" y="17" width="2.5" height="6" rx="1.25" fill="#0d9488"/>
+            <rect x="38" y="33" width="2.5" height="10" rx="1.25" fill="#0d9488"/>
+            <rect x="14" y="26.5" width="36" height="2" rx="1" fill="#34d399"/>
+          </svg>
         </div>
         <div class="min-w-0">
           <div class="flex items-center gap-1.5 flex-wrap">
@@ -53,6 +74,11 @@
       </div>
 
       <div class="flex items-center gap-1.5 shrink-0">
+        <button type="button" id="header-install-btn" onclick="handleSmartInstallClick()" aria-label="Installa FrigoScan" title="Installa su Android o iPhone" class="inline-flex items-center gap-1 bg-slate-900 hover:bg-slate-800 active:scale-95 text-white text-xs font-extrabold px-2.5 py-2 rounded-xl shadow-xs transition cursor-pointer">
+          <svg class="w-4 h-4 text-emerald-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          <span>Installa</span>
+        </button>
+
         <button type="button" onclick="openGearMenuModal()" aria-label="Menu e Impostazioni" title="Menu, Installazione & Impostazioni" class="w-9 h-9 rounded-xl bg-slate-100 hover:bg-slate-200 active:scale-95 text-slate-700 flex items-center justify-center border border-slate-200 transition cursor-pointer">
           <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="12" cy="12" r="3"></circle>
@@ -95,6 +121,31 @@
   </header>
 
   <main class="max-w-2xl mx-auto px-4 pt-4 space-y-4">
+
+    <!-- ==================== BANNER INSTALLAZIONE PWA (ANDROID & iOS) ==================== -->
+    <div id="pwa-install-banner" class="p-3 rounded-2xl bg-gradient-to-r from-emerald-900 via-teal-900 to-slate-900 text-white border border-emerald-500/40 shadow-md flex items-center justify-between gap-2.5">
+      <div class="flex items-center gap-2.5 min-w-0">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-500 to-sky-600 flex items-center justify-center shadow-xs shrink-0 border border-white/20">
+          <svg class="w-5 h-5" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 16C20 13.8 21.8 12 24 12H40C42.2 12 44 13.8 44 16V26H20V16Z" fill="#fff"/>
+            <path d="M20 29H44V48C44 50.2 42.2 52 40 52H24C21.8 52 20 50.2 20 48V29Z" fill="#fff" fill-opacity="0.95"/>
+            <rect x="13" y="26.5" width="38" height="2.2" rx="1.1" fill="#34d399"/>
+          </svg>
+        </div>
+        <div class="min-w-0">
+          <p class="text-xs font-extrabold text-white truncate">Installa FrigoScan sul telefono</p>
+          <p id="pwa-banner-sub" class="text-[11px] text-emerald-200 truncate">Icona sulla Home • Android &amp; iPhone</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-1.5 shrink-0">
+        <button type="button" onclick="handleSmartInstallClick()" class="px-3 py-1.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 active:scale-95 text-slate-950 text-xs font-extrabold shadow-xs transition cursor-pointer">
+          Installa Ora
+        </button>
+        <button type="button" onclick="dismissPwaBanner()" aria-label="Nascondi banner installazione" class="w-7 h-7 rounded-lg bg-white/10 hover:bg-white/20 text-emerald-100 text-xs font-bold flex items-center justify-center transition cursor-pointer">
+          ✕
+        </button>
+      </div>
+    </div>
 
     <!-- ==================== DISCRETE GITHUB UPDATE BANNER ==================== -->
     <div id="update-available-banner" class="hidden animate-banner-in p-3 rounded-2xl bg-sky-950 text-white border border-sky-700/70 shadow-md flex items-center justify-between gap-2.5">
@@ -326,7 +377,13 @@
     <div class="bg-white w-full max-w-md rounded-t-3xl sm:rounded-3xl p-5 space-y-4 max-h-[92vh] overflow-y-auto shadow-2xl">
       <div class="flex items-center justify-between border-b border-slate-100 pb-3">
         <div class="flex items-center gap-2.5">
-          <div class="w-9 h-9 rounded-xl bg-emerald-600 text-white font-black text-xs flex items-center justify-center shadow-sm shrink-0">FS</div>
+          <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-600 via-teal-600 to-sky-600 flex items-center justify-center shadow-sm shrink-0">
+            <svg class="w-5 h-5" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M20 16C20 13.8 21.8 12 24 12H40C42.2 12 44 13.8 44 16V26H20V16Z" fill="#fff"/>
+              <path d="M20 29H44V48C44 50.2 42.2 52 40 52H24C21.8 52 20 50.2 20 48V29Z" fill="#fff" fill-opacity="0.95"/>
+              <rect x="13" y="26.5" width="38" height="2.2" rx="1.1" fill="#34d399"/>
+            </svg>
+          </div>
           <div>
             <h3 class="text-base font-extrabold text-slate-900">Menu &amp; Impostazioni</h3>
             <p class="text-[11px] text-slate-500">Installazione, avvisi scadenza e suggerimenti</p>
@@ -338,7 +395,13 @@
       <div class="p-3.5 rounded-2xl bg-gradient-to-br from-emerald-50 to-teal-50 border border-emerald-200 space-y-2.5">
         <div class="flex items-center justify-between gap-2">
           <div class="flex items-center gap-2.5 min-w-0">
-            <div class="w-10 h-10 rounded-xl bg-emerald-600 text-white font-black text-sm flex items-center justify-center shrink-0 shadow-xs">FS</div>
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-600 via-teal-600 to-sky-600 flex items-center justify-center shrink-0 shadow-xs">
+              <svg class="w-6 h-6" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 16C20 13.8 21.8 12 24 12H40C42.2 12 44 13.8 44 16V26H20V16Z" fill="#fff"/>
+                <path d="M20 29H44V48C44 50.2 42.2 52 40 52H24C21.8 52 20 50.2 20 48V29Z" fill="#fff" fill-opacity="0.95"/>
+                <rect x="13" y="26.5" width="38" height="2.2" rx="1.1" fill="#34d399"/>
+              </svg>
+            </div>
             <div class="min-w-0">
               <span class="text-[10px] font-extrabold uppercase tracking-wider text-emerald-700 block">Web App (PWA)</span>
               <h4 class="text-sm font-extrabold text-slate-900 truncate">Installa su Smartphone</h4>
@@ -402,7 +465,7 @@
 
       <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2.5">
         <div class="flex items-center justify-between">
-          <span class="text-[10px] font-extrabold uppercase tracking-wider text-slate-500">Gestione Dati &amp; Aggiornamenti</span>
+          <span class="text-[10px] font-extrabold uppercase tracking-wider text-slate-500">Gestione Dati &amp; GitHub</span>
           <span class="text-[10px] font-mono font-bold text-slate-400">v14.5 • SafeStorage</span>
         </div>
         <div class="grid grid-cols-2 gap-2">
@@ -419,10 +482,86 @@
             🔊 Alexa &amp; Sync
           </button>
           <button type="button" onclick="closeModal('gear-menu-modal'); showUpdateAvailableBanner()" class="py-2 px-2.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-emerald-900 text-xs font-extrabold transition cursor-pointer">
-            ↻ Simula avviso update
+            ↻ Verifica Update
           </button>
         </div>
       </div>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL GUIDA INSTALLAZIONE ANDROID & iOS ==================== -->
+  <div id="install-guide-modal" onclick="if(event.target===this) closeModal('install-guide-modal')" class="hidden fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-xs flex items-end sm:items-center justify-center p-0 sm:p-4">
+    <div class="bg-white w-full max-w-md rounded-t-3xl sm:rounded-3xl p-5 space-y-4 shadow-2xl max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <div class="flex items-center gap-2.5">
+          <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-emerald-600 via-teal-600 to-sky-600 flex items-center justify-center shadow-sm shrink-0">
+            <svg class="w-6 h-6" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M20 16C20 13.8 21.8 12 24 12H40C42.2 12 44 13.8 44 16V26H20V16Z" fill="#fff"/>
+              <path d="M20 29H44V48C44 50.2 42.2 52 40 52H24C21.8 52 20 50.2 20 48V29Z" fill="#fff" fill-opacity="0.95"/>
+              <rect x="13" y="26.5" width="38" height="2.2" rx="1.1" fill="#34d399"/>
+            </svg>
+          </div>
+          <div>
+            <h3 class="text-base font-extrabold text-slate-900">Installa FrigoScan</h3>
+            <p class="text-[11px] text-slate-500">Aggiungi l'icona alla schermata Home</p>
+          </div>
+        </div>
+        <button type="button" onclick="closeModal('install-guide-modal')" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold cursor-pointer">✕</button>
+      </div>
+
+      <div id="install-native-box" class="hidden p-3.5 rounded-2xl bg-emerald-50 border border-emerald-200 flex items-center justify-between gap-2">
+        <div class="min-w-0">
+          <p class="text-xs font-extrabold text-emerald-950">Installazione diretta pronta!</p>
+          <p class="text-[11px] text-emerald-800">Tocca il pulsante per installare subito l'app</p>
+        </div>
+        <button type="button" onclick="triggerNativePwaPrompt()" class="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-extrabold shadow-xs shrink-0 cursor-pointer">
+          Installa Subito
+        </button>
+      </div>
+
+      <!-- ISTRUZIONI IPHONE / IPAD (SAFARI) -->
+      <div id="install-ios-card" class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2.5">
+        <div class="flex items-center gap-2">
+          <span class="text-base">🍎</span>
+          <h4 class="text-xs font-extrabold uppercase tracking-wider text-slate-800">iPhone e iPad (Safari)</h4>
+        </div>
+        <ol class="space-y-2 text-xs text-slate-700">
+          <li class="flex items-start gap-2">
+            <span class="w-5 h-5 rounded-full bg-emerald-600 text-white text-[11px] font-extrabold flex items-center justify-center shrink-0 mt-0.5">1</span>
+            <span>Tocca il pulsante <strong>Condividi</strong> nella barra in basso (o in alto) di Safari (il quadrato con la freccia verso l'alto).</span>
+          </li>
+          <li class="flex items-start gap-2">
+            <span class="w-5 h-5 rounded-full bg-emerald-600 text-white text-[11px] font-extrabold flex items-center justify-center shrink-0 mt-0.5">2</span>
+            <span>Scorri l'elenco verso il basso e tocca <strong>"Aggiungi alla schermata Home"</strong>.</span>
+          </li>
+          <li class="flex items-start gap-2">
+            <span class="w-5 h-5 rounded-full bg-emerald-600 text-white text-[11px] font-extrabold flex items-center justify-center shrink-0 mt-0.5">3</span>
+            <span>Conferma su <strong>Aggiungi</strong> in alto a destra: troverai <strong>FrigoScan</strong> tra le tue app!</span>
+          </li>
+        </ol>
+      </div>
+
+      <!-- ISTRUZIONI ANDROID (CHROME) -->
+      <div id="install-android-card" class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2.5">
+        <div class="flex items-center gap-2">
+          <span class="text-base">🤖</span>
+          <h4 class="text-xs font-extrabold uppercase tracking-wider text-slate-800">Android (Google Chrome)</h4>
+        </div>
+        <ol class="space-y-2 text-xs text-slate-700">
+          <li class="flex items-start gap-2">
+            <span class="w-5 h-5 rounded-full bg-sky-600 text-white text-[11px] font-extrabold flex items-center justify-center shrink-0 mt-0.5">1</span>
+            <span>Apri il menu di Chrome toccando i <strong>3 puntini (⋮)</strong> in alto a destra.</span>
+          </li>
+          <li class="flex items-start gap-2">
+            <span class="w-5 h-5 rounded-full bg-sky-600 text-white text-[11px] font-extrabold flex items-center justify-center shrink-0 mt-0.5">2</span>
+            <span>Seleziona <strong>"Installa app"</strong> oppure <strong>"Aggiungi a schermata Home"</strong> e conferma.</span>
+          </li>
+        </ol>
+      </div>
+
+      <button type="button" onclick="closeModal('install-guide-modal')" class="w-full py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-extrabold cursor-pointer">
+        Ho capito
+      </button>
     </div>
   </div>
 
@@ -513,6 +652,7 @@
   <div id="toast" class="hidden fixed top-20 left-1/2 -translate-x-1/2 z-[60] whitespace-nowrap px-4 py-2.5 rounded-full bg-slate-900 text-white text-xs font-bold shadow-lg"></div>
 
   <script>
+    const APP_VERSION = '14.5.0-github';
     const addDaysIso = (days) => {
       const d = new Date();
       d.setDate(d.getDate() + days);
@@ -610,23 +750,13 @@
       if (pendingServiceWorker) {
         try { pendingServiceWorker.postMessage({ type: 'SKIP_WAITING' }); } catch (e) {}
       }
-      setTimeout(() => {
-        try {
-          if (window.location.protocol.startsWith('http')) {
-            window.location.reload();
-          } else {
-            dismissUpdateBanner();
-          }
-        } catch (e) {
-          dismissUpdateBanner();
-        }
-      }, 450);
+      setTimeout(() => { window.location.reload(); }, 400);
     }
 
-    function setupUpdateDetection() {
+    function registerServiceWorkerAndUpdates() {
       if (!('serviceWorker' in navigator) || !window.location.protocol.startsWith('http')) return;
-      navigator.serviceWorker.getRegistration().then((reg) => {
-        if (!reg) return;
+      navigator.serviceWorker.register('./sw.js').then((reg) => {
+        reg.update().catch(() => {});
         if (reg.waiting) {
           pendingServiceWorker = reg.waiting;
           showUpdateAvailableBanner();
@@ -647,10 +777,91 @@
     let currentTab = 'fridge';
     let deferredPwaPrompt = null;
 
+    function isStandaloneInstalled() {
+      return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+    }
+
+    function isIosDevice() {
+      return /iphone|ipad|ipod/i.test(window.navigator.userAgent || '');
+    }
+
+    function updateInstallButtonsVisibility() {
+      const installed = isStandaloneInstalled();
+      const headerBtn = document.getElementById('header-install-btn');
+      const banner = document.getElementById('pwa-install-banner');
+      const dismissed = sessionStorage.getItem('frigoscan_install_banner_dismissed') === '1';
+
+      if (headerBtn) headerBtn.classList.toggle('hidden', installed);
+      if (banner) banner.classList.toggle('hidden', installed || dismissed);
+
+      const sub = document.getElementById('pwa-banner-sub');
+      if (sub && !installed) {
+        sub.textContent = isIosDevice()
+          ? 'Tocca Installa Ora per aggiungerla alla Home iPhone'
+          : 'Icona sulla Home a schermo intero • Android & iOS';
+      }
+    }
+
+    function dismissPwaBanner() {
+      try { sessionStorage.setItem('frigoscan_install_banner_dismissed', '1'); } catch (e) {}
+      const banner = document.getElementById('pwa-install-banner');
+      if (banner) banner.classList.add('hidden');
+    }
+
     window.addEventListener('beforeinstallprompt', (e) => {
       e.preventDefault();
       deferredPwaPrompt = e;
+      updateInstallButtonsVisibility();
     });
+
+    window.addEventListener('appinstalled', () => {
+      deferredPwaPrompt = null;
+      updateInstallButtonsVisibility();
+      showToast('FrigoScan installata nella schermata Home!');
+    });
+
+    async function triggerNativePwaPrompt() {
+      if (!deferredPwaPrompt) return false;
+      try {
+        deferredPwaPrompt.prompt();
+        const { outcome } = await deferredPwaPrompt.userChoice;
+        if (outcome === 'accepted') {
+          deferredPwaPrompt = null;
+          closeModal('install-guide-modal');
+          updateInstallButtonsVisibility();
+          showToast('FrigoScan installata nella schermata Home!');
+        }
+        return true;
+      } catch (err) {
+        return false;
+      }
+    }
+
+    async function handleSmartInstallClick() {
+      if (deferredPwaPrompt) {
+        const triggered = await triggerNativePwaPrompt();
+        if (triggered) return;
+      }
+      openInstallGuideModal();
+    }
+
+    function openInstallGuideModal() {
+      const nativeBox = document.getElementById('install-native-box');
+      const iosCard = document.getElementById('install-ios-card');
+      const androidCard = document.getElementById('install-android-card');
+      if (nativeBox) nativeBox.classList.toggle('hidden', !deferredPwaPrompt);
+
+      if (iosCard && androidCard) {
+        if (isIosDevice()) {
+          iosCard.classList.add('ring-2', 'ring-emerald-500');
+          androidCard.classList.remove('ring-2', 'ring-sky-500');
+        } else {
+          androidCard.classList.add('ring-2', 'ring-sky-500');
+          iosCard.classList.remove('ring-2', 'ring-emerald-500');
+        }
+      }
+      document.getElementById('install-guide-modal').classList.remove('hidden');
+    }
 
     function showToast(msg) {
       const el = document.getElementById('toast');
@@ -722,16 +933,8 @@
     }
 
     async function triggerInstallFromGear() {
-      if (deferredPwaPrompt) {
-        deferredPwaPrompt.prompt();
-        const { outcome } = await deferredPwaPrompt.userChoice;
-        if (outcome === 'accepted') {
-          deferredPwaPrompt = null;
-          showToast('FrigoScan installata nella schermata Home!');
-        }
-        return;
-      }
-      showToast('Segui i 2 passaggi Android o iPhone qui sotto per aggiungerla alla Home!');
+      closeModal('gear-menu-modal');
+      await handleSmartInstallClick();
     }
 
     function sendFeedbackEmail(e) {
@@ -740,7 +943,7 @@
       const msg = (input.value || '').trim();
       if (!msg) return;
       const subject = encodeURIComponent('Suggerimento / Segnalazione FrigoScan');
-      const body = encodeURIComponent(msg + '\n\n---\nInviato da FrigoScan Web App');
+      const body = encodeURIComponent(msg + '\n\n---\nInviato da FrigoScan Web App (' + APP_VERSION + ')');
       window.location.href = `mailto:frigoscanapp@gmail.com?subject=${subject}&body=${body}`;
       input.value = '';
       showToast('Apertura email verso frigoscanapp@gmail.com...');
@@ -1602,8 +1805,9 @@
     recoverAnyLocalState();
     syncFamilyAndWorkerUI();
     syncExpiryThresholdUI();
+    updateInstallButtonsVisibility();
     updateAllViews();
-    setupUpdateDetection();
+    registerServiceWorkerAndUpdates();
   </script>
 </body>
 </html>
