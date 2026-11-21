@@ -137,7 +137,7 @@
             <span class="text-xs font-extrabold text-white">Assistente Vocale FrigoScan</span>
             <span class="text-[9px] font-extrabold uppercase px-1.5 py-0.5 rounded bg-emerald-500/30 text-emerald-300 border border-emerald-400/30">Voce: Italiano</span>
           </div>
-          <p class="text-[11px] text-slate-300 mt-0.5 truncate">"Quando scade la mozzarella?" • "Metti in dispensa 3 pacchi di pasta"</p>
+          <p class="text-[11px] text-slate-300 mt-0.5 truncate">"Quando scade la mozzarella?" • "Aggiungi un litro di latte"</p>
         </div>
       </div>
       <button type="button" onclick="openFrigoVoiceModal(true)" class="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-xs font-extrabold text-white shrink-0 shadow-sm transition cursor-pointer">Parla</button>
@@ -431,7 +431,7 @@
       <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2.5">
         <div class="flex items-center justify-between">
           <span class="text-[10px] font-extrabold uppercase tracking-wider text-slate-500">Gestione Dati &amp; GitHub</span>
-          <span class="text-[10px] font-mono font-bold text-slate-400">v14.2 • SafeStorage</span>
+          <span class="text-[10px] font-mono font-bold text-slate-400">v14.3 • SafeStorage</span>
         </div>
         <div class="grid grid-cols-2 gap-2">
           <button type="button" onclick="exportBackupJSON()" class="py-2 px-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition cursor-pointer">
@@ -517,8 +517,8 @@
       <div class="space-y-1.5">
         <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Comandi rapidi (tocca per provare)</p>
         <div class="flex flex-wrap gap-1.5">
+          <button type="button" onclick="runDemoVoiceCommand('Aggiungi un litro di latte')" class="text-left px-2.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/15 text-[11px] text-slate-200 cursor-pointer">"Aggiungi un litro di latte"</button>
           <button type="button" onclick="runDemoVoiceCommand('Quando scade la mozzarella?')" class="text-left px-2.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/15 text-[11px] text-slate-200 cursor-pointer">"Quando scade la mozzarella?"</button>
-          <button type="button" onclick="runDemoVoiceCommand('Cosa sta per scadere?')" class="text-left px-2.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/15 text-[11px] text-slate-200 cursor-pointer">"Cosa sta per scadere?"</button>
           <button type="button" onclick="runDemoVoiceCommand('Metti in dispensa 3 pacchi di pasta')" class="text-left px-2.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/15 text-[11px] text-slate-200 cursor-pointer">"Metti in dispensa 3 pacchi di pasta"</button>
           <button type="button" onclick="runDemoVoiceCommand('Ho consumato 1 latte fresco')" class="text-left px-2.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/15 text-[11px] text-slate-200 cursor-pointer">"Ho consumato 1 latte fresco"</button>
           <button type="button" onclick="runDemoVoiceCommand('Aggiungi alla lista della spesa uova e pomodori')" class="text-left px-2.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/15 text-[11px] text-slate-200 cursor-pointer">"Aggiungi alla lista spesa uova e pomodori"</button>
@@ -536,7 +536,7 @@
   <div id="toast" class="hidden fixed top-20 left-1/2 -translate-x-1/2 z-[60] whitespace-nowrap px-4 py-2.5 rounded-full bg-slate-900 text-white text-xs font-bold shadow-lg"></div>
 
   <script>
-    const APP_VERSION = '14.2.0-github';
+    const APP_VERSION = '14.3.0-github';
     const addDaysIso = (days) => {
       const d = new Date();
       d.setDate(d.getDate() + days);
@@ -1273,7 +1273,7 @@
       else if (/\bconfezion[ei]\b/i.test(rawText)) unit = 'confezioni';
 
       let cleaned = rawText
-        .replace(/^(?:aggiungi|metti|inserisci|ho\s+consumato|consumato|ho\s+usato|usato|ho\s+finito|finito|finita|togli|rimuovi|scala|scarica)\b\s*/i, '')
+        .replace(/^(?:aggiungi|metti|inserisci|salva|ho\s+comprato|comprato|riponi|ho\s+consumato|consumato|ho\s+usato|usato|ho\s+finito|finito|finita|togli|rimuovi|scala|scarica)\b\s*/i, '')
         .replace(/\b(?:nella\s+dispensa|in\s+dispensa|dalla\s+dispensa|dispensa|nel\s+frigo|in\s+frigo|dal\s+frigo|frigo)\b/gi, ' ')
         .replace(/\b(?:litri|litro|pacchi|pacco|confezioni|confezione|pezzi|pezzo|pz)\b\s*(?:di\s+)?/gi, ' ');
 
@@ -1283,6 +1283,49 @@
       cleaned = cleaned.replace(/^(?:il|lo|la|i|gli|le|del|dello|della|dei|degli|delle|un|uno|una)\b\s*/i, '');
       cleaned = cleaned.replace(/\s+/g, ' ').replace(/[?.!]+$/, '').trim();
       return { qty, unit, name: cleaned };
+    }
+
+    function findExistingItemForMerge(productName, preferredLocation = null) {
+      const normalize = (s) => String(s || '')
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/[^a-z0-9\s]/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+
+      const target = normalize(productName);
+      if (!target) return null;
+
+      const targetTokens = target.split(' ').filter(w => w.length >= 3);
+      const pool = preferredLocation
+        ? state.items.filter(it => (it.location === 'dispensa' ? 'dispensa' : 'frigo') === preferredLocation)
+        : state.items;
+
+      // 1. Corrispondenza esatta
+      let match = pool.find(it => normalize(it.name) === target);
+      if (match) return match;
+
+      // 2. Il nome esistente inizia con il nome cercato (es. "latte" -> "Latte fresco intero", "pasta" -> "Pasta di semola penne")
+      match = pool.find(it => {
+        const n = normalize(it.name);
+        return n.startsWith(target + ' ') || target.startsWith(n + ' ');
+      });
+      if (match) return match;
+
+      // 3. Corrispondenza per parole chiave principali
+      if (targetTokens.length > 0) {
+        match = pool.find(it => {
+          const itemWords = normalize(it.name).split(' ').filter(w => w.length >= 3);
+          return targetTokens.every(tok => {
+            const stem = tok.length > 4 ? tok.slice(0, -1) : tok;
+            return itemWords.some(iw => iw === tok || iw.startsWith(stem));
+          });
+        });
+        if (match) return match;
+      }
+
+      return null;
     }
 
     function processFrigoVoiceCommand(cmd) {
@@ -1327,6 +1370,7 @@
         });
       };
 
+      // 1. LISTA SPESA
       if (/\b(?:lista\s+(?:della\s+)?spesa|compra|comprare|devo\s+prendere)\b/.test(l)) {
         const cleaned = rawTrimmed
           .replace(/^(?:aggiungi|metti|inserisci|devo\s+comprare|compra|devo\s+prendere)\b\s*(?:alla\s+lista\s+(?:della\s+)?spesa|in\s+lista)?\s*/i, '')
@@ -1349,6 +1393,7 @@
         return;
       }
 
+      // 2. TOGLI / CONSUMA / FINITO
       if (/^(?:ho\s+consumato|consumato|ho\s+usato|usato|ho\s+finito|finito|finita|togli|rimuovi|scala|scarica)\b/.test(l)) {
         const isFinishedAll = /^(?:ho\s+finito|finito|finita)\b/.test(l);
         const parsed = extractQtyAndName(rawTrimmed);
@@ -1394,6 +1439,7 @@
         return;
       }
 
+      // 3. DOMANDE SULLE SCADENZE
       const isExpiryQuestion = /\b(?:quando\s+scad|scade|scadono|scadenza|in\s+scadenza|sta\s+per\s+scadere|stanno\s+per\s+scadere|scadut[oiae])\b/.test(l);
       if (isExpiryQuestion) {
         const matches = findMatchingProducts(rawTrimmed);
@@ -1424,6 +1470,7 @@
         return;
       }
 
+      // 4. DOMANDE GENERICHE / DISPONIBILITÀ / QUANTITÀ / POSIZIONE
       const isGeneralQuestion =
         rawTrimmed.endsWith('?') ||
         /^(?:quando|cosa|che|quale|quali|quanto|quanta|quanti|quante|dove|come|perché|perche|abbiamo|c['’]è|ci\s+sono|hai|dimmi|controlla|verifica|guarda|vedi|elenca|lista)\b/.test(l);
@@ -1455,23 +1502,45 @@
         return;
       }
 
+      // 5. AGGIUNGI O INCREMENTA PRODOTTO ESISTENTE IN FRIGO O DISPENSA
       const explicitAdd = /^(?:aggiungi|metti|inserisci|salva|ho\s+comprato|comprato|riponi)\b/.test(l);
       const wordCount = rawTrimmed.split(/\s+/).length;
       if (!explicitAdd && wordCount > 5) {
-        showFrigoVoiceResponse('Non ho capito bene', 'Non ho aggiunto nulla per sicurezza. Puoi chiedermi ad esempio "Quando scade la mozzarella?" oppure dire "Metti in frigo 2 mozzarelle".');
+        showFrigoVoiceResponse('Non ho capito bene', 'Non ho aggiunto nulla per sicurezza. Puoi chiedermi ad esempio "Quando scade la mozzarella?" oppure dire "Aggiungi un litro di latte".');
         return;
       }
 
       const parsed = extractQtyAndName(rawTrimmed);
-      const qty = parsed.qty !== null ? parsed.qty : 1;
-      const targetLoc = mentionsPantry ? 'dispensa' : 'frigo';
+      const qtyToAdd = parsed.qty !== null ? parsed.qty : 1;
+      const explicitLoc = mentionsPantry ? 'dispensa' : (mentionsFridge ? 'frigo' : null);
       const capName = parsed.name ? parsed.name.charAt(0).toUpperCase() + parsed.name.slice(1) : 'Prodotto';
 
+      // Cerca se il prodotto esiste già (prima nella posizione richiesta se specificata, altrimenti in tutto l'inventario)
+      const existingItem = findExistingItemForMerge(parsed.name, explicitLoc) || (!explicitLoc ? findExistingItemForMerge(parsed.name, null) : null);
+
+      if (existingItem) {
+        existingItem.qty = (Number(existingItem.qty) || 0) + qtyToAdd;
+        if (parsed.unit && parsed.unit !== 'pz' && (!existingItem.unit || existingItem.unit === 'pz')) {
+          existingItem.unit = parsed.unit;
+        }
+        persistState();
+        updateAllViews();
+
+        const isPantry = existingItem.location === 'dispensa';
+        const whereLabel = isPantry ? 'in dispensa' : 'in frigo';
+        const badgeLabel = isPantry ? 'Aggiornato in Dispensa' : 'Aggiornato in Frigo';
+        const unitLabel = existingItem.qty === 1 && existingItem.unit === 'litri' ? 'litro' : (existingItem.unit || 'pz');
+        const reply = `Perfetto! Ho aggiunto ${qtyToAdd} di ${existingItem.name} a quello che avevi già ${whereLabel}. Ora ne hai ${existingItem.qty} ${unitLabel}.`;
+        showFrigoVoiceResponse(badgeLabel, reply);
+        return;
+      }
+
+      const targetLoc = explicitLoc || 'frigo';
       state.items.unshift({
         id: 'p_' + Date.now(),
         name: capName,
         location: targetLoc,
-        qty,
+        qty: qtyToAdd,
         unit: parsed.unit,
         expiry: addDaysIso(targetLoc === 'dispensa' ? 90 : 5)
       });
@@ -1480,7 +1549,7 @@
 
       const whereLabel = targetLoc === 'dispensa' ? 'in dispensa' : 'nel frigo';
       const badgeLabel = targetLoc === 'dispensa' ? 'Aggiunto in Dispensa' : 'Aggiunto in Frigo';
-      const reply = `Ho aggiunto ${qty} ${parsed.unit} di ${capName} ${whereLabel}.`;
+      const reply = `Ho aggiunto ${qtyToAdd} ${parsed.unit} di ${capName} ${whereLabel}.`;
       showFrigoVoiceResponse(badgeLabel, reply);
     }
 
