@@ -833,8 +833,8 @@
   </div>
 
   <!-- ==================== MODAL ASSISTENTE VOCALE FRIGOSCAN ==================== -->
-  <div id="frigo-voice-modal" onclick="if(event.target===this) closeFrigoVoiceModal()" class="hidden fixed inset-0 z-50 bg-slate-950/75 backdrop-blur-xs flex items-end sm:items-center justify-center p-0 sm:p-4">
-    <div class="bg-slate-900 text-white w-full max-w-md rounded-t-3xl sm:rounded-3xl p-5 space-y-4 shadow-2xl border border-slate-700/80 max-h-[92vh] overflow-y-auto">
+  <div id="frigo-voice-modal" onclick="if(event.target===this) closeFrigoVoiceModal()" class="hidden fixed inset-0 w-screen h-dvh z-50 bg-slate-950/75 backdrop-blur-xs flex items-end sm:items-center justify-center p-0 sm:p-4 overflow-x-hidden">
+    <div class="bg-slate-900 text-white w-full max-w-full sm:max-w-md mx-auto rounded-t-3xl sm:rounded-3xl p-4 sm:p-5 space-y-4 shadow-2xl border-t sm:border border-slate-700/80 max-h-[90dvh] overflow-y-auto overflow-x-hidden">
       <div class="space-y-2.5">
         <div class="flex items-center justify-between">
           <div class="flex items-center gap-2">
@@ -895,9 +895,9 @@
         <span id="frigo-learned-count" class="text-[11px] text-emerald-300 font-semibold">🧠 0 regole apprese in memoria</span>
         <button type="button" onclick="clearLearnedVoiceRules()" class="text-[10px] font-bold text-slate-400 hover:text-rose-300 underline cursor-pointer">Azzera memoria</button>
       </div>
-      </div>
 
-      <div class="pt-1 border-t border-slate-800">
+      <div class="pt-1 border-t border-slate-800 pb-2 sm:pb-0">
+        <button type="button" id="btn-show-voice-keyboard" onclick="revealVoiceTypedInput()" class="w-full py-2.5 px-3 rounded-xl bg-slate-800/80 hover:bg-slate-800 border border-slate-700/80 text-xs font-bold text-slate-300 flex items-center justify-center gap-2 transition cursor-pointer">
         <button type="button" id="btn-show-voice-keyboard" onclick="revealVoiceTypedInput()" class="w-full py-2 px-3 rounded-xl bg-slate-800/80 hover:bg-slate-800 border border-slate-700/80 text-xs font-bold text-slate-300 flex items-center justify-center gap-2 transition cursor-pointer">
           <span>⌨️</span>
           <span>Preferisci scrivere il comando? Tocca qui</span>

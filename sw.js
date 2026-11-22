@@ -1,4 +1,4 @@
-const CACHE_NAME = 'frigoscan-v14-8-cache';
+const CACHE_NAME = 'frigoscan-v14-9-cache';
 const STATIC_ASSETS = [
   './',
   './index.html',
