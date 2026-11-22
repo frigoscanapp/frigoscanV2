@@ -3,18 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <meta name="theme-color" content="#059669" />
-  <meta name="mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="FrigoScan" />
-  <meta name="description" content="FrigoScan — Inventario Frigo, Dispensa, Lista Spesa Alexa & Assistente Vocale" />
-  <title>FrigoScan — Inventario Frigo, Dispensa & Assistente Vocale</title>
-
-  <link rel="manifest" href="./manifest.json" />
-  <link rel="icon" type="image/svg+xml" href="./icon.svg" />
-  <link rel="apple-touch-icon" href="./icon.svg" />
-
+  <title>FrigoScan v14.5 — Inventario Frigo, Dispensa & Assistente Vocale</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <style>
@@ -49,18 +38,8 @@
   <header class="sticky top-0 z-40 bg-white/95 backdrop-blur border-b border-slate-200 shadow-sm">
     <div class="max-w-2xl mx-auto px-4 pt-3 pb-2 flex items-center justify-between gap-2">
       <div class="flex items-center gap-2.5 min-w-0">
-        <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-emerald-600 via-teal-600 to-sky-600 flex items-center justify-center shadow-sm shrink-0 border border-white/20">
-          <svg class="w-6 h-6" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M11 19V14C11 11.8 12.8 10 15 10H20" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity="0.65"/>
-            <path d="M44 10H49C51.2 10 53 11.8 53 14V19" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity="0.65"/>
-            <path d="M11 45V50C11 52.2 12.8 54 15 54H20" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity="0.65"/>
-            <path d="M44 54H49C51.2 54 53 52.2 53 50V45" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity="0.65"/>
-            <path d="M20 16C20 13.8 21.8 12 24 12H40C42.2 12 44 13.8 44 16V26H20V16Z" fill="#fff"/>
-            <path d="M20 29H44V48C44 50.2 42.2 52 40 52H24C21.8 52 20 50.2 20 48V29Z" fill="#fff" fill-opacity="0.95"/>
-            <rect x="38" y="17" width="2.5" height="6" rx="1.25" fill="#0d9488"/>
-            <rect x="38" y="33" width="2.5" height="10" rx="1.25" fill="#0d9488"/>
-            <rect x="14" y="26.5" width="36" height="2" rx="1" fill="#34d399"/>
-          </svg>
+        <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-700 flex items-center justify-center text-white font-black text-base tracking-tighter shadow-sm shrink-0">
+          FS
         </div>
         <div class="min-w-0">
           <div class="flex items-center gap-1.5 flex-wrap">
@@ -135,12 +114,8 @@
     <!-- ==================== BANNER INSTALLAZIONE PWA (ANDROID & iOS) ==================== -->
     <div id="pwa-install-banner" class="p-3 rounded-2xl bg-gradient-to-r from-emerald-900 via-teal-900 to-slate-900 text-white border border-emerald-500/40 shadow-md flex items-center justify-between gap-2.5">
       <div class="flex items-center gap-2.5 min-w-0">
-        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-500 to-sky-600 flex items-center justify-center shadow-xs shrink-0 border border-white/20">
-          <svg class="w-5 h-5" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M20 16C20 13.8 21.8 12 24 12H40C42.2 12 44 13.8 44 16V26H20V16Z" fill="#fff"/>
-            <path d="M20 29H44V48C44 50.2 42.2 52 40 52H24C21.8 52 20 50.2 20 48V29Z" fill="#fff" fill-opacity="0.95"/>
-            <rect x="13" y="26.5" width="38" height="2.2" rx="1.1" fill="#34d399"/>
-          </svg>
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-500 to-sky-600 flex items-center justify-center shadow-xs shrink-0 border border-white/20 font-black text-xs text-white">
+          FS
         </div>
         <div class="min-w-0">
           <p class="text-xs font-extrabold text-white truncate">Installa FrigoScan sul telefono</p>
@@ -308,7 +283,7 @@
       <div id="recipes-list" class="space-y-2.5"></div>
     </section>
 
-    <!-- ==================== TAB 6: ALEXA & SYNC FAMIGLIA ==================== -->
+    <!-- ==================== TAB 7: ALEXA & SYNC FAMIGLIA ==================== -->
     <section id="view-settings" class="tab-view hidden space-y-3">
       <div class="p-4 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-3">
         <div class="flex items-start justify-between gap-3">
@@ -461,6 +436,7 @@
         <button type="button" onclick="closeProductScannerModal()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-slate-300 font-bold cursor-pointer">✕</button>
       </div>
 
+      <!-- SELETTORE MODALITÀ -->
       <div class="grid grid-cols-2 gap-1.5 p-1 rounded-2xl bg-slate-800 border border-slate-700">
         <button type="button" id="scan-mode-btn-barcode" onclick="setProductScanMode('barcode')" class="py-2 px-3 rounded-xl bg-emerald-600 text-white text-xs font-extrabold transition cursor-pointer">
           ║▌║ Codice a Barre / QR
@@ -470,6 +446,7 @@
         </button>
       </div>
 
+      <!-- ANTEPRIMA FOTOCAMERA LIVE -->
       <div class="relative rounded-2xl overflow-hidden bg-black aspect-[4/3] max-h-[260px] mx-auto border-2 border-emerald-500/60 flex items-center justify-center">
         <video id="product-scanner-video" playsinline muted class="w-full h-full object-cover"></video>
         <canvas id="product-scanner-canvas" class="hidden"></canvas>
@@ -480,6 +457,7 @@
           Avvio fotocamera...
         </p>
       </div>
+
       <!-- CONTROLLI SCATTO FOTO / GALLERIA -->
       <div class="grid grid-cols-2 gap-2">
         <button type="button" onclick="captureProductPhotoFromCamera()" class="py-2.5 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 active:scale-98 text-white text-xs font-extrabold shadow-sm flex items-center justify-center gap-1.5 cursor-pointer">
@@ -493,6 +471,7 @@
         </label>
       </div>
 
+      <!-- INSERIMENTO MANUALE CODICE A BARRE / EAN -->
       <div class="p-3 rounded-2xl bg-slate-800/90 border border-slate-700 space-y-2">
         <p class="text-[11px] text-slate-300">Oppure digita il codice a barre (EAN / QR):</p>
         <form onsubmit="submitManualBarcodeLookup(event)" class="flex gap-2">
@@ -603,13 +582,7 @@
     <div class="bg-white w-full max-w-md rounded-t-3xl sm:rounded-3xl p-5 space-y-4 max-h-[92vh] overflow-y-auto shadow-2xl">
       <div class="flex items-center justify-between border-b border-slate-100 pb-3">
         <div class="flex items-center gap-2.5">
-          <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-600 via-teal-600 to-sky-600 flex items-center justify-center shadow-sm shrink-0">
-            <svg class="w-5 h-5" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M20 16C20 13.8 21.8 12 24 12H40C42.2 12 44 13.8 44 16V26H20V16Z" fill="#fff"/>
-              <path d="M20 29H44V48C44 50.2 42.2 52 40 52H24C21.8 52 20 50.2 20 48V29Z" fill="#fff" fill-opacity="0.95"/>
-              <rect x="13" y="26.5" width="38" height="2.2" rx="1.1" fill="#34d399"/>
-            </svg>
-          </div>
+          <div class="w-9 h-9 rounded-xl bg-emerald-600 text-white font-black text-xs flex items-center justify-center shadow-sm shrink-0">FS</div>
           <div>
             <h3 class="text-base font-extrabold text-slate-900">Menu &amp; Impostazioni</h3>
             <p class="text-[11px] text-slate-500">Installazione, avvisi scadenza e suggerimenti</p>
@@ -621,13 +594,7 @@
       <div class="p-3.5 rounded-2xl bg-gradient-to-br from-emerald-50 to-teal-50 border border-emerald-200 space-y-2.5">
         <div class="flex items-center justify-between gap-2">
           <div class="flex items-center gap-2.5 min-w-0">
-            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-600 via-teal-600 to-sky-600 flex items-center justify-center shrink-0 shadow-xs">
-              <svg class="w-6 h-6" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M20 16C20 13.8 21.8 12 24 12H40C42.2 12 44 13.8 44 16V26H20V16Z" fill="#fff"/>
-                <path d="M20 29H44V48C44 50.2 42.2 52 40 52H24C21.8 52 20 50.2 20 48V29Z" fill="#fff" fill-opacity="0.95"/>
-                <rect x="13" y="26.5" width="38" height="2.2" rx="1.1" fill="#34d399"/>
-              </svg>
-            </div>
+            <div class="w-10 h-10 rounded-xl bg-emerald-600 text-white font-black text-sm flex items-center justify-center shrink-0 shadow-xs">FS</div>
             <div class="min-w-0">
               <span class="text-[10px] font-extrabold uppercase tracking-wider text-emerald-700 block">Web App (PWA)</span>
               <h4 class="text-sm font-extrabold text-slate-900 truncate">Installa su Smartphone</h4>
@@ -691,7 +658,7 @@
 
       <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2.5">
         <div class="flex items-center justify-between">
-          <span class="text-[10px] font-extrabold uppercase tracking-wider text-slate-500">Gestione Dati &amp; GitHub</span>
+          <span class="text-[10px] font-extrabold uppercase tracking-wider text-slate-500">Gestione Dati &amp; Aggiornamenti</span>
           <span class="text-[10px] font-mono font-bold text-slate-400">v14.5 • SafeStorage</span>
         </div>
         <div class="grid grid-cols-2 gap-2">
@@ -708,7 +675,7 @@
             🔊 Alexa &amp; Sync
           </button>
           <button type="button" onclick="closeModal('gear-menu-modal'); showUpdateAvailableBanner()" class="py-2 px-2.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-emerald-900 text-xs font-extrabold transition cursor-pointer">
-            ↻ Verifica Update
+            ↻ Simula avviso update
           </button>
         </div>
       </div>
@@ -720,13 +687,7 @@
     <div class="bg-white w-full max-w-md rounded-t-3xl sm:rounded-3xl p-5 space-y-4 shadow-2xl max-h-[90vh] overflow-y-auto">
       <div class="flex items-center justify-between border-b border-slate-100 pb-3">
         <div class="flex items-center gap-2.5">
-          <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-emerald-600 via-teal-600 to-sky-600 flex items-center justify-center shadow-sm shrink-0">
-            <svg class="w-6 h-6" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M20 16C20 13.8 21.8 12 24 12H40C42.2 12 44 13.8 44 16V26H20V16Z" fill="#fff"/>
-              <path d="M20 29H44V48C44 50.2 42.2 52 40 52H24C21.8 52 20 50.2 20 48V29Z" fill="#fff" fill-opacity="0.95"/>
-              <rect x="13" y="26.5" width="38" height="2.2" rx="1.1" fill="#34d399"/>
-            </svg>
-          </div>
+          <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-700 text-white font-black text-sm flex items-center justify-center shadow-sm shrink-0">FS</div>
           <div>
             <h3 class="text-base font-extrabold text-slate-900">Installa FrigoScan</h3>
             <p class="text-[11px] text-slate-500">Aggiungi l'icona alla schermata Home</p>
@@ -878,7 +839,6 @@
   <div id="toast" class="hidden fixed top-20 left-1/2 -translate-x-1/2 z-[60] whitespace-nowrap px-4 py-2.5 rounded-full bg-slate-900 text-white text-xs font-bold shadow-lg"></div>
 
   <script>
-    const APP_VERSION = '14.6.0-github';
     const addDaysIso = (days) => {
       const d = new Date();
       d.setDate(d.getDate() + days);
@@ -981,27 +941,36 @@
       if (pendingServiceWorker) {
         try { pendingServiceWorker.postMessage({ type: 'SKIP_WAITING' }); } catch (e) {}
       }
-      setTimeout(() => { window.location.reload(); }, 400);
+      setTimeout(() => {
+        try {
+          if (window.location.protocol.startsWith('http')) {
+            window.location.reload();
+          } else {
+            dismissUpdateBanner();
+          }
+        } catch (e) {
+          dismissUpdateBanner();
+        }
+      }, 450);
     }
 
-    function registerServiceWorkerAndUpdates() {
+    function setupUpdateDetection() {
       if (!('serviceWorker' in navigator) || !window.location.protocol.startsWith('http')) return;
-
-      let reloadingForUpdate = false;
-      navigator.serviceWorker.addEventListener('controllerchange', () => {
-        if (reloadingForUpdate) return;
-        reloadingForUpdate = true;
-        persistState();
-        window.location.reload();
-      });
-
-      navigator.serviceWorker.register('./sw.js').then((reg) => {
-        reg.update().catch(() => {});
-        // Ricontrolla automaticamente ogni volta che riapri o torni sull'app
-        document.addEventListener('visibilitychange', () => {
-          if (document.visibilityState === 'visible') {
-            reg.update().catch(() => {});
-          }
+      navigator.serviceWorker.getRegistration().then((reg) => {
+        if (!reg) return;
+        if (reg.waiting) {
+          pendingServiceWorker = reg.waiting;
+          showUpdateAvailableBanner();
+        }
+        reg.addEventListener('updatefound', () => {
+          const newWorker = reg.installing;
+          if (!newWorker) return;
+          newWorker.addEventListener('statechange', () => {
+            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+              pendingServiceWorker = newWorker;
+              showUpdateAvailableBanner();
+            }
+          });
         });
       }).catch(() => {});
     }
@@ -1175,7 +1144,7 @@
       const msg = (input.value || '').trim();
       if (!msg) return;
       const subject = encodeURIComponent('Suggerimento / Segnalazione FrigoScan');
-      const body = encodeURIComponent(msg + '\n\n---\nInviato da FrigoScan Web App (' + APP_VERSION + ')');
+      const body = encodeURIComponent(msg + '\n\n---\nInviato da FrigoScan Web App');
       window.location.href = `mailto:frigoscanapp@gmail.com?subject=${subject}&body=${body}`;
       input.value = '';
       showToast('Apertura email verso frigoscanapp@gmail.com...');
@@ -1575,7 +1544,6 @@
         if (black) bars += `<rect x="${x}" y="4" width="${w}" height="68" fill="#0f172a"/>`;
         x += w;
       };
-      // Guard pattern iniziale
       drawBar(2, true); drawBar(2, false); drawBar(2, true); drawBar(3, false);
       for (let i = 0; i < clean.length; i++) {
         const ch = clean.charCodeAt(i);
@@ -1588,7 +1556,6 @@
         drawBar(w3, true);
         drawBar(w4, false);
       }
-      // Guard pattern finale
       drawBar(2, true); drawBar(2, false); drawBar(2, true);
       const totalWidth = Math.max(160, x + 8);
       return `<svg viewBox="0 0 ${totalWidth} 76" class="w-full max-w-[270px] h-24 mx-auto" preserveAspectRatio="none">${bars}</svg>`;
@@ -2491,7 +2458,7 @@
 
       const findMatchingProducts = (queryText) => {
         const stopWords = new Set([
-          'quando', 'scade', 'scadono', 'scadenza', 'data', 'cosa', 'che', 'quale', 'quali',
+          'quando', 'scade', 'scadono', 'scadenza', 'scadenze', 'data', 'cosa', 'che', 'quale', 'quali',
           'abbiamo', 'hai', 'sono', 'ce', 'cè', 'ci', 'quanto', 'quanta', 'quanti', 'quante',
           'dove', 'sta', 'stanno', 'per', 'scadere', 'scaduti', 'scaduto', 'dimmi', 'controlla',
           'verifica', 'guarda', 'vedi', 'nel', 'nella', 'nei', 'nelle', 'del', 'dello', 'della',
@@ -2513,6 +2480,9 @@
           });
         });
       };
+
+      const explicitAdd = /^(?:aggiungi|metti|inserisci|salva|ho\s+comprato|comprato|riponi)\b/.test(l);
+      const explicitRemove = /^(?:ho\s+consumato|consumato|ho\s+usato|usato|ho\s+finito|finito|finita|togli|rimuovi|elimina|cancella|butta|ho\s+buttato|scala|scarica)\b/.test(l);
 
       // 1. LISTA SPESA
       if (/\b(?:lista\s+(?:della\s+)?spesa|compra|comprare|devo\s+prendere)\b/.test(l)) {
@@ -2538,7 +2508,7 @@
       }
 
       // 2. TOGLI / CONSUMA / FINITO / RIMUOVI TUTTO
-      if (/^(?:ho\s+consumato|consumato|ho\s+usato|usato|ho\s+finito|finito|finita|togli|rimuovi|elimina|cancella|butta|ho\s+buttato|scala|scarica)\b/.test(l)) {
+      if (explicitRemove) {
         const explicitLoc = mentionsPantry ? 'dispensa' : (mentionsFridge ? 'frigo' : null);
         const removeEverything = /\b(?:tutto|tutta|tutti|tutte|interamente|completamente|ho\s+finito|finito|finita)\b/.test(l);
         const parsed = extractQtyAndName(rawTrimmed);
@@ -2584,9 +2554,28 @@
         return;
       }
 
-      // 3. DOMANDE SULLE SCADENZE
-      const isExpiryQuestion = /\b(?:quando\s+scad|scade|scadono|scadenza|in\s+scadenza|sta\s+per\s+scadere|stanno\s+per\s+scadere|scadut[oiae])\b/.test(l);
+      // 3. DOMANDE SULLE SCADENZE (es. "cosa c'è in scadenza", "quando scade...", "prodotti scaduti")
+      const isExpiryQuestion = !explicitAdd && /\b(?:quando\s+scad|scade|scadono|scadenza|scadenze|in\s+scadenza|sta\s+per\s+scadere|stanno\s+per\s+scadere|scadut[oiae])\b/.test(l);
       if (isExpiryQuestion) {
+        const thresh = state.expiryThresholdDays || 3;
+        const urgent = state.items
+          .filter(i => daysUntil(i.expiry) <= thresh)
+          .sort((a, b) => daysUntil(a.expiry) - daysUntil(b.expiry));
+
+        const isGeneralExpiryQuery =
+          /\b(?:cosa|che|quali|dimmi|elenca|lista|controlla|verifica|vedi|guarda|prodotti|cibo|alimenti)\b/.test(l) ||
+          /^(?:in\s+scadenza|scadenze|scaduti)\b/.test(l);
+
+        if (isGeneralExpiryQuery) {
+          if (urgent.length === 0) {
+            showFrigoVoiceResponse('Tutto ok', `Ottime notizie! Non hai nessun prodotto scaduto o in scadenza nei prossimi ${thresh} giorni.`);
+          } else {
+            const listTxt = urgent.slice(0, 5).map(u => `${u.name} (${formatItalianExpiry(u.expiry)})`).join(', ');
+            showFrigoVoiceResponse('In Scadenza', `Ecco cosa controllare: ${listTxt}.`);
+          }
+          return;
+        }
+
         const matches = findMatchingProducts(rawTrimmed);
         if (matches.length > 0) {
           const details = matches.map(m => {
@@ -2597,37 +2586,26 @@
           return;
         }
 
-        const thresh = state.expiryThresholdDays || 3;
-        const urgent = state.items
-          .filter(i => daysUntil(i.expiry) <= thresh)
-          .sort((a, b) => daysUntil(a.expiry) - daysUntil(b.expiry));
-
-        if (!/\b(?:cosa|che|quali|prodotti|cibo|alimenti)\b/.test(l)) {
-          showFrigoVoiceResponse('Non in inventario', 'Non ho trovato questo prodotto né in frigo né in dispensa.');
-          return;
-        }
-        if (urgent.length === 0) {
-          showFrigoVoiceResponse('Tutto ok', `Ottime notizie! Non hai nessun prodotto scaduto o in scadenza nei prossimi ${thresh} giorni.`);
-        } else {
-          const listTxt = urgent.slice(0, 4).map(u => `${u.name} (${formatItalianExpiry(u.expiry)})`).join(', ');
-          showFrigoVoiceResponse('In Scadenza', `Ecco cosa controllare: ${listTxt}.`);
-        }
+        showFrigoVoiceResponse('Non in inventario', 'Non ho trovato questo prodotto né in frigo né in dispensa.');
         return;
       }
 
-      // 4. DOMANDE GENERICHE / DISPONIBILITÀ / QUANTITÀ / POSIZIONE
+      // 4. DOMANDE GENERICHE / DISPONIBILITÀ / QUANTITÀ / POSIZIONE (anche senza punto interrogativo)
       const isGeneralQuestion =
-        rawTrimmed.endsWith('?') ||
-        /^(?:quando|cosa|che|quale|quali|quanto|quanta|quanti|quante|dove|come|perché|perche|abbiamo|c['’]è|ci\s+sono|hai|dimmi|controlla|verifica|guarda|vedi|elenca|lista)\b/.test(l);
+        !explicitAdd && (
+          rawTrimmed.endsWith('?') ||
+          /^(?:quando|cosa|che|quale|quali|quanto|quanta|quanti|quante|dove|come|perché|perche|abbiamo|c['’]è|c\s+è|ci\s+sono|hai|dimmi|controlla|verifica|guarda|vedi|elenca|lista|mostra|fammi\s+vedere)\b/.test(l) ||
+          /\b(?:cosa\s+c['’]è|cosa\s+abbiamo|ci\s+sono|c['’]è\s+(?:del|della|dello|dei|degli|delle|il|lo|la|un|una))\b/.test(l)
+        );
 
       if (isGeneralQuestion) {
-        if (/\b(?:cosa\s+c['’]è|cosa\s+abbiamo|elenca|contenuto)\b/.test(l) && (mentionsFridge || mentionsPantry)) {
+        if (/\b(?:cosa\s+c['’]è|cosa\s+abbiamo|elenca|contenuto|lista|mostra)\b/.test(l) && (mentionsFridge || mentionsPantry)) {
           const locTarget = mentionsPantry ? 'dispensa' : 'frigo';
           const list = state.items.filter(i => (i.location === 'dispensa' ? 'dispensa' : 'frigo') === locTarget);
           if (list.length === 0) {
             showFrigoVoiceResponse('Vuoto', `Al momento non hai nulla ${locTarget === 'dispensa' ? 'in dispensa' : 'in frigo'}.`);
           } else {
-            const summary = list.slice(0, 5).map(i => `${i.name} (${i.qty} ${i.unit})`).join(', ');
+            const summary = list.slice(0, 6).map(i => `${i.name} (${i.qty} ${i.unit})`).join(', ');
             showFrigoVoiceResponse(locTarget === 'dispensa' ? 'In Dispensa' : 'In Frigo', `Hai ${list.length} prodotti: ${summary}.`);
           }
           return;
@@ -2648,31 +2626,30 @@
       }
 
       // 5. AGGIUNGI O INCREMENTA PRODOTTO ESISTENTE IN FRIGO O DISPENSA
-      const explicitAdd = /^(?:aggiungi|metti|inserisci|salva|ho\s+comprato|comprato|riponi)\b/.test(l);
+      const containsQuestionWords = /\b(?:cosa|quando|dove|quanti|quante|quanto|quanta|quale|quali|perché|perche|c['’]è|ci\s+sono|abbiamo|scadenza|scadono|scade)\b/.test(l);
       const wordCount = rawTrimmed.split(/\s+/).length;
-      if (!explicitAdd && wordCount > 5) {
-        showFrigoVoiceResponse('Non ho capito bene', 'Non ho aggiunto nulla per sicurezza. Puoi chiedermi ad esempio "Quando scade la mozzarella?" oppure dire "Aggiungi un litro di latte".');
+      if (!explicitAdd && (containsQuestionWords || wordCount > 5)) {
+        showFrigoVoiceResponse('Non ho capito bene', 'Non ho aggiunto nulla per sicurezza. Puoi chiedermi ad esempio "Cosa c\'è in scadenza?" oppure dire "Aggiungi un litro di latte".');
         return;
       }
 
       const parsed = extractQtyAndName(rawTrimmed);
+      if (!parsed.name || parsed.name.length < 2) {
+        showFrigoVoiceResponse('Non ho capito bene', 'Dimmi il nome del prodotto da aggiungere, ad esempio "Aggiungi 2 litri di latte".');
+        return;
+      }
       const qtyToAdd = parsed.qty !== null ? parsed.qty : 1;
       const explicitLoc = mentionsPantry ? 'dispensa' : (mentionsFridge ? 'frigo' : null);
-      const capName = parsed.name ? parsed.name.charAt(0).toUpperCase() + parsed.name.slice(1) : 'Prodotto';
+      const capName = parsed.name.charAt(0).toUpperCase() + parsed.name.slice(1);
 
       const existingItem = findExistingItemForMerge(parsed.name, explicitLoc) || (!explicitLoc ? findExistingItemForMerge(parsed.name, null) : null);
-
       if (existingItem) {
         existingItem.qty = (Number(existingItem.qty) || 0) + qtyToAdd;
-        if (parsed.unit && parsed.unit !== 'pz' && (!existingItem.unit || existingItem.unit === 'pz')) {
-          existingItem.unit = parsed.unit;
-        }
+        if (parsed.unit && parsed.unit !== 'pz') existingItem.unit = parsed.unit;
         persistState();
         updateAllViews();
-
-        const isPantry = existingItem.location === 'dispensa';
-        const whereLabel = isPantry ? 'in dispensa' : 'in frigo';
-        const badgeLabel = isPantry ? 'Aggiornato in Dispensa' : 'Aggiornato in Frigo';
+        const whereLabel = existingItem.location === 'dispensa' ? 'in dispensa' : 'nel frigo';
+        const badgeLabel = existingItem.location === 'dispensa' ? 'Aggiornato in Dispensa' : 'Aggiornato nel Frigo';
         const unitLabel = existingItem.qty === 1 && existingItem.unit === 'litri' ? 'litro' : (existingItem.unit || 'pz');
         const reply = `Perfetto! Ho aggiunto ${qtyToAdd} di ${existingItem.name} a quello che avevi già ${whereLabel}. Ora ne hai ${existingItem.qty} ${unitLabel}.`;
         showFrigoVoiceResponse(badgeLabel, reply);
@@ -2732,7 +2709,7 @@
     syncExpiryThresholdUI();
     updateInstallButtonsVisibility();
     updateAllViews();
-    registerServiceWorkerAndUpdates();
+    setupUpdateDetection();
   </script>
 </body>
 </html>
