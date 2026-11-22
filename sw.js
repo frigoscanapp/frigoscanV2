@@ -1,4 +1,4 @@
-const CACHE_NAME = 'frigoscan-v14-6-cache';
+const CACHE_NAME = 'frigoscan-v14-8-cache';
 const STATIC_ASSETS = [
   './',
   './index.html',
@@ -6,7 +6,6 @@ const STATIC_ASSETS = [
   './icon.svg'
 ];
 
-// 1. Installazione: attiva immediatamente il nuovo Service Worker senza attendere
 self.addEventListener('install', (event) => {
   self.skipWaiting();
   event.waitUntil(
@@ -16,7 +15,6 @@ self.addEventListener('install', (event) => {
   );
 });
 
-// 2. Attivazione: pulisce le vecchie cache dei file e prende subito il controllo
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys()
@@ -31,8 +29,6 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-// 3. Strategia Network-First: scarica sempre l'ultima versione da GitHub;
-//    usa la cache locale solo se il telefono è offline.
 self.addEventListener('fetch', (event) => {
   const req = event.request;
   if (req.method !== 'GET') return;

@@ -3,7 +3,18 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>FrigoScan v14.5 — Inventario Frigo, Dispensa & Assistente Vocale</title>
+  <meta name="theme-color" content="#059669" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="FrigoScan" />
+  <meta name="description" content="FrigoScan — Inventario Frigo, Dispensa, Lista Spesa Alexa & Assistente Vocale" />
+  <title>FrigoScan — Inventario Frigo, Dispensa & Assistente Vocale</title>
+
+  <link rel="manifest" href="./manifest.json" />
+  <link rel="icon" type="image/svg+xml" href="./icon.svg" />
+  <link rel="apple-touch-icon" href="./icon.svg" />
+
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <style>
@@ -38,8 +49,18 @@
   <header class="sticky top-0 z-40 bg-white/95 backdrop-blur border-b border-slate-200 shadow-sm">
     <div class="max-w-2xl mx-auto px-4 pt-3 pb-2 flex items-center justify-between gap-2">
       <div class="flex items-center gap-2.5 min-w-0">
-        <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-700 flex items-center justify-center text-white font-black text-base tracking-tighter shadow-sm shrink-0">
-          FS
+        <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-emerald-600 via-teal-600 to-sky-600 flex items-center justify-center shadow-sm shrink-0 border border-white/20">
+          <svg class="w-6 h-6" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M11 19V14C11 11.8 12.8 10 15 10H20" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity="0.65"/>
+            <path d="M44 10H49C51.2 10 53 11.8 53 14V19" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity="0.65"/>
+            <path d="M11 45V50C11 52.2 12.8 54 15 54H20" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity="0.65"/>
+            <path d="M44 54H49C51.2 54 53 52.2 53 50V45" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity="0.65"/>
+            <path d="M20 16C20 13.8 21.8 12 24 12H40C42.2 12 44 13.8 44 16V26H20V16Z" fill="#fff"/>
+            <path d="M20 29H44V48C44 50.2 42.2 52 40 52H24C21.8 52 20 50.2 20 48V29Z" fill="#fff" fill-opacity="0.95"/>
+            <rect x="38" y="17" width="2.5" height="6" rx="1.25" fill="#0d9488"/>
+            <rect x="38" y="33" width="2.5" height="10" rx="1.25" fill="#0d9488"/>
+            <rect x="14" y="26.5" width="36" height="2" rx="1" fill="#34d399"/>
+          </svg>
         </div>
         <div class="min-w-0">
           <div class="flex items-center gap-1.5 flex-wrap">
@@ -84,6 +105,10 @@
         <span>❄️ In Frigo</span>
         <span id="badge-fridge" class="text-[11px] font-extrabold px-1.5 py-0.5 rounded-full bg-white/25 text-white">0</span>
       </button>
+      <button type="button" data-tab="freezer" onclick="switchTab('freezer')" class="nav-btn inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs sm:text-sm font-bold whitespace-nowrap transition bg-slate-100 text-slate-700 hover:bg-slate-200 cursor-pointer">
+        <span>🧊 Freezer</span>
+        <span id="badge-freezer" class="text-[11px] font-extrabold px-1.5 py-0.5 rounded-full bg-cyan-100 text-cyan-900">0</span>
+      </button>
       <button type="button" data-tab="pantry" onclick="switchTab('pantry')" class="nav-btn inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs sm:text-sm font-bold whitespace-nowrap transition bg-slate-100 text-slate-700 hover:bg-slate-200 cursor-pointer">
         <span>🥫 Dispensa</span>
         <span id="badge-pantry" class="text-[11px] font-extrabold px-1.5 py-0.5 rounded-full bg-amber-100 text-amber-900">0</span>
@@ -114,8 +139,12 @@
     <!-- ==================== BANNER INSTALLAZIONE PWA (ANDROID & iOS) ==================== -->
     <div id="pwa-install-banner" class="p-3 rounded-2xl bg-gradient-to-r from-emerald-900 via-teal-900 to-slate-900 text-white border border-emerald-500/40 shadow-md flex items-center justify-between gap-2.5">
       <div class="flex items-center gap-2.5 min-w-0">
-        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-500 to-sky-600 flex items-center justify-center shadow-xs shrink-0 border border-white/20 font-black text-xs text-white">
-          FS
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-500 to-sky-600 flex items-center justify-center shadow-xs shrink-0 border border-white/20">
+          <svg class="w-5 h-5" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 16C20 13.8 21.8 12 24 12H40C42.2 12 44 13.8 44 16V26H20V16Z" fill="#fff"/>
+            <path d="M20 29H44V48C44 50.2 42.2 52 40 52H24C21.8 52 20 50.2 20 48V29Z" fill="#fff" fill-opacity="0.95"/>
+            <rect x="13" y="26.5" width="38" height="2.2" rx="1.1" fill="#34d399"/>
+          </svg>
         </div>
         <div class="min-w-0">
           <p class="text-xs font-extrabold text-white truncate">Installa FrigoScan sul telefono</p>
@@ -185,19 +214,44 @@
       <div id="fridge-list" class="space-y-2.5"></div>
     </section>
 
-    <!-- ==================== TAB 2: DISPENSA ==================== -->
-    <section id="view-pantry" class="tab-view hidden space-y-3">
-      <div class="flex items-center justify-between bg-amber-50 border border-amber-200 p-3.5 rounded-2xl gap-2">
+    <!-- ==================== TAB 1B: FREEZER ==================== -->
+    <section id="view-freezer" class="tab-view hidden space-y-3">
+      <div class="flex items-center justify-between bg-cyan-50 border border-cyan-200 p-3.5 rounded-2xl gap-2">
         <div>
-          <h2 class="text-sm font-extrabold text-amber-950">🥫 Scorte in Dispensa</h2>
-          <p class="text-xs text-amber-800">Pasta, conserve, olio, farine, bevande e scorte secche</p>
+          <h2 class="text-sm font-extrabold text-cyan-950">🧊 Scorte in Freezer</h2>
+          <p class="text-xs text-cyan-800">Surgelati, carne, pesce, verdure congelate, gelati e pane</p>
         </div>
         <div class="flex items-center gap-1.5 shrink-0">
-          <button type="button" onclick="openProductScannerModal('barcode', 'dispensa')" class="px-2.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-extrabold shadow-xs transition cursor-pointer">
+          <button type="button" onclick="openProductScannerModal('barcode', 'freezer')" class="px-2.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-extrabold shadow-xs transition cursor-pointer">
             📷 Scan
           </button>
-          <button type="button" onclick="openItemModal({ location: 'dispensa' })" class="px-3 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-extrabold shadow-xs transition cursor-pointer">
-            + Dispensa
+          <button type="button" onclick="openItemModal({ location: 'freezer' })" class="px-3 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-700 text-white text-xs font-extrabold shadow-xs transition cursor-pointer">
+            + Freezer
+          </button>
+        </div>
+      </div>
+
+      <div class="relative">
+        <input id="freezer-search" oninput="renderInventory('freezer')" type="search" placeholder="Cerca in freezer (es. piselli, merluzzo, gelato...)" class="w-full pl-9 pr-3 py-2.5 rounded-xl bg-white border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500" />
+        <svg class="w-4 h-4 text-slate-400 absolute left-3 top-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+      </div>
+
+      <div id="freezer-list" class="space-y-2.5"></div>
+    </section>
+
+    <!-- ==================== TAB 2: DISPENSA ==================== -->
+    <section id="view-pantry" class="tab-view hidden space-y-3">
+      <div id="shopping-checked-bar" class="hidden p-3 rounded-2xl bg-slate-900 text-white flex items-center justify-between gap-2 flex-wrap">
+        <span id="shopping-checked-label" class="text-xs font-bold">0 nel carrello</span>
+        <div class="flex items-center gap-1.5 flex-wrap">
+          <button type="button" onclick="moveCheckedToLocation('frigo')" class="px-2.5 py-1.5 rounded-xl bg-sky-500 hover:bg-sky-400 text-slate-950 text-xs font-extrabold cursor-pointer">
+            ❄️ Frigo
+          </button>
+          <button type="button" onclick="moveCheckedToLocation('freezer')" class="px-2.5 py-1.5 rounded-xl bg-cyan-400 hover:bg-cyan-300 text-slate-950 text-xs font-extrabold cursor-pointer">
+            🧊 Freezer
+          </button>
+          <button type="button" onclick="moveCheckedToLocation('dispensa')" class="px-2.5 py-1.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs font-extrabold cursor-pointer">
+            🥫 Dispensa
           </button>
         </div>
       </div>
@@ -283,7 +337,7 @@
       <div id="recipes-list" class="space-y-2.5"></div>
     </section>
 
-    <!-- ==================== TAB 7: ALEXA & SYNC FAMIGLIA ==================== -->
+    <!-- ==================== TAB 6: ALEXA & SYNC FAMIGLIA ==================== -->
     <section id="view-settings" class="tab-view hidden space-y-3">
       <div class="p-4 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-3">
         <div class="flex items-start justify-between gap-3">
@@ -436,7 +490,6 @@
         <button type="button" onclick="closeProductScannerModal()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-slate-300 font-bold cursor-pointer">✕</button>
       </div>
 
-      <!-- SELETTORE MODALITÀ -->
       <div class="grid grid-cols-2 gap-1.5 p-1 rounded-2xl bg-slate-800 border border-slate-700">
         <button type="button" id="scan-mode-btn-barcode" onclick="setProductScanMode('barcode')" class="py-2 px-3 rounded-xl bg-emerald-600 text-white text-xs font-extrabold transition cursor-pointer">
           ║▌║ Codice a Barre / QR
@@ -446,7 +499,6 @@
         </button>
       </div>
 
-      <!-- ANTEPRIMA FOTOCAMERA LIVE -->
       <div class="relative rounded-2xl overflow-hidden bg-black aspect-[4/3] max-h-[260px] mx-auto border-2 border-emerald-500/60 flex items-center justify-center">
         <video id="product-scanner-video" playsinline muted class="w-full h-full object-cover"></video>
         <canvas id="product-scanner-canvas" class="hidden"></canvas>
@@ -457,7 +509,6 @@
           Avvio fotocamera...
         </p>
       </div>
-
       <!-- CONTROLLI SCATTO FOTO / GALLERIA -->
       <div class="grid grid-cols-2 gap-2">
         <button type="button" onclick="captureProductPhotoFromCamera()" class="py-2.5 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 active:scale-98 text-white text-xs font-extrabold shadow-sm flex items-center justify-center gap-1.5 cursor-pointer">
@@ -471,7 +522,6 @@
         </label>
       </div>
 
-      <!-- INSERIMENTO MANUALE CODICE A BARRE / EAN -->
       <div class="p-3 rounded-2xl bg-slate-800/90 border border-slate-700 space-y-2">
         <p class="text-[11px] text-slate-300">Oppure digita il codice a barre (EAN / QR):</p>
         <form onsubmit="submitManualBarcodeLookup(event)" class="flex gap-2">
@@ -545,6 +595,7 @@
             <label class="block text-xs font-bold text-slate-700 mb-1">Dove si trova *</label>
             <select id="prod-location" class="w-full px-3 py-2 rounded-xl border border-slate-200 text-sm bg-white font-semibold">
               <option value="frigo">❄️ In Frigo</option>
+              <option value="freezer">🧊 In Freezer</option>
               <option value="dispensa">🥫 In Dispensa</option>
             </select>
           </div>
@@ -582,7 +633,13 @@
     <div class="bg-white w-full max-w-md rounded-t-3xl sm:rounded-3xl p-5 space-y-4 max-h-[92vh] overflow-y-auto shadow-2xl">
       <div class="flex items-center justify-between border-b border-slate-100 pb-3">
         <div class="flex items-center gap-2.5">
-          <div class="w-9 h-9 rounded-xl bg-emerald-600 text-white font-black text-xs flex items-center justify-center shadow-sm shrink-0">FS</div>
+          <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-600 via-teal-600 to-sky-600 flex items-center justify-center shadow-sm shrink-0">
+            <svg class="w-5 h-5" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M20 16C20 13.8 21.8 12 24 12H40C42.2 12 44 13.8 44 16V26H20V16Z" fill="#fff"/>
+              <path d="M20 29H44V48C44 50.2 42.2 52 40 52H24C21.8 52 20 50.2 20 48V29Z" fill="#fff" fill-opacity="0.95"/>
+              <rect x="13" y="26.5" width="38" height="2.2" rx="1.1" fill="#34d399"/>
+            </svg>
+          </div>
           <div>
             <h3 class="text-base font-extrabold text-slate-900">Menu &amp; Impostazioni</h3>
             <p class="text-[11px] text-slate-500">Installazione, avvisi scadenza e suggerimenti</p>
@@ -594,7 +651,13 @@
       <div class="p-3.5 rounded-2xl bg-gradient-to-br from-emerald-50 to-teal-50 border border-emerald-200 space-y-2.5">
         <div class="flex items-center justify-between gap-2">
           <div class="flex items-center gap-2.5 min-w-0">
-            <div class="w-10 h-10 rounded-xl bg-emerald-600 text-white font-black text-sm flex items-center justify-center shrink-0 shadow-xs">FS</div>
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-600 via-teal-600 to-sky-600 flex items-center justify-center shrink-0 shadow-xs">
+              <svg class="w-6 h-6" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 16C20 13.8 21.8 12 24 12H40C42.2 12 44 13.8 44 16V26H20V16Z" fill="#fff"/>
+                <path d="M20 29H44V48C44 50.2 42.2 52 40 52H24C21.8 52 20 50.2 20 48V29Z" fill="#fff" fill-opacity="0.95"/>
+                <rect x="13" y="26.5" width="38" height="2.2" rx="1.1" fill="#34d399"/>
+              </svg>
+            </div>
             <div class="min-w-0">
               <span class="text-[10px] font-extrabold uppercase tracking-wider text-emerald-700 block">Web App (PWA)</span>
               <h4 class="text-sm font-extrabold text-slate-900 truncate">Installa su Smartphone</h4>
@@ -658,7 +721,7 @@
 
       <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2.5">
         <div class="flex items-center justify-between">
-          <span class="text-[10px] font-extrabold uppercase tracking-wider text-slate-500">Gestione Dati &amp; Aggiornamenti</span>
+          <span class="text-[10px] font-extrabold uppercase tracking-wider text-slate-500">Gestione Dati &amp; GitHub</span>
           <span class="text-[10px] font-mono font-bold text-slate-400">v14.5 • SafeStorage</span>
         </div>
         <div class="grid grid-cols-2 gap-2">
@@ -675,7 +738,7 @@
             🔊 Alexa &amp; Sync
           </button>
           <button type="button" onclick="closeModal('gear-menu-modal'); showUpdateAvailableBanner()" class="py-2 px-2.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-emerald-900 text-xs font-extrabold transition cursor-pointer">
-            ↻ Simula avviso update
+            ↻ Verifica Update
           </button>
         </div>
       </div>
@@ -687,7 +750,13 @@
     <div class="bg-white w-full max-w-md rounded-t-3xl sm:rounded-3xl p-5 space-y-4 shadow-2xl max-h-[90vh] overflow-y-auto">
       <div class="flex items-center justify-between border-b border-slate-100 pb-3">
         <div class="flex items-center gap-2.5">
-          <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-700 text-white font-black text-sm flex items-center justify-center shadow-sm shrink-0">FS</div>
+          <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-emerald-600 via-teal-600 to-sky-600 flex items-center justify-center shadow-sm shrink-0">
+            <svg class="w-6 h-6" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M20 16C20 13.8 21.8 12 24 12H40C42.2 12 44 13.8 44 16V26H20V16Z" fill="#fff"/>
+              <path d="M20 29H44V48C44 50.2 42.2 52 40 52H24C21.8 52 20 50.2 20 48V29Z" fill="#fff" fill-opacity="0.95"/>
+              <rect x="13" y="26.5" width="38" height="2.2" rx="1.1" fill="#34d399"/>
+            </svg>
+          </div>
           <div>
             <h3 class="text-base font-extrabold text-slate-900">Installa FrigoScan</h3>
             <p class="text-[11px] text-slate-500">Aggiungi l'icona alla schermata Home</p>
@@ -816,10 +885,16 @@
         <div class="flex flex-wrap gap-1.5">
           <button type="button" onclick="runDemoVoiceCommand('Aggiungi un litro di latte')" class="text-left px-2.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/15 text-[11px] text-slate-200 cursor-pointer">"Aggiungi un litro di latte"</button>
           <button type="button" onclick="runDemoVoiceCommand('Quando scade la mozzarella?')" class="text-left px-2.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/15 text-[11px] text-slate-200 cursor-pointer">"Quando scade la mozzarella?"</button>
-          <button type="button" onclick="runDemoVoiceCommand('Metti in dispensa 3 pacchi di pasta')" class="text-left px-2.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/15 text-[11px] text-slate-200 cursor-pointer">"Metti in dispensa 3 pacchi di pasta"</button>
-          <button type="button" onclick="runDemoVoiceCommand('Rimuovi tutto lo yogurt naturale')" class="text-left px-2.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/15 text-[11px] text-slate-200 cursor-pointer">"Rimuovi tutto lo yogurt naturale"</button>
+          <button type="button" onclick="runDemoVoiceCommand('Cosa posso cucinare stasera con quello che sta per scadere?')" class="text-left px-2.5 py-1.5 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-400/30 text-[11px] text-emerald-200 cursor-pointer">"Cosa cucino con quello che scade?"</button>
+          <button type="button" onclick="runDemoVoiceCommand('Quanto dura la mozzarella aperta in frigo?')" class="text-left px-2.5 py-1.5 rounded-xl bg-sky-500/20 hover:bg-sky-500/30 border border-sky-400/30 text-[11px] text-sky-200 cursor-pointer">"Quanto dura la mozzarella aperta?"</button>
           <button type="button" onclick="runDemoVoiceCommand('Aggiungi alla lista della spesa uova e pomodori')" class="text-left px-2.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/15 text-[11px] text-slate-200 cursor-pointer">"Aggiungi alla lista spesa uova e pomodori"</button>
         </div>
+      </div>
+
+      <div id="frigo-learned-box" class="hidden p-2.5 rounded-xl bg-slate-800/70 border border-slate-700/80 flex items-center justify-between gap-2">
+        <span id="frigo-learned-count" class="text-[11px] text-emerald-300 font-semibold">🧠 0 regole apprese in memoria</span>
+        <button type="button" onclick="clearLearnedVoiceRules()" class="text-[10px] font-bold text-slate-400 hover:text-rose-300 underline cursor-pointer">Azzera memoria</button>
+      </div>
       </div>
 
       <div class="pt-1 border-t border-slate-800">
@@ -839,6 +914,7 @@
   <div id="toast" class="hidden fixed top-20 left-1/2 -translate-x-1/2 z-[60] whitespace-nowrap px-4 py-2.5 rounded-full bg-slate-900 text-white text-xs font-bold shadow-lg"></div>
 
   <script>
+    const APP_VERSION = '14.7.0-ai-learning';
     const addDaysIso = (days) => {
       const d = new Date();
       d.setDate(d.getDate() + days);
@@ -859,11 +935,14 @@
       workerUrl: 'https://frigoscan-sync.tuo-account.workers.dev',
       expiryThresholdDays: 3,
       updatedAt: Date.now(),
+      learnedRules: {},
       items: [
         { id: 'f1', name: 'Latte fresco intero', location: 'frigo', qty: 2, unit: 'litri', expiry: addDaysIso(2) },
         { id: 'f2', name: 'Mozzarella di bufala', location: 'frigo', qty: 2, unit: 'pz', expiry: addDaysIso(1) },
         { id: 'f3', name: 'Uova biologiche', location: 'frigo', qty: 6, unit: 'pz', expiry: addDaysIso(8) },
         { id: 'f4', name: 'Yogurt greco naturale', location: 'frigo', qty: 4, unit: 'pz', expiry: addDaysIso(-1) },
+        { id: 'fz1', name: 'Piselli fini surgelati', location: 'freezer', qty: 2, unit: 'confezioni', expiry: addDaysIso(160) },
+        { id: 'fz2', name: 'Filetti di merluzzo', location: 'freezer', qty: 1, unit: 'confezioni', expiry: addDaysIso(120) },
         { id: 'p1', name: 'Pasta di semola penne', location: 'dispensa', qty: 4, unit: 'pacchi', expiry: addDaysIso(180) },
         { id: 'p2', name: 'Passata di pomodoro', location: 'dispensa', qty: 3, unit: 'pz', expiry: addDaysIso(240) },
         { id: 'p3', name: 'Olio Extra Vergine Oliva', location: 'dispensa', qty: 1, unit: 'litri', expiry: addDaysIso(300) },
@@ -905,6 +984,9 @@
         if (Array.isArray(bestCandidate.items)) state.items = bestCandidate.items;
         if (Array.isArray(bestCandidate.shopping)) state.shopping = bestCandidate.shopping;
         if (Array.isArray(bestCandidate.loyaltyCards)) state.loyaltyCards = bestCandidate.loyaltyCards;
+        if (bestCandidate.learnedRules && typeof bestCandidate.learnedRules === 'object') {
+          state.learnedRules = bestCandidate.learnedRules;
+        }
         if (bestCandidate.familyCode) state.familyCode = bestCandidate.familyCode;
         if (bestCandidate.workerUrl) state.workerUrl = bestCandidate.workerUrl;
         if (typeof bestCandidate.expiryThresholdDays === 'number') {
@@ -941,36 +1023,27 @@
       if (pendingServiceWorker) {
         try { pendingServiceWorker.postMessage({ type: 'SKIP_WAITING' }); } catch (e) {}
       }
-      setTimeout(() => {
-        try {
-          if (window.location.protocol.startsWith('http')) {
-            window.location.reload();
-          } else {
-            dismissUpdateBanner();
-          }
-        } catch (e) {
-          dismissUpdateBanner();
-        }
-      }, 450);
+      setTimeout(() => { window.location.reload(); }, 400);
     }
 
-    function setupUpdateDetection() {
+    function registerServiceWorkerAndUpdates() {
       if (!('serviceWorker' in navigator) || !window.location.protocol.startsWith('http')) return;
-      navigator.serviceWorker.getRegistration().then((reg) => {
-        if (!reg) return;
-        if (reg.waiting) {
-          pendingServiceWorker = reg.waiting;
-          showUpdateAvailableBanner();
-        }
-        reg.addEventListener('updatefound', () => {
-          const newWorker = reg.installing;
-          if (!newWorker) return;
-          newWorker.addEventListener('statechange', () => {
-            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-              pendingServiceWorker = newWorker;
-              showUpdateAvailableBanner();
-            }
-          });
+
+      let reloadingForUpdate = false;
+      navigator.serviceWorker.addEventListener('controllerchange', () => {
+        if (reloadingForUpdate) return;
+        reloadingForUpdate = true;
+        persistState();
+        window.location.reload();
+      });
+
+      navigator.serviceWorker.register('./sw.js').then((reg) => {
+        reg.update().catch(() => {});
+        // Ricontrolla automaticamente ogni volta che riapri o torni sull'app
+        document.addEventListener('visibilitychange', () => {
+          if (document.visibilityState === 'visible') {
+            reg.update().catch(() => {});
+          }
         });
       }).catch(() => {});
     }
@@ -1144,7 +1217,7 @@
       const msg = (input.value || '').trim();
       if (!msg) return;
       const subject = encodeURIComponent('Suggerimento / Segnalazione FrigoScan');
-      const body = encodeURIComponent(msg + '\n\n---\nInviato da FrigoScan Web App');
+      const body = encodeURIComponent(msg + '\n\n---\nInviato da FrigoScan Web App (' + APP_VERSION + ')');
       window.location.href = `mailto:frigoscanapp@gmail.com?subject=${subject}&body=${body}`;
       input.value = '';
       showToast('Apertura email verso frigoscanapp@gmail.com...');
@@ -1403,6 +1476,7 @@
       }
 
       if (tab === 'fridge') renderInventory('frigo');
+      if (tab === 'freezer') renderInventory('freezer');
       if (tab === 'pantry') renderInventory('dispensa');
       if (tab === 'expiring') renderExpiring();
       if (tab === 'shopping') renderShopping();
@@ -1413,7 +1487,8 @@
 
     function updateAllViews() {
       const thresh = state.expiryThresholdDays || 3;
-      const fridgeItems = state.items.filter(i => i.location !== 'dispensa');
+      const fridgeItems = state.items.filter(i => i.location !== 'dispensa' && i.location !== 'freezer');
+      const freezerItems = state.items.filter(i => i.location === 'freezer');
       const pantryItems = state.items.filter(i => i.location === 'dispensa');
       const expiredItems = state.items.filter(i => daysUntil(i.expiry) < 0);
       const expiringSoonItems = state.items.filter(i => {
@@ -1425,6 +1500,8 @@
       const cardsList = Array.isArray(state.loyaltyCards) ? state.loyaltyCards : [];
 
       document.getElementById('badge-fridge').textContent = fridgeItems.length;
+      const freezerBadge = document.getElementById('badge-freezer');
+      if (freezerBadge) freezerBadge.textContent = freezerItems.length;
       document.getElementById('badge-pantry').textContent = pantryItems.length;
       const cardsBadge = document.getElementById('badge-cards');
       if (cardsBadge) cardsBadge.textContent = cardsList.length;
@@ -1442,6 +1519,7 @@
       document.getElementById('stat-fridge-total').textContent = fridgeItems.length;
 
       renderInventory('frigo');
+      renderInventory('freezer');
       renderInventory('dispensa');
       renderExpiring();
       renderShopping();
@@ -1452,377 +1530,127 @@
     function buildProductCardHtml(item) {
       const d = daysUntil(item.expiry);
       const thresh = state.expiryThresholdDays || 3;
-      const isPantry = item.location === 'dispensa';
-      const locBadge = isPantry
+      const loc = item.location === 'dispensa' ? 'dispensa' : (item.location === 'freezer' ? 'freezer' : 'frigo');
+      const locBadge = loc === 'dispensa'
         ? `<span class="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-amber-100 text-amber-900">🥫 Dispensa</span>`
-        : `<span class="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-sky-100 text-sky-900">❄️ Frigo</span>`;
-
-      let expBadge = '';
-      if (item.expiry) {
-        if (d < 0) expBadge = `<span class="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-rose-600 text-white">Scaduto</span>`;
-        else if (d <= thresh) expBadge = `<span class="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-rose-100 text-rose-800">Scade tra ${d === 0 ? 'oggi' : d + ' gg'}</span>`;
-        else expBadge = `<span class="text-[10px] font-semibold text-slate-400">Scad. ${item.expiry}</span>`;
-      }
+        : (loc === 'freezer'
+          ? `<span class="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-cyan-100 text-cyan-900">🧊 Freezer</span>`
+          : `<span class="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-sky-100 text-sky-900">❄️ Frigo</span>`);
+      const expBadge = !item.expiry ? '' : (d < 0
+        ? `<span class="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-rose-100 text-rose-800">Scaduto da ${Math.abs(d)}g</span>`
+        : (d === 0
+          ? `<span class="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-rose-100 text-rose-800">Scade oggi</span>`
+          : (d <= thresh
+            ? `<span class="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-amber-100 text-amber-900">Scade tra ${d}g</span>`
+            : `<span class="text-[10px] font-semibold text-slate-400">Scad. ${item.expiry}</span>`)));
 
       const thumbHtml = item.photo
         ? `<img src="${item.photo}" alt="${escapeHtml(item.name)}" class="w-11 h-11 rounded-xl object-cover border border-slate-200 shrink-0" />`
         : '';
 
       return `
-        <div class="p-3 rounded-2xl bg-white border ${d <= thresh ? 'border-amber-300' : 'border-slate-200'} shadow-xs flex items-center justify-between gap-2">
-          <div onclick="openItemModal('${item.id}')" class="min-w-0 flex-1 flex items-center gap-2.5 cursor-pointer">
+        <div class="p-3.5 rounded-2xl bg-white border border-slate-200 shadow-xs flex items-center justify-between gap-2.5">
+          <div class="flex items-center gap-2.5 min-w-0 flex-1">
             ${thumbHtml}
             <div class="min-w-0 flex-1">
-              <h4 class="text-sm font-extrabold text-slate-900 truncate">${escapeHtml(item.name)}</h4>
-              <div class="flex items-center gap-1.5 flex-wrap mt-1">
+              <div class="flex items-center gap-1.5 flex-wrap">
+                <h3 class="text-sm font-extrabold text-slate-900 truncate">${escapeHtml(item.name)}</h3>
                 ${locBadge}
                 ${expBadge}
               </div>
+              <p class="text-xs font-semibold text-slate-500 mt-0.5">${item.qty} ${escapeHtml(item.unit || 'pz')}</p>
             </div>
           </div>
           <div class="flex items-center gap-1 shrink-0">
-            <button type="button" onclick="changeQty('${item.id}', -1)" class="w-7 h-7 rounded-lg bg-slate-100 hover:bg-rose-100 text-slate-800 font-extrabold text-sm cursor-pointer">−</button>
-            <span class="min-w-[50px] text-center text-xs font-extrabold text-slate-800">${item.qty} <span class="font-normal text-slate-500">${escapeHtml(item.unit || 'pz')}</span></span>
-            <button type="button" onclick="changeQty('${item.id}', 1)" class="w-7 h-7 rounded-lg bg-slate-100 hover:bg-emerald-100 text-slate-800 font-extrabold text-sm cursor-pointer">+</button>
-            <button type="button" onclick="openItemModal('${item.id}')" title="Modifica" class="w-7 h-7 rounded-lg bg-slate-50 hover:bg-slate-200 text-slate-600 text-xs font-bold cursor-pointer">✎</button>
+            <button type="button" onclick="adjustItemQty('${item.id}', -1)" class="w-8 h-8 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-black text-sm cursor-pointer">−</button>
+            <button type="button" onclick="adjustItemQty('${item.id}', 1)" class="w-8 h-8 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-black text-sm cursor-pointer">+</button>
+            <button type="button" onclick="openItemModalById('${item.id}')" class="w-8 h-8 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 text-xs font-bold cursor-pointer">✎</button>
           </div>
         </div>
       `;
     }
 
     function renderInventory(location) {
-      const searchId = location === 'dispensa' ? 'pantry-search' : 'fridge-search';
-      const listId = location === 'dispensa' ? 'pantry-list' : 'fridge-list';
-      const q = (document.getElementById(searchId)?.value || '').toLowerCase().trim();
-      const filtered = state.items.filter(i => {
-        const loc = i.location === 'dispensa' ? 'dispensa' : 'frigo';
-        if (loc !== location) return false;
-        return !q || i.name.toLowerCase().includes(q);
-      });
+      const listId = location === 'dispensa' ? 'pantry-list' : (location === 'freezer' ? 'freezer-list' : 'fridge-list');
+      const searchId = location === 'dispensa' ? 'pantry-search' : (location === 'freezer' ? 'freezer-search' : 'fridge-search');
       const container = document.getElementById(listId);
       if (!container) return;
-      container.innerHTML = filtered.length
-        ? filtered.map(buildProductCardHtml).join('')
-        : `<div class="text-center py-8 bg-white rounded-2xl border border-dashed border-slate-300 text-xs text-slate-500">Nessun prodotto trovato qui.</div>`;
+      const q = (document.getElementById(searchId)?.value || '').trim().toLowerCase();
+
+      const filtered = state.items.filter(i => {
+        const itemLoc = i.location === 'dispensa' ? 'dispensa' : (i.location === 'freezer' ? 'freezer' : 'frigo');
+        if (itemLoc !== location) return false;
+        return !q || i.name.toLowerCase().includes(q);
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = `<div class="p-6 rounded-2xl bg-white border border-dashed border-slate-300 text-center text-xs text-slate-500">Nessun prodotto trovato in questa sezione.</div>`;
+        return;
+      }
+      container.innerHTML = filtered.map(buildProductCardHtml).join('');
     }
 
     function renderExpiring() {
+      const container = document.getElementById('expiring-list');
+      if (!container) return;
       const thresh = state.expiryThresholdDays || 3;
       const list = state.items
         .filter(i => daysUntil(i.expiry) <= thresh)
         .sort((a, b) => daysUntil(a.expiry) - daysUntil(b.expiry));
-      const container = document.getElementById('expiring-list');
-      if (!container) return;
-      container.innerHTML = list.length
-        ? list.map(buildProductCardHtml).join('')
-        : `<div class="text-center py-8 bg-white rounded-2xl border border-dashed border-slate-300 text-xs text-slate-500">Ottimo! Nessun prodotto in scadenza entro ${thresh} ${thresh === 1 ? 'giorno' : 'giorni'}.</div>`;
-    }
 
-    function addMissingToShopping(itemName) {
-      const cap = itemName.charAt(0).toUpperCase() + itemName.slice(1);
-      state.shopping.unshift({ id: 's_' + Date.now(), name: cap, checked: false, source: 'manual' });
-      persistState();
-      updateAllViews();
-      showToast(`"${cap}" aggiunto alla Lista Spesa!`);
-    }
-
-    // ==================== CARTE FEDELTÀ ====================
-    const CARD_GRADIENTS = {
-      emerald: 'from-emerald-600 to-teal-700',
-      sky: 'from-sky-600 to-blue-700',
-      rose: 'from-rose-600 to-red-700',
-      amber: 'from-amber-500 to-orange-600',
-      indigo: 'from-indigo-600 to-violet-700',
-      slate: 'from-slate-800 to-slate-950'
-    };
-
-    function buildBarcodeSvgHtml(codeStr) {
-      const clean = String(codeStr || '00000000').trim();
-      let bars = '';
-      let x = 8;
-      const drawBar = (w, black) => {
-        if (black) bars += `<rect x="${x}" y="4" width="${w}" height="68" fill="#0f172a"/>`;
-        x += w;
-      };
-      drawBar(2, true); drawBar(2, false); drawBar(2, true); drawBar(3, false);
-      for (let i = 0; i < clean.length; i++) {
-        const ch = clean.charCodeAt(i);
-        const w1 = (ch % 3) + 1;
-        const w2 = ((ch >> 2) % 3) + 1;
-        const w3 = ((ch >> 4) % 2) + 1;
-        const w4 = ((ch >> 5) % 2) + 1;
-        drawBar(w1, true);
-        drawBar(w2, false);
-        drawBar(w3, true);
-        drawBar(w4, false);
-      }
-      drawBar(2, true); drawBar(2, false); drawBar(2, true);
-      const totalWidth = Math.max(160, x + 8);
-      return `<svg viewBox="0 0 ${totalWidth} 76" class="w-full max-w-[270px] h-24 mx-auto" preserveAspectRatio="none">${bars}</svg>`;
-    }
-
-    function renderLoyaltyCards() {
-      const container = document.getElementById('loyalty-cards-list');
-      if (!container) return;
-      const cards = Array.isArray(state.loyaltyCards) ? state.loyaltyCards : [];
-      if (!cards.length) {
-        container.innerHTML = `<div class="col-span-full text-center py-8 bg-white rounded-2xl border border-dashed border-slate-300 text-xs text-slate-500">Nessuna carta fedeltà salvata. Tocca <strong>+ Carta</strong> per aggiungerne una!</div>`;
+      if (list.length === 0) {
+        container.innerHTML = `<div class="p-6 rounded-2xl bg-white border border-dashed border-slate-300 text-center text-xs text-slate-500">Ottimo! Nessun alimento scaduto o in scadenza entro ${thresh} giorni.</div>`;
         return;
       }
-      container.innerHTML = cards.map(c => {
-        const grad = CARD_GRADIENTS[c.color] || CARD_GRADIENTS.emerald;
-        return `
-          <div onclick="openShowLoyaltyCardModal('${c.id}')" class="cursor-pointer rounded-2xl bg-gradient-to-br ${grad} text-white p-4 shadow-md hover:shadow-lg active:scale-[0.99] transition flex flex-col justify-between min-h-[124px] relative overflow-hidden">
-            <div class="flex items-start justify-between gap-2">
-              <div class="min-w-0">
-                <span class="text-[10px] font-extrabold uppercase tracking-wider text-white/75 block">Tessera Fedeltà</span>
-                <h4 class="text-base font-black tracking-tight truncate mt-0.5">${escapeHtml(c.store)}</h4>
-              </div>
-              <button type="button" onclick="event.stopPropagation(); openLoyaltyCardModal('${c.id}')" title="Modifica carta" class="w-7 h-7 rounded-lg bg-white/15 hover:bg-white/25 text-white text-xs font-bold flex items-center justify-center shrink-0 cursor-pointer">✎</button>
-            </div>
-            <div class="pt-4 flex items-end justify-between gap-2">
-              <span class="text-xs font-mono font-bold tracking-wider text-white/90 truncate">${escapeHtml(c.code)}</span>
-              <span class="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-white/20 text-white shrink-0">${c.format === 'qr' ? 'QR Code' : 'Mostra Cassa'}</span>
-            </div>
-          </div>
-        `;
-      }).join('');
+      container.innerHTML = list.map(buildProductCardHtml).join('');
     }
 
-    function openLoyaltyCardModal(cardId = null) {
-      if (!Array.isArray(state.loyaltyCards)) state.loyaltyCards = [];
-      const card = cardId ? state.loyaltyCards.find(c => c.id === cardId) : null;
-      document.getElementById('card-modal-title').textContent = card ? 'Modifica Carta Fedeltà' : 'Nuova Carta Fedeltà';
-      document.getElementById('card-id').value = card ? card.id : '';
-      document.getElementById('card-store').value = card ? card.store : '';
-      document.getElementById('card-code').value = card ? card.code : '';
-      document.getElementById('card-format').value = card?.format || 'barcode';
-      document.getElementById('card-color').value = card?.color || 'emerald';
-
-      const imgVal = card?.image || '';
-      document.getElementById('card-image-data').value = imgVal;
-      const previewBox = document.getElementById('card-image-preview-box');
-      const previewImg = document.getElementById('card-image-preview-img');
-      if (imgVal) {
-        previewImg.src = imgVal;
-        previewBox.classList.remove('hidden');
-      } else {
-        previewImg.src = '';
-        previewBox.classList.add('hidden');
-      }
-
-      document.getElementById('btn-delete-card').classList.toggle('hidden', !card);
-      document.getElementById('loyalty-card-modal').classList.remove('hidden');
-    }
-
-    function clearLoyaltyCardImage() {
-      document.getElementById('card-image-data').value = '';
-      document.getElementById('card-image-preview-img').src = '';
-      document.getElementById('card-image-preview-box').classList.add('hidden');
-    }
-
-    function setLoyaltyCardImagePreview(dataUrl) {
-      document.getElementById('card-image-data').value = dataUrl;
-      document.getElementById('card-image-preview-img').src = dataUrl;
-      document.getElementById('card-image-preview-box').classList.remove('hidden');
-    }
-
-    function handleLoyaltyCardGalleryUpload(e) {
-      const file = e.target.files && e.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = () => {
-        const img = new Image();
-        img.onload = async () => {
-          const canvas = document.createElement('canvas');
-          canvas.width = img.width;
-          canvas.height = img.height;
-          canvas.getContext('2d').drawImage(img, 0, 0);
-
-          let detectedCode = '';
-          let detectedFormat = '';
-          if ('BarcodeDetector' in window) {
-            try {
-              const detector = new BarcodeDetector({ formats: ['ean_13', 'ean_8', 'upc_a', 'upc_e', 'code_128', 'code_39', 'qr_code'] });
-              const found = await detector.detect(canvas);
-              if (found && found.length > 0 && found[0].rawValue) {
-                detectedCode = found[0].rawValue.trim();
-                detectedFormat = found[0].format === 'qr_code' ? 'qr' : 'barcode';
-              }
-            } catch (err) {}
-          }
-
-          const compressed = compressCanvasToDataUrl(canvas, 640);
-          setLoyaltyCardImagePreview(compressed);
-
-          if (detectedCode) {
-            document.getElementById('card-code').value = detectedCode;
-            if (detectedFormat) document.getElementById('card-format').value = detectedFormat;
-            showToast(`Codice letto dallo screenshot: ${detectedCode}`);
-          } else {
-            const codeInput = document.getElementById('card-code');
-            if (!codeInput.value.trim()) {
-              codeInput.value = 'SCREENSHOT-' + String(Date.now()).slice(-6);
-            }
-            showToast('Immagine carta caricata dalla galleria!');
-          }
-        };
-        img.src = reader.result;
-      };
-      reader.readAsDataURL(file);
-      e.target.value = '';
-    }
-
-    function saveLoyaltyCardForm(e) {
-      e.preventDefault();
-      if (!Array.isArray(state.loyaltyCards)) state.loyaltyCards = [];
-      const id = document.getElementById('card-id').value;
-      const image = document.getElementById('card-image-data').value || '';
-      const payload = {
-        id: id || 'card_' + Date.now(),
-        store: document.getElementById('card-store').value.trim(),
-        code: document.getElementById('card-code').value.trim(),
-        format: document.getElementById('card-format').value,
-        color: document.getElementById('card-color').value,
-        ...(image ? { image } : {})
-      };
-      if (id) {
-        const idx = state.loyaltyCards.findIndex(c => c.id === id);
-        if (idx !== -1) state.loyaltyCards[idx] = payload;
-      } else {
-        state.loyaltyCards.unshift(payload);
-      }
-      persistState();
-      closeModal('loyalty-card-modal');
-      updateAllViews();
-      showToast(`Carta "${payload.store}" salvata!`);
-    }
-
-    function deleteCurrentLoyaltyCard() {
-      const id = document.getElementById('card-id').value;
-      state.loyaltyCards = (state.loyaltyCards || []).filter(c => c.id !== id);
-      persistState();
-      closeModal('loyalty-card-modal');
-      updateAllViews();
-      showToast('Carta fedeltà eliminata');
-    }
-
-    function openShowLoyaltyCardModal(cardId) {
-      const card = (state.loyaltyCards || []).find(c => c.id === cardId);
-      if (!card) return;
-      const header = document.getElementById('show-card-header');
-      const grad = CARD_GRADIENTS[card.color] || CARD_GRADIENTS.emerald;
-      header.className = `p-4 bg-gradient-to-r ${grad} text-white flex items-center justify-between`;
-      document.getElementById('show-card-store').textContent = card.store;
-      document.getElementById('show-card-number').textContent = card.code;
-
-      const graphicBox = document.getElementById('show-card-code-graphic');
-      graphicBox.innerHTML = '';
-      if (card.image && String(card.code).startsWith('SCREENSHOT-')) {
-        graphicBox.innerHTML = `<img src="${card.image}" alt="${escapeHtml(card.store)}" class="max-h-56 w-auto rounded-xl object-contain mx-auto" />`;
-      } else if (card.format === 'qr' && typeof QRCode !== 'undefined') {
-        new QRCode(graphicBox, {
-          text: card.code,
-          width: 150,
-          height: 150,
-          colorDark: '#0f172a',
-          colorLight: '#ffffff',
-          correctLevel: QRCode.CorrectLevel.M
-        });
-      } else {
-        graphicBox.innerHTML = buildBarcodeSvgHtml(card.code);
-        if (card.image) {
-          graphicBox.innerHTML += `<img src="${card.image}" alt="${escapeHtml(card.store)}" class="mt-3 max-h-36 w-auto rounded-lg object-contain mx-auto border border-slate-100" />`;
-        }
-      }
-
-      document.getElementById('show-card-edit-btn').onclick = () => {
-        closeModal('loyalty-card-show-modal');
-        openLoyaltyCardModal(card.id);
-      };
-      document.getElementById('loyalty-card-show-modal').classList.remove('hidden');
-    }
-
-    let prodScanModePurpose = 'product';
-
-    function scanLoyaltyCardBarcode() {
-      prodScanModePurpose = 'loyalty';
-      closeModal('loyalty-card-modal');
-      openProductScannerModal('barcode');
-    }
-
-    function renderRecipes() {
-      const names = state.items.map(i => i.name.toLowerCase());
-      const has = (kw) => names.some(n => n.includes(kw));
-      const ideas = [
-        { title: 'Pasta al Pomodoro e Mozzarella Filante', needs: ['pasta', 'pomodoro', 'mozzarella'], time: '15 min' },
-        { title: 'Frittata Svuota-Frigo con Uova e Formaggio', needs: ['uova', 'latte', 'parmigiano'], time: '12 min' },
-        { title: 'Pasta Tonno e Olio Extra Vergine', needs: ['pasta', 'tonno', 'olio'], time: '12 min' }
-      ];
-      const container = document.getElementById('recipes-list');
-      if (!container) return;
-      container.innerHTML = ideas.map(r => {
-        const matched = r.needs.filter(has);
-        const missing = r.needs.filter(k => !has(k));
-        return `
-          <div class="p-3.5 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-2">
-            <div class="flex items-center justify-between gap-2">
-              <h4 class="text-sm font-extrabold text-slate-900">${r.title}</h4>
-              <span class="text-[11px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 shrink-0">⏱ ${r.time}</span>
-            </div>
-            <p class="text-xs text-slate-600">Ingredienti in casa: <strong class="text-emerald-700">${matched.length}/${r.needs.length}</strong> (${matched.join(', ') || 'nessuno'})</p>
-            ${missing.length ? `
-              <div class="flex items-center gap-1.5 flex-wrap pt-0.5">
-                <span class="text-[11px] text-slate-500">Manca:</span>
-                ${missing.map(m => `<button type="button" onclick="addMissingToShopping('${escapeHtml(m)}')" class="px-2 py-0.5 rounded-lg bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-[11px] font-bold text-emerald-800 cursor-pointer">+ ${escapeHtml(m)} in Lista</button>`).join('')}
-              </div>
-            ` : `<span class="inline-block text-[11px] font-extrabold text-emerald-700">✓ Hai tutti gli ingredienti in casa!</span>`}
-          </div>
-        `;
-      }).join('');
-    }
-
-    function changeQty(id, delta) {
+    function adjustItemQty(id, delta) {
       const idx = state.items.findIndex(i => i.id === id);
       if (idx === -1) return;
-      const next = Math.max(0, Number(state.items[idx].qty) + delta);
-      if (next === 0) {
-        const removed = state.items.splice(idx, 1)[0];
-        showToast(`${removed.name} terminato!`);
+      const item = state.items[idx];
+      const nextQty = (Number(item.qty) || 0) + delta;
+      if (nextQty <= 0) {
+        const name = item.name;
+        state.items.splice(idx, 1);
+        if (!state.shopping.some(s => s.name.toLowerCase() === name.toLowerCase())) {
+          state.shopping.unshift({ id: 'shop_' + Date.now(), name, checked: false, source: 'auto' });
+        }
+        showToast(`${name} terminato e aggiunto alla Lista Spesa`);
       } else {
-        state.items[idx].qty = next;
+        item.qty = nextQty;
       }
       persistState();
       updateAllViews();
     }
 
-    function openItemModal(itemOrPreset = null) {
-      const obj = typeof itemOrPreset === 'string'
-        ? state.items.find(i => i.id === itemOrPreset) || null
-        : itemOrPreset;
-      const isEdit = Boolean(obj && obj.id);
-      document.getElementById('item-modal-title').textContent = isEdit ? 'Modifica Prodotto' : 'Nuovo Prodotto';
-      document.getElementById('prod-id').value = isEdit ? obj.id : '';
-      document.getElementById('prod-name').value = obj?.name || '';
-      document.getElementById('prod-location').value = obj?.location === 'dispensa' ? 'dispensa' : 'frigo';
-      document.getElementById('prod-expiry').value = obj?.expiry || addDaysIso(5);
-      document.getElementById('prod-qty').value = obj?.qty ?? 1;
-      document.getElementById('prod-unit').value = obj?.unit || 'pz';
+    function openItemModal(preset = {}) {
+      document.getElementById('item-modal-title').textContent = preset.id ? 'Modifica Prodotto' : 'Nuovo Prodotto';
+      document.getElementById('prod-id').value = preset.id || '';
+      document.getElementById('prod-name').value = preset.name || '';
+      document.getElementById('prod-location').value = preset.location || (currentTab === 'pantry' ? 'dispensa' : (currentTab === 'freezer' ? 'freezer' : 'frigo'));
+      document.getElementById('prod-expiry').value = preset.expiry || addDaysIso(preset.location === 'dispensa' ? 180 : (preset.location === 'freezer' ? 180 : 5));
+      document.getElementById('prod-qty').value = preset.qty != null ? preset.qty : 1;
+      document.getElementById('prod-unit').value = preset.unit || 'pz';
+      document.getElementById('prod-photo-data').value = preset.photo || '';
 
-      const photoVal = obj?.photo || '';
-      document.getElementById('prod-photo-data').value = photoVal;
       const previewBox = document.getElementById('prod-photo-preview-box');
       const previewImg = document.getElementById('prod-photo-preview-img');
-      if (photoVal) {
-        previewImg.src = photoVal;
+      if (preset.photo) {
+        previewImg.src = preset.photo;
         previewBox.classList.remove('hidden');
       } else {
         previewImg.src = '';
         previewBox.classList.add('hidden');
       }
 
-      document.getElementById('btn-delete-prod').classList.toggle('hidden', !isEdit);
+      document.getElementById('btn-delete-prod').classList.toggle('hidden', !preset.id);
       document.getElementById('item-modal').classList.remove('hidden');
+    }
+
+    function openItemModalById(id) {
+      const item = state.items.find(i => i.id === id);
+      if (item) openItemModal(item);
     }
 
     function clearProductPhotoPreview() {
@@ -1834,436 +1662,487 @@
     function saveProductForm(e) {
       e.preventDefault();
       const id = document.getElementById('prod-id').value;
+      const name = (document.getElementById('prod-name').value || '').trim();
+      const location = document.getElementById('prod-location').value;
+      const expiry = document.getElementById('prod-expiry').value;
+      const qty = Math.max(1, parseInt(document.getElementById('prod-qty').value, 10) || 1);
+      const unit = document.getElementById('prod-unit').value;
       const photo = document.getElementById('prod-photo-data').value || '';
-      const payload = {
-        id: id || 'p_' + Date.now(),
-        name: document.getElementById('prod-name').value.trim(),
-        location: document.getElementById('prod-location').value,
-        expiry: document.getElementById('prod-expiry').value,
-        qty: parseInt(document.getElementById('prod-qty').value, 10) || 1,
-        unit: document.getElementById('prod-unit').value,
-        ...(photo ? { photo } : {})
-      };
+      if (!name) return;
+
       if (id) {
-        const idx = state.items.findIndex(i => i.id === id);
-        if (idx !== -1) state.items[idx] = payload;
+        const item = state.items.find(i => i.id === id);
+        if (item) Object.assign(item, { name, location, expiry, qty, unit, photo });
       } else {
-        state.items.unshift(payload);
+        state.items.unshift({ id: 'item_' + Date.now(), name, location, expiry, qty, unit, photo });
       }
       persistState();
-      closeModal('item-modal');
       updateAllViews();
-      showToast(payload.location === 'dispensa' ? 'Salvato in Dispensa!' : 'Salvato in Frigo!');
+      closeModal('item-modal');
+      showToast('Prodotto salvato!');
     }
 
-    // ==================== SCANNER BARCODE / QR / FOTO PRODOTTO ====================
-    let prodScanStream = null;
-    let prodScanTimer = null;
-    let prodScanMode = 'barcode';
-    let prodScanTargetLocation = 'frigo';
+    function deleteCurrentProduct() {
+      const id = document.getElementById('prod-id').value;
+      if (!id) return;
+      state.items = state.items.filter(i => i.id !== id);
+      persistState();
+      updateAllViews();
+      closeModal('item-modal');
+      showToast('Prodotto rimosso');
+    }
 
-    function setProductScanMode(mode) {
-      prodScanMode = mode === 'photo' ? 'photo' : 'barcode';
-      const btnBar = document.getElementById('scan-mode-btn-barcode');
-      const btnPho = document.getElementById('scan-mode-btn-photo');
-      const reticle = document.getElementById('product-scan-reticle');
-      const status = document.getElementById('product-scanner-status');
+    function renderShopping() {
+      const container = document.getElementById('shopping-list');
+      const sub = document.getElementById('shopping-subtitle');
+      const checkedBars = document.querySelectorAll('#shopping-checked-bar');
+      const checkedLabels = document.querySelectorAll('#shopping-checked-label');
+      if (!container) return;
 
-      if (prodScanMode === 'barcode') {
-        btnBar.className = 'py-2 px-3 rounded-xl bg-emerald-600 text-white text-xs font-extrabold transition cursor-pointer';
-        btnPho.className = 'py-2 px-3 rounded-xl text-slate-300 hover:text-white text-xs font-extrabold transition cursor-pointer';
-        if (reticle) reticle.classList.remove('hidden');
-        if (status) status.textContent = 'Inquadra il codice a barre o QR del prodotto...';
-      } else {
-        btnPho.className = 'py-2 px-3 rounded-xl bg-emerald-600 text-white text-xs font-extrabold transition cursor-pointer';
-        btnBar.className = 'py-2 px-3 rounded-xl text-slate-300 hover:text-white text-xs font-extrabold transition cursor-pointer';
-        if (reticle) reticle.classList.add('hidden');
-        if (status) status.textContent = 'Inquadra il prodotto o la data di scadenza e tocca "Scatta Foto Ora"';
+      const pending = state.shopping.filter(i => !i.checked);
+      const checked = state.shopping.filter(i => i.checked);
+      if (sub) sub.textContent = `${pending.length} da comprare • Sincronizzata con Alexa`;
+
+      checkedBars.forEach(bar => bar.classList.toggle('hidden', checked.length === 0));
+      checkedLabels.forEach(lbl => lbl.textContent = `${checked.length} nel carrello`);
+
+      if (state.shopping.length === 0) {
+        container.innerHTML = `<div class="p-6 rounded-2xl bg-white border border-dashed border-slate-300 text-center text-xs text-slate-500">Lista della spesa vuota.</div>`;
+        return;
       }
+
+      container.innerHTML = state.shopping.map(item => `
+        <div class="p-3 rounded-2xl bg-white border border-slate-200 flex items-center justify-between gap-2.5">
+          <button type="button" onclick="toggleShoppingItem('${item.id}')" class="flex items-center gap-3 flex-1 text-left min-w-0 cursor-pointer">
+            <span class="w-5 h-5 rounded-lg border-2 flex items-center justify-center shrink-0 ${item.checked ? 'bg-emerald-600 border-emerald-600 text-white' : 'border-slate-300'}">
+              ${item.checked ? '✓' : ''}
+            </span>
+            <span class="text-sm font-bold truncate ${item.checked ? 'line-through text-slate-400' : 'text-slate-900'}">${escapeHtml(item.name)}</span>
+          </button>
+          <button type="button" onclick="removeShoppingItem('${item.id}')" class="w-7 h-7 rounded-lg text-slate-400 hover:text-rose-600 text-xs font-bold cursor-pointer">✕</button>
+        </div>
+      `).join('');
     }
 
-    async function openProductScannerModal(mode = 'barcode', defaultLocation = null) {
-      prodScanTargetLocation = defaultLocation || (currentTab === 'pantry' ? 'dispensa' : 'frigo');
-      setProductScanMode(mode);
+    function addShoppingManual(e) {
+      e.preventDefault();
+      const inp = document.getElementById('shopping-input');
+      const val = (inp.value || '').trim();
+      if (!val) return;
+      state.shopping.unshift({ id: 'shop_' + Date.now(), name: val, checked: false, source: 'manual' });
+      inp.value = '';
+      persistState();
+      updateAllViews();
+    }
+
+    function toggleShoppingItem(id) {
+      const it = state.shopping.find(i => i.id === id);
+      if (it) it.checked = !it.checked;
+      persistState();
+      updateAllViews();
+    }
+
+    function removeShoppingItem(id) {
+      state.shopping = state.shopping.filter(i => i.id !== id);
+      persistState();
+      updateAllViews();
+    }
+
+    function moveCheckedToLocation(loc) {
+      const checked = state.shopping.filter(i => i.checked);
+      if (!checked.length) return;
+      const defaultDays = loc === 'frigo' ? 7 : 180;
+      checked.forEach(c => {
+        state.items.unshift({
+          id: 'item_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
+          name: c.name,
+          location: loc,
+          qty: 1,
+          unit: 'pz',
+          expiry: addDaysIso(defaultDays)
+        });
+      });
+      state.shopping = state.shopping.filter(i => !i.checked);
+      persistState();
+      updateAllViews();
+      showToast(`Spostati ${checked.length} prodotti in ${loc}!`);
+    }
+
+    function simulateAlexaSyncRefresh() {
+      persistState();
+      showToast('Sincronizzazione Alexa completata!');
+    }
+
+    const CARD_GRADIENTS = {
+      emerald: 'from-emerald-600 to-teal-700',
+      sky: 'from-sky-600 to-blue-700',
+      rose: 'from-rose-600 to-pink-700',
+      amber: 'from-amber-500 to-orange-600',
+      indigo: 'from-indigo-600 to-purple-700',
+      slate: 'from-slate-800 to-slate-950'
+    };
+
+    function renderLoyaltyCards() {
+      const container = document.getElementById('loyalty-cards-list');
+      if (!container) return;
+      const cards = Array.isArray(state.loyaltyCards) ? state.loyaltyCards : [];
+      if (cards.length === 0) {
+        container.innerHTML = `<div class="col-span-full p-6 rounded-2xl bg-white border border-dashed border-slate-300 text-center text-xs text-slate-500">Nessuna carta fedeltà salvata. Tocca <strong>+ Carta</strong> per aggiungerne una.</div>`;
+        return;
+      }
+      container.innerHTML = cards.map(c => {
+        const grad = CARD_GRADIENTS[c.color] || CARD_GRADIENTS.emerald;
+        return `
+          <button type="button" onclick="showLoyaltyCardAtCheckout('${c.id}')" class="text-left p-4 rounded-2xl bg-gradient-to-br ${grad} text-white shadow-md hover:scale-[1.01] active:scale-99 transition flex flex-col justify-between min-h-[112px] cursor-pointer">
+            <div class="flex items-center justify-between gap-2">
+              <span class="text-[10px] font-extrabold uppercase tracking-wider text-white/80">Carta Fedeltà</span>
+              <span class="text-xs bg-white/20 px-2 py-0.5 rounded-full font-bold">${c.format === 'qr' ? 'QR' : '║▌║'}</span>
+            </div>
+            <div class="mt-2">
+              <h3 class="text-base font-black tracking-tight truncate">${escapeHtml(c.store)}</h3>
+              <p class="text-xs font-mono text-white/85 mt-0.5 tracking-wider truncate">${escapeHtml(c.code)}</p>
+            </div>
+          </button>
+        `;
+      }).join('');
+    }
+
+    function openLoyaltyCardModal(preset = {}) {
+      document.getElementById('card-modal-title').textContent = preset.id ? 'Modifica Carta Fedeltà' : 'Nuova Carta Fedeltà';
+      document.getElementById('card-id').value = preset.id || '';
+      document.getElementById('card-store').value = preset.store || '';
+      document.getElementById('card-code').value = preset.code || '';
+      document.getElementById('card-format').value = preset.format || 'barcode';
+      document.getElementById('card-color').value = preset.color || 'emerald';
+      document.getElementById('card-image-data').value = preset.image || '';
+
+      const box = document.getElementById('card-image-preview-box');
+      const img = document.getElementById('card-image-preview-img');
+      if (preset.image) {
+        img.src = preset.image;
+        box.classList.remove('hidden');
+      } else {
+        img.src = '';
+        box.classList.add('hidden');
+      }
+
+      document.getElementById('btn-delete-card').classList.toggle('hidden', !preset.id);
+      document.getElementById('loyalty-card-modal').classList.remove('hidden');
+    }
+
+    function clearLoyaltyCardImage() {
+      document.getElementById('card-image-data').value = '';
+      document.getElementById('card-image-preview-img').src = '';
+      document.getElementById('card-image-preview-box').classList.add('hidden');
+    }
+
+    async function handleLoyaltyCardGalleryUpload(e) {
+      const file = e.target.files && e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = async () => {
+        const dataUrl = reader.result;
+        document.getElementById('card-image-data').value = dataUrl;
+        document.getElementById('card-image-preview-img').src = dataUrl;
+        document.getElementById('card-image-preview-box').classList.remove('hidden');
+
+        if ('BarcodeDetector' in window) {
+          try {
+            const img = new Image();
+            img.src = dataUrl;
+            await new Promise(res => { img.onload = res; img.onerror = res; });
+            const detector = new BarcodeDetector();
+            const codes = await detector.detect(img);
+            if (codes && codes.length > 0 && codes[0].rawValue) {
+              document.getElementById('card-code').value = codes[0].rawValue;
+              if (codes[0].format === 'qr_code') document.getElementById('card-format').value = 'qr';
+              showToast('Codice letto automaticamente dallo screenshot!');
+              return;
+            }
+          } catch (err) {}
+        }
+        showToast('Immagine tessera caricata dalla galleria!');
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function saveLoyaltyCardForm(e) {
+      e.preventDefault();
+      const id = document.getElementById('card-id').value;
+      const store = (document.getElementById('card-store').value || '').trim();
+      const code = (document.getElementById('card-code').value || '').trim();
+      const format = document.getElementById('card-format').value;
+      const color = document.getElementById('card-color').value;
+      const image = document.getElementById('card-image-data').value || '';
+      if (!store || !code) return;
+
+      if (!Array.isArray(state.loyaltyCards)) state.loyaltyCards = [];
+      if (id) {
+        const card = state.loyaltyCards.find(c => c.id === id);
+        if (card) Object.assign(card, { store, code, format, color, image });
+      } else {
+        state.loyaltyCards.unshift({ id: 'card_' + Date.now(), store, code, format, color, image });
+      }
+      persistState();
+      updateAllViews();
+      closeModal('loyalty-card-modal');
+      showToast('Carta fedeltà salvata!');
+    }
+
+    function deleteCurrentLoyaltyCard() {
+      const id = document.getElementById('card-id').value;
+      if (!id) return;
+      state.loyaltyCards = (state.loyaltyCards || []).filter(c => c.id !== id);
+      persistState();
+      updateAllViews();
+      closeModal('loyalty-card-modal');
+      showToast('Carta fedeltà eliminata');
+    }
+
+    function buildBarcodeSvg(code) {
+      const str = String(code || '000000000000');
+      let bars = '';
+      let x = 10;
+      for (let i = 0; i < str.length; i++) {
+        const digit = str.charCodeAt(i);
+        const w1 = (digit % 3) + 1.5;
+        const w2 = ((digit >> 2) % 2) + 1.5;
+        bars += `<rect x="${x}" y="8" width="${w1}" height="74" fill="#0f172a"/>`;
+        x += w1 + 2;
+        bars += `<rect x="${x}" y="8" width="${w2}" height="74" fill="#0f172a"/>`;
+        x += w2 + 2.5;
+      }
+      return `<svg viewBox="0 0 ${Math.max(180, x + 10)} 90" class="w-full max-h-28">${bars}</svg>`;
+    }
+
+    function showLoyaltyCardAtCheckout(id) {
+      const card = (state.loyaltyCards || []).find(c => c.id === id);
+      if (!card) return;
+      const header = document.getElementById('show-card-header');
+      const grad = CARD_GRADIENTS[card.color] || CARD_GRADIENTS.emerald;
+      header.className = `p-4 bg-gradient-to-r ${grad} text-white flex items-center justify-between`;
+      document.getElementById('show-card-store').textContent = card.store;
+      document.getElementById('show-card-number').textContent = card.code;
+
+      const graphic = document.getElementById('show-card-code-graphic');
+      graphic.innerHTML = '';
+      if (card.image) {
+        graphic.innerHTML = `<img src="${card.image}" alt="${escapeHtml(card.store)}" class="max-h-48 w-auto object-contain rounded-lg" />`;
+      } else if (card.format === 'qr' && typeof QRCode !== 'undefined') {
+        new QRCode(graphic, { text: card.code, width: 140, height: 140 });
+      } else {
+        graphic.innerHTML = buildBarcodeSvg(card.code);
+      }
+
+      document.getElementById('show-card-edit-btn').onclick = () => {
+        closeModal('loyalty-card-show-modal');
+        openLoyaltyCardModal(card);
+      };
+      document.getElementById('loyalty-card-show-modal').classList.remove('hidden');
+    }
+
+    let scannerTargetMode = 'product';
+    let scannerDefaultLocation = 'frigo';
+    let productVideoStream = null;
+    let productScanTimer = null;
+
+    function scanLoyaltyCardBarcode() {
+      closeModal('loyalty-card-modal');
+      openProductScannerModal('card');
+    }
+
+    async function openProductScannerModal(mode = 'barcode', defaultLoc = 'frigo') {
+      scannerTargetMode = mode;
+      scannerDefaultLocation = defaultLoc;
       const modal = document.getElementById('product-scanner-modal');
       const video = document.getElementById('product-scanner-video');
       const status = document.getElementById('product-scanner-status');
       modal.classList.remove('hidden');
+      setProductScanMode(mode === 'photo' ? 'photo' : 'barcode');
+      status.textContent = 'Avvio fotocamera...';
 
       if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-        status.textContent = 'Fotocamera live non disponibile: usa "Carica Foto" o inserisci il codice.';
+        status.textContent = 'Fotocamera non disponibile: usa Galleria o digita il codice.';
         return;
       }
 
       try {
-        prodScanStream = await navigator.mediaDevices.getUserMedia({
-          video: { facingMode: { ideal: 'environment' } }
-        });
-        video.srcObject = prodScanStream;
+        productVideoStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
+        video.srcObject = productVideoStream;
         await video.play();
 
         if ('BarcodeDetector' in window) {
-          const detector = new BarcodeDetector({
-            formats: ['ean_13', 'ean_8', 'upc_a', 'upc_e', 'qr_code', 'code_128']
-          });
-          prodScanTimer = setInterval(async () => {
-            if (prodScanMode !== 'barcode') return;
+          const detector = new BarcodeDetector();
+          status.textContent = 'Inquadra il codice a barre / QR oppure scatta una foto...';
+          productScanTimer = setInterval(async () => {
             try {
               const codes = await detector.detect(video);
               if (codes && codes.length > 0 && codes[0].rawValue) {
-                const rawCode = codes[0].rawValue.trim();
+                const rawVal = codes[0].rawValue;
                 closeProductScannerModal();
-                await resolveScannedProductCode(rawCode);
+                if (scannerTargetMode === 'card') {
+                  openLoyaltyCardModal({ code: rawVal });
+                } else {
+                  await lookupProductByBarcode(rawVal);
+                }
               }
             } catch (err) {}
-          }, 420);
-        } else if (prodScanMode === 'barcode') {
-          status.textContent = 'Inquadra e scatta una foto, oppure inserisci il codice EAN qui sotto.';
+          }, 450);
+        } else {
+          status.textContent = 'Usa Scatta Foto Ora, Galleria oppure digita il codice qui sotto.';
         }
       } catch (err) {
-        status.textContent = 'Permesso fotocamera non attivo: usa "Carica Foto" o digita il codice.';
+        status.textContent = 'Fotocamera non autorizzata: carica una foto o digita il codice.';
+      }
+    }
+
+    function setProductScanMode(mode) {
+      const btnBar = document.getElementById('scan-mode-btn-barcode');
+      const btnPhoto = document.getElementById('scan-mode-btn-photo');
+      if (btnBar && btnPhoto) {
+        btnBar.className = mode === 'barcode'
+          ? 'py-2 px-3 rounded-xl bg-emerald-600 text-white text-xs font-extrabold transition cursor-pointer'
+          : 'py-2 px-3 rounded-xl text-slate-300 hover:text-white text-xs font-extrabold transition cursor-pointer';
+        btnPhoto.className = mode === 'photo'
+          ? 'py-2 px-3 rounded-xl bg-emerald-600 text-white text-xs font-extrabold transition cursor-pointer'
+          : 'py-2 px-3 rounded-xl text-slate-300 hover:text-white text-xs font-extrabold transition cursor-pointer';
       }
     }
 
     function closeProductScannerModal() {
-      if (prodScanTimer) {
-        clearInterval(prodScanTimer);
-        prodScanTimer = null;
+      if (productScanTimer) {
+        clearInterval(productScanTimer);
+        productScanTimer = null;
       }
-      if (prodScanStream) {
-        try { prodScanStream.getTracks().forEach(t => t.stop()); } catch (e) {}
-        prodScanStream = null;
+      if (productVideoStream) {
+        try { productVideoStream.getTracks().forEach(t => t.stop()); } catch (e) {}
+        productVideoStream = null;
       }
       const video = document.getElementById('product-scanner-video');
       if (video) video.srcObject = null;
       document.getElementById('product-scanner-modal').classList.add('hidden');
     }
 
-    async function submitManualBarcodeLookup(e) {
-      e.preventDefault();
-      const inp = document.getElementById('manual-barcode-input');
-      const code = (inp.value || '').trim();
-      if (!code) return;
-      inp.value = '';
-      closeProductScannerModal();
-      await resolveScannedProductCode(code);
-    }
-
-    async function resolveScannedProductCode(rawCode) {
-      if (prodScanModePurpose === 'loyalty') {
-        prodScanModePurpose = 'product';
-        openLoyaltyCardModal();
-        document.getElementById('card-code').value = rawCode;
-        showToast('Codice tessera acquisito! Inserisci il nome del negozio.');
-        return;
-      }
-      if (/FRIGO-[A-Z0-9-]+/i.test(rawCode) || rawCode.includes('family=')) {
-        applyFamilyCode(rawCode);
-        return;
-      }
-
-      showToast(`Ricerca prodotto per codice ${rawCode}...`);
-      let detectedName = '';
-      let detectedLocation = prodScanTargetLocation;
-
-      if (/^\d{8,14}$/.test(rawCode)) {
-        try {
-          const res = await fetch(`https://world.openfoodfacts.org/api/v2/product/${encodeURIComponent(rawCode)}.json`);
-          if (res.ok) {
-            const data = await res.json();
-            const p = data && data.product;
-            if (p) {
-              const brand = (p.brands || '').split(',')[0].trim();
-              const pname = p.product_name_it || p.product_name || p.generic_name_it || p.generic_name || '';
-              detectedName = [pname, brand].filter(Boolean).join(' - ').trim();
-              const cats = (p.categories || '').toLowerCase();
-              if (/pasta|riso|conserve|biscotti|olio|farina|tonno|legumi|cereali/.test(cats)) {
-                detectedLocation = 'dispensa';
-              } else if (/latte|yogurt|formaggi|mozzarella|freschi|salumi|carne/.test(cats)) {
-                detectedLocation = 'frigo';
-              }
-            }
-          }
-        } catch (err) {}
-      } else if (!/^https?:\/\//i.test(rawCode)) {
-        detectedName = rawCode;
-      }
-
-      openItemModal({
-        name: detectedName || `Prodotto (${rawCode})`,
-        location: detectedLocation,
-        qty: 1,
-        unit: 'pz',
-        expiry: addDaysIso(detectedLocation === 'dispensa' ? 90 : 7)
-      });
-      showToast(detectedName ? `Trovato: ${detectedName}` : 'Codice letto! Completa i dettagli del prodotto.');
-    }
-
-    function compressCanvasToDataUrl(sourceCanvas, maxSide = 480) {
-      const w = sourceCanvas.width;
-      const h = sourceCanvas.height;
-      const scale = Math.min(1, maxSide / Math.max(w, h));
-      const out = document.createElement('canvas');
-      out.width = Math.max(1, Math.round(w * scale));
-      out.height = Math.max(1, Math.round(h * scale));
-      const ctx = out.getContext('2d');
-      ctx.drawImage(sourceCanvas, 0, 0, out.width, out.height);
-      return out.toDataURL('image/jpeg', 0.72);
-    }
-
-    async function captureProductPhotoFromCamera() {
+    function captureProductPhotoFromCamera() {
       const video = document.getElementById('product-scanner-video');
       const canvas = document.getElementById('product-scanner-canvas');
       if (!video || !video.videoWidth) {
-        showToast('Fotocamera non attiva: usa "Carica Foto"');
+        showToast('Fotocamera non attiva: usa Galleria / File');
         return;
       }
-      canvas.width = video.videoWidth;
-      canvas.height = video.videoHeight;
-      canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
-
-      let detectedCode = '';
-      if ('BarcodeDetector' in window) {
-        try {
-          const detector = new BarcodeDetector({ formats: ['ean_13', 'ean_8', 'upc_a', 'upc_e', 'qr_code'] });
-          const found = await detector.detect(canvas);
-          if (found && found.length > 0 && found[0].rawValue) {
-            detectedCode = found[0].rawValue.trim();
-          }
-        } catch (e) {}
-      }
-
-      const photoDataUrl = compressCanvasToDataUrl(canvas, 480);
+      canvas.width = Math.min(640, video.videoWidth);
+      canvas.height = Math.round((video.videoHeight / video.videoWidth) * canvas.width);
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+      const photoData = canvas.toDataURL('image/jpeg', 0.75);
       closeProductScannerModal();
-
-      if (detectedCode) {
-        await resolveScannedProductCode(detectedCode);
-        document.getElementById('prod-photo-data').value = photoDataUrl;
-        document.getElementById('prod-photo-preview-img').src = photoDataUrl;
-        document.getElementById('prod-photo-preview-box').classList.remove('hidden');
-        return;
-      }
-
-      openItemModal({
-        name: '',
-        location: prodScanTargetLocation,
-        qty: 1,
-        unit: 'pz',
-        expiry: addDaysIso(prodScanTargetLocation === 'dispensa' ? 90 : 5),
-        photo: photoDataUrl
-      });
-      showToast('Foto acquisita! Inserisci il nome del prodotto.');
+      openItemModal({ location: scannerDefaultLocation, photo: photoData });
+      showToast('Foto acquisita! Inserisci nome e scadenza.');
     }
 
     function handleUploadedProductPhoto(e) {
       const file = e.target.files && e.target.files[0];
       if (!file) return;
       const reader = new FileReader();
-      reader.onload = () => {
-        const img = new Image();
-        img.onload = async () => {
-          const canvas = document.createElement('canvas');
-          canvas.width = img.width;
-          canvas.height = img.height;
-          canvas.getContext('2d').drawImage(img, 0, 0);
-
-          let detectedCode = '';
-          if ('BarcodeDetector' in window) {
-            try {
-              const detector = new BarcodeDetector({ formats: ['ean_13', 'ean_8', 'upc_a', 'upc_e', 'qr_code'] });
-              const found = await detector.detect(canvas);
-              if (found && found.length > 0 && found[0].rawValue) {
-                detectedCode = found[0].rawValue.trim();
-              }
-            } catch (err) {}
-          }
-
-          const photoDataUrl = compressCanvasToDataUrl(canvas, 480);
-          closeProductScannerModal();
-
-          if (prodScanModePurpose === 'loyalty') {
-            prodScanModePurpose = 'product';
-            openLoyaltyCardModal();
-            setLoyaltyCardImagePreview(compressCanvasToDataUrl(canvas, 640));
-            if (detectedCode) {
-              document.getElementById('card-code').value = detectedCode;
-              showToast(`Codice tessera letto: ${detectedCode}`);
-            } else {
-              document.getElementById('card-code').value = 'SCREENSHOT-' + String(Date.now()).slice(-6);
-              showToast('Screenshot carta caricato! Inserisci il nome del negozio.');
-            }
-            return;
-          }
-
-          if (detectedCode) {
-            await resolveScannedProductCode(detectedCode);
-            document.getElementById('prod-photo-data').value = photoDataUrl;
-            document.getElementById('prod-photo-preview-img').src = photoDataUrl;
-            document.getElementById('prod-photo-preview-box').classList.remove('hidden');
-            return;
-          }
-
-          openItemModal({
-            name: '',
-            location: prodScanTargetLocation,
-            qty: 1,
-            unit: 'pz',
-            expiry: addDaysIso(prodScanTargetLocation === 'dispensa' ? 90 : 5),
-            photo: photoDataUrl
-          });
-          showToast('Foto caricata! Inserisci il nome del prodotto.');
-        };
-        img.src = reader.result;
+      reader.onload = async () => {
+        const photoData = reader.result;
+        closeProductScannerModal();
+        openItemModal({ location: scannerDefaultLocation, photo: photoData });
       };
       reader.readAsDataURL(file);
     }
 
-    function deleteCurrentProduct() {
-      const id = document.getElementById('prod-id').value;
-      state.items = state.items.filter(i => i.id !== id);
-      persistState();
-      closeModal('item-modal');
-      updateAllViews();
-      showToast('Prodotto eliminato');
-    }
-
-    function closeModal(id) {
-      document.getElementById(id).classList.add('hidden');
-    }
-
-    function addShoppingManual(e) {
+    async function submitManualBarcodeLookup(e) {
       e.preventDefault();
-      const input = document.getElementById('shopping-input');
-      const name = input.value.trim();
-      if (!name) return;
-      state.shopping.unshift({ id: 's_' + Date.now(), name, checked: false, source: 'manual' });
-      input.value = '';
-      persistState();
-      updateAllViews();
-    }
-
-    function simulateAlexaSyncRefresh() {
-      const samples = ['Pane fresco', 'Avocado maturi', 'Biscotti integrali', 'Acqua frizzante'];
-      const pick = samples[Math.floor(Math.random() * samples.length)];
-      state.shopping.unshift({ id: 's_' + Date.now(), name: pick, checked: false, source: 'alexa' });
-      persistState();
-      updateAllViews();
-      showToast(`Sync Alexa: aggiunto "${pick}"!`);
-    }
-
-    function toggleShoppingCheck(id) {
-      const item = state.shopping.find(i => i.id === id);
-      if (item) {
-        item.checked = !item.checked;
-        persistState();
-        updateAllViews();
+      const inp = document.getElementById('manual-barcode-input');
+      const code = (inp?.value || '').trim();
+      if (!code) return;
+      inp.value = '';
+      closeProductScannerModal();
+      if (scannerTargetMode === 'card') {
+        openLoyaltyCardModal({ code });
+      } else {
+        await lookupProductByBarcode(code);
       }
     }
 
-    function moveCheckedToLocation(loc) {
-      const checked = state.shopping.filter(i => i.checked);
-      if (!checked.length) return;
-      checked.forEach((c, idx) => {
-        state.items.unshift({
-          id: 'p_' + Date.now() + '_' + idx,
-          name: c.name,
-          location: loc,
-          qty: 1,
-          unit: 'pz',
-          expiry: addDaysIso(loc === 'dispensa' ? 90 : 5)
-        });
-      });
-      state.shopping = state.shopping.filter(i => !i.checked);
-      persistState();
-      updateAllViews();
-      showToast(`Spostati ${checked.length} prodotti ${loc === 'dispensa' ? 'in Dispensa' : 'in Frigo'}!`);
-    }
-
-    function renderShopping() {
-      const pending = state.shopping.filter(i => !i.checked);
-      const checked = state.shopping.filter(i => i.checked);
-      document.getElementById('shopping-subtitle').textContent = `${pending.length} da comprare • Sincronizzata con Alexa`;
-      const bar = document.getElementById('shopping-checked-bar');
-      bar.classList.toggle('hidden', checked.length === 0);
-      document.getElementById('shopping-checked-label').textContent = `${checked.length} nel carrello`;
-
-      const container = document.getElementById('shopping-list');
-      if (!container) return;
-      const sorted = [...state.shopping].sort((a, b) => (a.checked === b.checked ? 0 : a.checked ? 1 : -1));
-      container.innerHTML = sorted.map(item => `
-        <div onclick="toggleShoppingCheck('${item.id}')" class="cursor-pointer p-3 rounded-2xl border ${item.checked ? 'bg-slate-100 border-slate-200 opacity-60' : 'bg-white border-slate-200 shadow-xs'} flex items-center justify-between gap-2.5">
-          <div class="flex items-center gap-3 min-w-0">
-            <div class="w-6 h-6 rounded-lg border-2 flex items-center justify-center shrink-0 ${item.checked ? 'bg-emerald-600 border-emerald-600 text-white' : 'border-slate-300'}">${item.checked ? '✓' : ''}</div>
-            <p class="text-sm font-bold ${item.checked ? 'line-through text-slate-500' : 'text-slate-900'} truncate">${escapeHtml(item.name)}</p>
-          </div>
-          ${item.source === 'alexa' ? `<span class="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-sky-100 text-sky-800 shrink-0">Alexa</span>` : ''}
-        </div>
-      `).join('');
-    }
-
-    let frigoRecognition = null;
-    let isFrigoListening = false;
-    let frigoTtsEnabled = true;
-
-    function getFixedItalianVoice() {
-      if (!('speechSynthesis' in window)) return null;
-      const voices = window.speechSynthesis.getVoices() || [];
-      return (
-        voices.find(v => (v.name || '').trim().toLowerCase() === 'google italiano') ||
-        voices.find(v => (v.name || '').trim().toLowerCase() === 'italiano') ||
-        voices.find(v => (v.lang || '').toLowerCase().startsWith('it') && (v.name || '').toLowerCase().includes('italiano')) ||
-        voices.find(v => (v.lang || '').toLowerCase().startsWith('it')) ||
-        null
-      );
-    }
-
-    if ('speechSynthesis' in window) {
-      window.speechSynthesis.getVoices();
-      window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
-    }
-
-    function speakFrigoReply(text) {
-      if (!frigoTtsEnabled || !('speechSynthesis' in window)) return;
+    async function lookupProductByBarcode(barcode) {
+      showToast(`Ricerca codice ${barcode}...`);
       try {
-        window.speechSynthesis.cancel();
-        const runSpeak = () => {
-          const voiceIt = getFixedItalianVoice();
-          const utter = new SpeechSynthesisUtterance(String(text || ''));
-          utter.lang = 'it-IT';
-          if (voiceIt) utter.voice = voiceIt;
-          utter.rate = 0.96;
-          utter.pitch = 1.03;
-          window.speechSynthesis.speak(utter);
-        };
-        if (window.speechSynthesis.getVoices().length === 0) {
-          setTimeout(runSpeak, 140);
-        } else {
-          runSpeak();
+        const res = await fetch(`https://world.openfoodfacts.org/api/v0/product/${encodeURIComponent(barcode)}.json`);
+        const data = await res.json();
+        if (data && data.status === 1 && data.product) {
+          const pName = data.product.product_name_it || data.product.product_name || `Prodotto ${barcode}`;
+          const brand = data.product.brands ? ` (${data.product.brands.split(',')[0].trim()})` : '';
+          openItemModal({ name: `${pName}${brand}`, location: scannerDefaultLocation });
+          return;
         }
-      } catch (e) {}
+      } catch (err) {}
+      openItemModal({ name: `Prodotto (${barcode})`, location: scannerDefaultLocation });
     }
 
-    function previewItalianVoice() {
-      speakFrigoReply('Ciao! Sono pronto ad aiutarti con il frigo, la dispensa e la lista della spesa.');
+    function renderRecipes() {
+      const container = document.getElementById('recipes-list');
+      if (!container) return;
+      const names = state.items.map(i => i.name.toLowerCase());
+      const ideas = [
+        { title: 'Frittata svuota-frigo con formaggi e verdure', need: ['uova', 'mozzarella'], extra: 'Prezzemolo e pepe' },
+        { title: 'Pasta al pomodoro e tonno veloce', need: ['pasta', 'pomodoro', 'tonno'], extra: 'Aglio e olio EVO' },
+        { title: 'Merluzzo al forno con piselli', need: ['merluzzo', 'piselli'], extra: 'Limone ed erbe aromatiche' }
+      ];
+      container.innerHTML = ideas.map(r => {
+        const matched = r.need.filter(k => names.some(n => n.includes(k)));
+        return `
+          <div class="p-4 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-1.5">
+            <div class="flex items-center justify-between gap-2">
+              <h3 class="text-sm font-extrabold text-slate-900">${escapeHtml(r.title)}</h3>
+              <span class="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">${matched.length}/${r.need.length} in casa</span>
+            </div>
+            <p class="text-xs text-slate-600">Ingredienti chiave: <strong>${r.need.join(', ')}</strong> • Extra: ${r.extra}</p>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function closeModal(id) {
+      const el = document.getElementById(id);
+      if (el) el.classList.add('hidden');
+    }
+
+    let frigoTtsEnabled = true;
+    let frigoListening = false;
+    let frigoRecognition = null;
+
+    function openFrigoVoiceModal() {
+      updateLearnedRulesBadge();
+      document.getElementById('frigo-voice-modal').classList.remove('hidden');
+    }
+
+    function closeFrigoVoiceModal() {
+      if (frigoRecognition && frigoListening) {
+        try { frigoRecognition.stop(); } catch (e) {}
+      }
+      document.getElementById('frigo-voice-modal').classList.add('hidden');
     }
 
     function toggleFrigoTts() {
       frigoTtsEnabled = !frigoTtsEnabled;
       const btn = document.getElementById('btn-frigo-tts-toggle');
-      btn.textContent = frigoTtsEnabled ? '🔊 Voce ON' : '🔇 Voce OFF';
-      if (!frigoTtsEnabled && 'speechSynthesis' in window) window.speechSynthesis.cancel();
+      if (btn) btn.textContent = frigoTtsEnabled ? '🔊 Voce ON' : '🔇 Voce OFF';
     }
 
-    function hideVoiceTypedInput() {
-      const form = document.getElementById('frigo-voice-typed-form');
-      const btn = document.getElementById('btn-show-voice-keyboard');
-      const inp = document.getElementById('frigo-voice-typed');
-      if (inp) {
-        inp.blur();
-        inp.setAttribute('tabindex', '-1');
-      }
-      if (form) form.classList.add('hidden');
-      if (btn) btn.classList.remove('hidden');
+    function speakItalian(text) {
+      if (!frigoTtsEnabled || !('speechSynthesis' in window)) return;
+      try {
+        window.speechSynthesis.cancel();
+        const utt = new SpeechSynthesisUtterance(text);
+        utt.lang = 'it-IT';
+        window.speechSynthesis.speak(utt);
+      } catch (e) {}
+    }
+
+    function previewItalianVoice() {
+      speakItalian('Ciao! Sono l’assistente vocale di FrigoScan. Dimmi pure cosa aggiungere o controllare.');
     }
 
     function revealVoiceTypedInput() {
@@ -2278,438 +2157,310 @@
       }
     }
 
-    function openFrigoVoiceModal(autoStart = true) {
-      if (document.activeElement && typeof document.activeElement.blur === 'function') {
-        document.activeElement.blur();
-      }
-      hideVoiceTypedInput();
-      document.getElementById('frigo-voice-modal').classList.remove('hidden');
-      document.getElementById('frigo-voice-transcript').textContent = '«Parla ora...»';
-      if (autoStart) startFrigoListening();
-    }
-
-    function closeFrigoVoiceModal() {
-      if (frigoRecognition) { try { frigoRecognition.stop(); } catch (e) {} }
-      isFrigoListening = false;
-      hideVoiceTypedInput();
-      if (document.activeElement && typeof document.activeElement.blur === 'function') {
-        document.activeElement.blur();
-      }
-      if ('speechSynthesis' in window) window.speechSynthesis.cancel();
-      document.getElementById('frigo-voice-modal').classList.add('hidden');
-    }
-
-    function toggleFrigoListening() {
-      if (isFrigoListening) {
-        if (frigoRecognition) { try { frigoRecognition.stop(); } catch (e) {} }
-        isFrigoListening = false;
-        document.getElementById('frigo-voice-orb').classList.remove('voice-orb-listening');
-        document.getElementById('frigo-voice-eq').classList.add('hidden');
-        document.getElementById('frigo-voice-status').textContent = 'Tocca il microfono per parlare';
-      } else {
-        startFrigoListening();
-      }
-    }
-
-    function startFrigoListening() {
-      const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
-      if (!SpeechRec) {
-        document.getElementById('frigo-voice-status').textContent = 'Usa i comandi rapidi o tocca in basso per scrivere';
-        return;
-      }
-      let finalText = '';
-      frigoRecognition = new SpeechRec();
-      frigoRecognition.lang = 'it-IT';
-      frigoRecognition.interimResults = true;
-      frigoRecognition.onstart = () => {
-        isFrigoListening = true;
-        document.getElementById('frigo-voice-orb').classList.add('voice-orb-listening');
-        document.getElementById('frigo-voice-eq').classList.remove('hidden');
-        document.getElementById('frigo-voice-eq').classList.add('flex');
-        document.getElementById('frigo-voice-status').textContent = 'Ti ascolto...';
-      };
-      frigoRecognition.onresult = (e) => {
-        let txt = '';
-        for (let i = e.resultIndex; i < e.results.length; i++) txt += e.results[i][0].transcript;
-        if (txt.trim()) {
-          finalText = txt.trim();
-          document.getElementById('frigo-voice-transcript').textContent = `«${finalText}»`;
-        }
-      };
-      frigoRecognition.onend = () => {
-        isFrigoListening = false;
-        document.getElementById('frigo-voice-orb').classList.remove('voice-orb-listening');
-        document.getElementById('frigo-voice-eq').classList.add('hidden');
-        document.getElementById('frigo-voice-status').textContent = 'Tocca il microfono per parlare di nuovo';
-        if (finalText) processFrigoVoiceCommand(finalText);
-      };
-      try { frigoRecognition.start(); } catch (e) {}
-    }
-
-    function runDemoVoiceCommand(cmd) {
-      document.getElementById('frigo-voice-transcript').textContent = `«${cmd}»`;
-      processFrigoVoiceCommand(cmd);
-    }
-
     function submitTypedCommand(e) {
       e.preventDefault();
       const inp = document.getElementById('frigo-voice-typed');
-      const val = inp.value.trim();
+      const val = (inp?.value || '').trim();
       if (!val) return;
       inp.value = '';
-      hideVoiceTypedInput();
-      runDemoVoiceCommand(val);
+      processFrigoVoiceCommand(val);
     }
 
-    function showFrigoVoiceResponse(badge, reply) {
+    function runDemoVoiceCommand(cmd) {
+      processFrigoVoiceCommand(cmd);
+    }
+
+    function toggleFrigoListening() {
+      const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRec) {
+        showToast('Riconoscimento vocale non supportato: usa la tastiera qui sotto.');
+        revealVoiceTypedInput();
+        return;
+      }
+      if (frigoListening && frigoRecognition) {
+        frigoRecognition.stop();
+        return;
+      }
+      frigoRecognition = new SpeechRec();
+      frigoRecognition.lang = 'it-IT';
+      frigoRecognition.interimResults = false;
+      frigoRecognition.onstart = () => {
+        frigoListening = true;
+        document.getElementById('frigo-voice-orb').classList.add('voice-orb-listening');
+        document.getElementById('frigo-voice-eq').classList.remove('hidden');
+        document.getElementById('frigo-voice-eq').classList.add('flex');
+        document.getElementById('frigo-voice-status').textContent = 'In ascolto...';
+      };
+      frigoRecognition.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        processFrigoVoiceCommand(transcript);
+      };
+      frigoRecognition.onerror = () => {
+        frigoListening = false;
+        document.getElementById('frigo-voice-status').textContent = 'Non ho sentito bene, riprova';
+      };
+      frigoRecognition.onend = () => {
+        frigoListening = false;
+        document.getElementById('frigo-voice-orb').classList.remove('voice-orb-listening');
+        document.getElementById('frigo-voice-eq').classList.add('hidden');
+        document.getElementById('frigo-voice-eq').classList.remove('flex');
+        document.getElementById('frigo-voice-status').textContent = 'Tocca il microfono e parla';
+      };
+      frigoRecognition.start();
+    }
+
+    function showVoiceReply(badge, text) {
+      const box = document.getElementById('frigo-voice-response');
       document.getElementById('frigo-res-badge').textContent = badge;
-      document.getElementById('frigo-res-text').textContent = reply;
-      document.getElementById('frigo-voice-response').classList.remove('hidden');
-      speakFrigoReply(reply);
+      document.getElementById('frigo-res-text').textContent = text;
+      box.classList.remove('hidden');
+      speakItalian(text);
     }
 
-    function extractQtyAndName(rawText) {
-      const wordNums = { un: 1, uno: 1, una: 1, due: 2, tre: 3, quattro: 4, cinque: 5, sei: 6, sette: 7, otto: 8, nove: 9, dieci: 10 };
-      let qty = null;
-      const digitMatch = rawText.match(/\b(\d{1,3})\b/);
-      if (digitMatch) {
-        qty = parseInt(digitMatch[1], 10);
-      } else {
-        for (const w of rawText.toLowerCase().split(/\s+/)) {
-          if (wordNums[w] !== undefined) { qty = wordNums[w]; break; }
+    function updateLearnedRulesBadge() {
+      const box = document.getElementById('frigo-learned-box');
+      const lbl = document.getElementById('frigo-learned-count');
+      const count = Object.keys(state.learnedRules || {}).length;
+      if (box && lbl) {
+        box.classList.toggle('hidden', count === 0);
+        lbl.textContent = `🧠 ${count} ${count === 1 ? 'regola appresa' : 'regole apprese'} in memoria`;
+      }
+    }
+
+    function clearLearnedVoiceRules() {
+      state.learnedRules = {};
+      persistState();
+      updateLearnedRulesBadge();
+      showToast('Memoria apprendimento azzerata');
+    }
+
+    function findExistingItemForMerge(queryName, preferredLoc = null) {
+      const q = queryName.toLowerCase().trim();
+      const tokens = q.split(/\s+/).filter(t => t.length > 2);
+      const candidates = state.items.filter(it => {
+        const n = it.name.toLowerCase();
+        return n.includes(q) || q.includes(n) || (tokens.length > 0 && tokens.every(t => n.includes(t)));
+      });
+      if (!candidates.length) return null;
+      if (preferredLoc) {
+        const exactLoc = candidates.find(c => c.location === preferredLoc);
+        if (exactLoc) return exactLoc;
+      }
+      return candidates[0];
+    }
+
+    function processFrigoVoiceCommand(rawText) {
+      const text = String(rawText || '').trim();
+      if (!text) return;
+      document.getElementById('frigo-voice-transcript').textContent = `«${text}»`;
+      const lower = text.toLowerCase();
+
+      const formatPlacePhrase = (loc) => loc === 'dispensa' ? 'in dispensa' : (loc === 'freezer' ? 'in freezer' : 'in frigo');
+      const formatFromPlacePhrase = (loc) => loc === 'dispensa' ? 'dalla dispensa' : (loc === 'freezer' ? 'dal freezer' : 'dal frigo');
+      const formatItalianExpiry = (isoDate) => {
+        if (!isoDate) return 'non ha una data di scadenza impostata';
+        const d = daysUntil(isoDate);
+        if (d < 0) return `è scaduto da ${Math.abs(d)} giorni`;
+        if (d === 0) return 'scade oggi';
+        if (d === 1) return 'scade domani';
+        return `scade tra ${d} giorni (${isoDate})`;
+      };
+
+      // 1. Lista della spesa
+      if (/lista\s+(della\s+)?spesa|da\s+comprare/i.test(lower)) {
+        const cleaned = lower
+          .replace(/^(aggiungi|metti|inserisci|scrivi)\s+(alla\s+lista\s+(della\s+)?spesa\s*)?/i, '')
+          .replace(/\s+alla\s+lista\s+(della\s+)?spesa$/i, '')
+          .trim();
+        if (cleaned && !/^(cosa|quali|leggi)/i.test(cleaned)) {
+          const parts = cleaned.split(/\s+e\s+|,\s*/).map(s => s.trim()).filter(Boolean);
+          parts.forEach(p => {
+            const cap = p.charAt(0).toUpperCase() + p.slice(1);
+            state.shopping.unshift({ id: 'shop_' + Date.now() + Math.random(), name: cap, checked: false, source: 'voice' });
+          });
+          persistState();
+          updateAllViews();
+          showVoiceReply('Lista Spesa', `Ho aggiunto ${parts.join(', ')} alla lista della spesa.`);
+          return;
         }
+        const pending = state.shopping.filter(s => !s.checked).map(s => s.name);
+        showVoiceReply('Lista Spesa', pending.length ? `Nella lista della spesa hai: ${pending.join(', ')}.` : 'La lista della spesa è vuota.');
+        return;
+      }
+
+      // 2. Domande su scadenze o inventario
+      if (/^(cosa|quali|quando|dove|quanti|quante|c'è|ci\s+sono)/i.test(lower) || /scadenz|scadut|scade/i.test(lower)) {
+        if (/quando\s+scade/i.test(lower)) {
+          const targetName = lower.replace(/.*quando\s+scade\s+(il|lo|la|l'|i|gli|le)?\s*/i, '').replace(/[?]/g, '').trim();
+          const found = findExistingItemForMerge(targetName);
+          if (found) {
+            showVoiceReply('Scadenza', `${found.name} (${formatPlacePhrase(found.location)}) ${formatItalianExpiry(found.expiry)}.`);
+          } else {
+            showVoiceReply('Non trovato', `Non ho trovato "${targetName}" nel tuo inventario.`);
+          }
+          return;
+        }
+        if (/freezer|surgelat/i.test(lower)) {
+          const list = state.items.filter(i => i.location === 'freezer').map(i => `${i.qty} ${i.name}`);
+          showVoiceReply('Freezer', list.length ? `In freezer hai: ${list.join(', ')}.` : 'Il freezer è vuoto.');
+          return;
+        }
+        if (/dispensa/i.test(lower)) {
+          const list = state.items.filter(i => i.location === 'dispensa').map(i => `${i.qty} ${i.name}`);
+          showVoiceReply('Dispensa', list.length ? `In dispensa hai: ${list.join(', ')}.` : 'La dispensa è vuota.');
+          return;
+        }
+        if (/frigo/i.test(lower)) {
+          const list = state.items.filter(i => i.location === 'frigo').map(i => `${i.qty} ${i.name}`);
+          showVoiceReply('Frigo', list.length ? `In frigo hai: ${list.join(', ')}.` : 'Il frigo è vuoto.');
+          return;
+        }
+        const thresh = state.expiryThresholdDays || 3;
+        const expiring = state.items.filter(i => daysUntil(i.expiry) <= thresh);
+        showVoiceReply('In Scadenza', expiring.length
+          ? `Hai ${expiring.length} prodotti scaduti o in scadenza: ${expiring.map(i => i.name).join(', ')}.`
+          : 'Nessun prodotto scaduto o in scadenza nei prossimi giorni.');
+        return;
+      }
+
+      // 3. Rimozione / Consumo
+      if (/^(rimuovi|togli|elimina|ho\s+consumato|ho\s+finito|consumato)/i.test(lower)) {
+        const removeAll = /\b(tutto|tutta|tutti|tutte)\b/i.test(lower);
+        const targetLoc = /freezer/i.test(lower) ? 'freezer' : (/dispensa/i.test(lower) ? 'dispensa' : (/frigo/i.test(lower) ? 'frigo' : null));
+        const cleaned = lower
+          .replace(/^(rimuovi|togli|elimina|ho\s+consumato|ho\s+finito|consumato)\s+/i, '')
+          .replace(/\b(tutto|tutta|tutti|tutte)\b/gi, '')
+          .replace(/\b(dal\s+frigo|dal\s+freezer|dalla\s+dispensa|in\s+frigo|in\s+freezer|in\s+dispensa)\b/gi, '')
+          .replace(/^(il|lo|la|l'|i|gli|le|un|una|uno)\s+/i, '')
+          .trim();
+
+        const found = findExistingItemForMerge(cleaned, targetLoc);
+        if (!found) {
+          showVoiceReply('Non trovato', `Non ho trovato "${cleaned}" nel tuo inventario.`);
+          return;
+        }
+        if (removeAll || found.qty <= 1) {
+          state.items = state.items.filter(i => i.id !== found.id);
+          persistState();
+          updateAllViews();
+          showVoiceReply('Rimosso', `Ho rimosso completamente ${found.name} ${formatFromPlacePhrase(found.location)}.`);
+        } else {
+          found.qty -= 1;
+          persistState();
+          updateAllViews();
+          showVoiceReply('Aggiornato', `Ho tolto 1 ${found.name}. Ne restano ${found.qty} ${found.unit} ${formatPlacePhrase(found.location)}.`);
+        }
+        return;
+      }
+
+      // 4. Aggiunta / Incremento
+      const explicitLoc = /freezer/i.test(lower) ? 'freezer' : (/dispensa/i.test(lower) ? 'dispensa' : (/frigo/i.test(lower) ? 'frigo' : null));
+      let body = lower
+        .replace(/^(aggiungi|metti|inserisci|salva|ho\s+comprato|riponi)\s+/i, '')
+        .replace(/\b(in\s+frigo|nel\s+frigo|in\s+freezer|nel\s+freezer|in\s+dispensa|nella\s+dispensa)\b/gi, '')
+        .trim();
+
+      let qty = 1;
+      const numMatch = body.match(/^(\d+|un|uno|una|due|tre|quattro|cinque)\s+/i);
+      const wordNums = { un: 1, uno: 1, una: 1, due: 2, tre: 3, quattro: 4, cinque: 5 };
+      if (numMatch) {
+        const tok = numMatch[1].toLowerCase();
+        qty = wordNums[tok] || parseInt(tok, 10) || 1;
+        body = body.slice(numMatch[0].length).trim();
       }
 
       let unit = 'pz';
-      if (/\blitr[io]\b/i.test(rawText)) unit = 'litri';
-      else if (/\bpacch[io]\b/i.test(rawText)) unit = 'pacchi';
-      else if (/\bconfezion[ei]\b/i.test(rawText)) unit = 'confezioni';
-
-      let cleaned = rawText
-        .replace(/^(?:aggiungi|metti|inserisci|salva|ho\s+comprato|comprato|riponi|ho\s+consumato|consumato|ho\s+usato|usato|ho\s+finito|finito|finita|togli|rimuovi|elimina|cancella|butta|ho\s+buttato|scala|scarica)\b\s*/i, '')
-        .replace(/\b(?:tutto|tutta|tutti|tutte|interamente|completamente)\b\s*/gi, ' ')
-        .replace(/\b(?:nella\s+dispensa|in\s+dispensa|dalla\s+dispensa|dispensa|nel\s+frigo|in\s+frigo|dal\s+frigo|frigo)\b/gi, ' ')
-        .replace(/\b(?:litri|litro|pacchi|pacco|confezioni|confezione|pezzi|pezzo|pz)\b\s*(?:di\s+)?/gi, ' ');
-
-      if (qty !== null) {
-        cleaned = cleaned.replace(new RegExp('^\\b(?:' + qty + '|un|uno|una|due|tre|quattro|cinque|sei|sette|otto|nove|dieci)\\b\\s*(?:di\\s+)?', 'i'), '');
-      }
-      cleaned = cleaned.replace(/^(?:il|lo|la|i|gli|le|del|dello|della|dei|degli|delle|un|uno|una|l['’])\s*/i, '');
-      cleaned = cleaned.replace(/\s+/g, ' ').replace(/[?.!]+$/, '').trim();
-      return { qty, unit, name: cleaned };
-    }
-
-    function findExistingItemForMerge(productName, preferredLocation = null) {
-      const normalize = (s) => String(s || '')
-        .toLowerCase()
-        .normalize('NFD')
-        .replace(/[\u0300-\u036f]/g, '')
-        .replace(/[^a-z0-9\s]/g, ' ')
-        .replace(/\s+/g, ' ')
-        .trim();
-
-      const target = normalize(productName);
-      if (!target) return null;
-
-      const targetTokens = target.split(' ').filter(w => w.length >= 3);
-      const pool = preferredLocation
-        ? state.items.filter(it => (it.location === 'dispensa' ? 'dispensa' : 'frigo') === preferredLocation)
-        : state.items;
-
-      let match = pool.find(it => normalize(it.name) === target);
-      if (match) return match;
-
-      match = pool.find(it => {
-        const n = normalize(it.name);
-        return n.startsWith(target + ' ') || target.startsWith(n + ' ');
-      });
-      if (match) return match;
-
-      if (targetTokens.length > 0) {
-        match = pool.find(it => {
-          const itemWords = normalize(it.name).split(' ').filter(w => w.length >= 3);
-          return targetTokens.every(tok => {
-            const stem = tok.length > 4 ? tok.slice(0, -1) : tok;
-            return itemWords.some(iw => iw === tok || iw.startsWith(stem));
-          });
-        });
-        if (match) return match;
+      const unitMatch = body.match(/^(litri|litro|pacchi|pacco|confezioni|confezione|bottiglie|bottiglia)\s+(di\s+)?/i);
+      if (unitMatch) {
+        const u = unitMatch[1].toLowerCase();
+        if (u.startsWith('litr')) unit = 'litri';
+        else if (u.startsWith('pacch')) unit = 'pacchi';
+        else if (u.startsWith('confezion')) unit = 'confezioni';
+        body = body.slice(unitMatch[0].length).trim();
       }
 
-      return null;
-    }
-
-    function processFrigoVoiceCommand(cmd) {
-      const rawTrimmed = String(cmd || '').trim();
-      const l = rawTrimmed.toLowerCase();
-      const mentionsPantry = /\b(?:in\s+dispensa|nella\s+dispensa|dalla\s+dispensa|dispensa)\b/.test(l);
-      const mentionsFridge = /\b(?:in\s+frigo|nel\s+frigo|dal\s+frigo|frigo)\b/.test(l);
-
-      const formatItalianExpiry = (isoDate) => {
-        if (!isoDate) return 'senza data di scadenza impostata';
-        const d = daysUntil(isoDate);
-        const [y, m, day] = isoDate.split('-');
-        const dateStr = `${day}/${m}/${y}`;
-        if (d < 0) return `è scaduto il ${dateStr} (${Math.abs(d)} ${Math.abs(d) === 1 ? 'giorno' : 'giorni'} fa)`;
-        if (d === 0) return `scade oggi (${dateStr})`;
-        if (d === 1) return `scade domani (${dateStr})`;
-        return `scade il ${dateStr}, tra ${d} giorni`;
-      };
-
-      const findMatchingProducts = (queryText) => {
-        const stopWords = new Set([
-          'quando', 'scade', 'scadono', 'scadenza', 'scadenze', 'data', 'cosa', 'che', 'quale', 'quali',
-          'abbiamo', 'hai', 'sono', 'ce', 'cè', 'ci', 'quanto', 'quanta', 'quanti', 'quante',
-          'dove', 'sta', 'stanno', 'per', 'scadere', 'scaduti', 'scaduto', 'dimmi', 'controlla',
-          'verifica', 'guarda', 'vedi', 'nel', 'nella', 'nei', 'nelle', 'del', 'dello', 'della',
-          'dei', 'degli', 'delle', 'al', 'allo', 'alla', 'frigo', 'dispensa', 'casa', 'in', 'a',
-          'il', 'lo', 'la', 'i', 'gli', 'le', 'un', 'uno', 'una', 'di', 'da', 'con', 'su', 'o', 'e'
-        ]);
-        const tokens = queryText
-          .toLowerCase()
-          .replace(/[?.!,;:'"’]+/g, ' ')
-          .split(/\s+/)
-          .filter(w => w.length >= 3 && !stopWords.has(w));
-
-        if (!tokens.length) return [];
-        return state.items.filter(item => {
-          const itemName = item.name.toLowerCase();
-          return tokens.some(tok => {
-            const stem = tok.length > 4 ? tok.slice(0, -1) : tok;
-            return itemName.includes(tok) || itemName.includes(stem);
-          });
-        });
-      };
-
-      const explicitAdd = /^(?:aggiungi|metti|inserisci|salva|ho\s+comprato|comprato|riponi)\b/.test(l);
-      const explicitRemove = /^(?:ho\s+consumato|consumato|ho\s+usato|usato|ho\s+finito|finito|finita|togli|rimuovi|elimina|cancella|butta|ho\s+buttato|scala|scarica)\b/.test(l);
-
-      // 1. LISTA SPESA
-      if (/\b(?:lista\s+(?:della\s+)?spesa|compra|comprare|devo\s+prendere)\b/.test(l)) {
-        const cleaned = rawTrimmed
-          .replace(/^(?:aggiungi|metti|inserisci|devo\s+comprare|compra|devo\s+prendere)\b\s*(?:alla\s+lista\s+(?:della\s+)?spesa|in\s+lista)?\s*/i, '')
-          .replace(/[?.!]+$/, '')
-          .trim();
-        if (!cleaned) {
-          showFrigoVoiceResponse('Lista Spesa', 'Dimmi pure cosa vuoi aggiungere alla lista della spesa.');
-          return;
-        }
-        const items = cleaned.split(/\s+e\s+|,\s*/i).map(s => s.trim()).filter(Boolean);
-        items.forEach((it, idx) => {
-          state.shopping.unshift({ id: 's_' + Date.now() + '_' + idx, name: it.charAt(0).toUpperCase() + it.slice(1), checked: false, source: 'manual' });
-        });
-        persistState();
-        updateAllViews();
-        const reply = items.length > 1
-          ? `Perfetto! Ho aggiunto ${items.join(' e ')} alla lista della spesa.`
-          : `Perfetto! Ho aggiunto ${items[0]} alla lista della spesa.`;
-        showFrigoVoiceResponse('Lista Spesa', reply);
+      body = body.replace(/^(il|lo|la|l'|i|gli|le|del|dello|della|dell'|dei|degli|delle)\s+/i, '').trim();
+      if (!body) {
+        showVoiceReply('Non ho capito', 'Ripeti pure il nome del prodotto da aggiungere.');
         return;
       }
 
-      // 2. TOGLI / CONSUMA / FINITO / RIMUOVI TUTTO
-      if (explicitRemove) {
-        const explicitLoc = mentionsPantry ? 'dispensa' : (mentionsFridge ? 'frigo' : null);
-        const removeEverything = /\b(?:tutto|tutta|tutti|tutte|interamente|completamente|ho\s+finito|finito|finita)\b/.test(l);
-        const parsed = extractQtyAndName(rawTrimmed);
-        const amountToRemove = parsed.qty !== null ? parsed.qty : 1;
-
-        if (!parsed.name) {
-          showFrigoVoiceResponse('Rimozione', 'Dimmi quale prodotto vuoi togliere o consumare.');
-          return;
-        }
-
-        const matchedItem = findExistingItemForMerge(parsed.name, explicitLoc) || (!explicitLoc ? findExistingItemForMerge(parsed.name, null) : null);
-
-        if (!matchedItem) {
-          const placeTxt = mentionsPantry ? 'in dispensa' : (mentionsFridge ? 'in frigo' : 'in casa');
-          showFrigoVoiceResponse('Non trovato', `Non ho trovato ${parsed.name} ${placeTxt}.`);
-          return;
-        }
-
-        const fromWhere = matchedItem.location === 'dispensa' ? 'dalla dispensa' : 'dal frigo';
-        const removedQty = Number(matchedItem.qty) || 1;
-        const remaining = removeEverything ? 0 : Math.max(0, removedQty - amountToRemove);
-
-        if (remaining === 0) {
-          state.items = state.items.filter(it => it.id !== matchedItem.id);
-          persistState();
-          updateAllViews();
-          const unitTxt = removedQty === 1 && matchedItem.unit === 'litri' ? 'litro' : (matchedItem.unit || 'pz');
-          const qtyDetail = removedQty > 1 ? ` (tutti e ${removedQty} ${unitTxt})` : '';
-          showFrigoVoiceResponse(
-            matchedItem.location === 'dispensa' ? 'Rimosso dalla Dispensa' : 'Rimosso dal Frigo',
-            `Fatto! Ho rimosso completamente ${matchedItem.name}${qtyDetail} ${fromWhere}.`
-          );
-        } else {
-          matchedItem.qty = remaining;
-          persistState();
-          updateAllViews();
-          const unitTxt = remaining === 1 && matchedItem.unit === 'litri' ? 'litro' : (matchedItem.unit || 'pz');
-          showFrigoVoiceResponse(
-            matchedItem.location === 'dispensa' ? 'Scalato dalla Dispensa' : 'Scalato dal Frigo',
-            `Aggiornato! Ho tolto ${amountToRemove} di ${matchedItem.name} ${fromWhere}. Te ne restano ancora ${remaining} ${unitTxt}.`
-          );
-        }
-        return;
-      }
-
-      // 3. DOMANDE SULLE SCADENZE (es. "cosa c'è in scadenza", "quando scade...", "prodotti scaduti")
-      const isExpiryQuestion = !explicitAdd && /\b(?:quando\s+scad|scade|scadono|scadenza|scadenze|in\s+scadenza|sta\s+per\s+scadere|stanno\s+per\s+scadere|scadut[oiae])\b/.test(l);
-      if (isExpiryQuestion) {
-        const thresh = state.expiryThresholdDays || 3;
-        const urgent = state.items
-          .filter(i => daysUntil(i.expiry) <= thresh)
-          .sort((a, b) => daysUntil(a.expiry) - daysUntil(b.expiry));
-
-        const isGeneralExpiryQuery =
-          /\b(?:cosa|che|quali|dimmi|elenca|lista|controlla|verifica|vedi|guarda|prodotti|cibo|alimenti)\b/.test(l) ||
-          /^(?:in\s+scadenza|scadenze|scaduti)\b/.test(l);
-
-        if (isGeneralExpiryQuery) {
-          if (urgent.length === 0) {
-            showFrigoVoiceResponse('Tutto ok', `Ottime notizie! Non hai nessun prodotto scaduto o in scadenza nei prossimi ${thresh} giorni.`);
-          } else {
-            const listTxt = urgent.slice(0, 5).map(u => `${u.name} (${formatItalianExpiry(u.expiry)})`).join(', ');
-            showFrigoVoiceResponse('In Scadenza', `Ecco cosa controllare: ${listTxt}.`);
-          }
-          return;
-        }
-
-        const matches = findMatchingProducts(rawTrimmed);
-        if (matches.length > 0) {
-          const details = matches.map(m => {
-            const whereTxt = m.location === 'dispensa' ? 'in dispensa' : 'in frigo';
-            return `${m.name} (${whereTxt}) ${formatItalianExpiry(m.expiry)}`;
-          }).join('; ');
-          showFrigoVoiceResponse('Info Scadenza', `${details}.`);
-          return;
-        }
-
-        showFrigoVoiceResponse('Non in inventario', 'Non ho trovato questo prodotto né in frigo né in dispensa.');
-        return;
-      }
-
-      // 4. DOMANDE GENERICHE / DISPONIBILITÀ / QUANTITÀ / POSIZIONE (anche senza punto interrogativo)
-      const isGeneralQuestion =
-        !explicitAdd && (
-          rawTrimmed.endsWith('?') ||
-          /^(?:quando|cosa|che|quale|quali|quanto|quanta|quanti|quante|dove|come|perché|perche|abbiamo|c['’]è|c\s+è|ci\s+sono|hai|dimmi|controlla|verifica|guarda|vedi|elenca|lista|mostra|fammi\s+vedere)\b/.test(l) ||
-          /\b(?:cosa\s+c['’]è|cosa\s+abbiamo|ci\s+sono|c['’]è\s+(?:del|della|dello|dei|degli|delle|il|lo|la|un|una))\b/.test(l)
-        );
-
-      if (isGeneralQuestion) {
-        if (/\b(?:cosa\s+c['’]è|cosa\s+abbiamo|elenca|contenuto|lista|mostra)\b/.test(l) && (mentionsFridge || mentionsPantry)) {
-          const locTarget = mentionsPantry ? 'dispensa' : 'frigo';
-          const list = state.items.filter(i => (i.location === 'dispensa' ? 'dispensa' : 'frigo') === locTarget);
-          if (list.length === 0) {
-            showFrigoVoiceResponse('Vuoto', `Al momento non hai nulla ${locTarget === 'dispensa' ? 'in dispensa' : 'in frigo'}.`);
-          } else {
-            const summary = list.slice(0, 6).map(i => `${i.name} (${i.qty} ${i.unit})`).join(', ');
-            showFrigoVoiceResponse(locTarget === 'dispensa' ? 'In Dispensa' : 'In Frigo', `Hai ${list.length} prodotti: ${summary}.`);
-          }
-          return;
-        }
-
-        const matches = findMatchingProducts(rawTrimmed);
-        if (matches.length > 0) {
-          const descr = matches.map(m => {
-            const whereTxt = m.location === 'dispensa' ? 'in dispensa' : 'in frigo';
-            const expTxt = m.expiry ? ` e ${formatItalianExpiry(m.expiry)}` : '';
-            return `${m.name}: ne hai ${m.qty} ${m.unit} ${whereTxt}${expTxt}`;
-          }).join('. ');
-          showFrigoVoiceResponse('Trovato', `${descr}.`);
-        } else {
-          showFrigoVoiceResponse('Non trovato', 'Non risulta né in frigo né in dispensa. Se vuoi aggiungerlo alla spesa, dimmi "Aggiungi alla lista spesa" seguito dal nome.');
-        }
-        return;
-      }
-
-      // 5. AGGIUNGI O INCREMENTA PRODOTTO ESISTENTE IN FRIGO O DISPENSA
-      const containsQuestionWords = /\b(?:cosa|quando|dove|quanti|quante|quanto|quanta|quale|quali|perché|perche|c['’]è|ci\s+sono|abbiamo|scadenza|scadono|scade)\b/.test(l);
-      const wordCount = rawTrimmed.split(/\s+/).length;
-      if (!explicitAdd && (containsQuestionWords || wordCount > 5)) {
-        showFrigoVoiceResponse('Non ho capito bene', 'Non ho aggiunto nulla per sicurezza. Puoi chiedermi ad esempio "Cosa c\'è in scadenza?" oppure dire "Aggiungi un litro di latte".');
-        return;
-      }
-
-      const parsed = extractQtyAndName(rawTrimmed);
-      if (!parsed.name || parsed.name.length < 2) {
-        showFrigoVoiceResponse('Non ho capito bene', 'Dimmi il nome del prodotto da aggiungere, ad esempio "Aggiungi 2 litri di latte".');
-        return;
-      }
-      const qtyToAdd = parsed.qty !== null ? parsed.qty : 1;
-      const explicitLoc = mentionsPantry ? 'dispensa' : (mentionsFridge ? 'frigo' : null);
-      const capName = parsed.name.charAt(0).toUpperCase() + parsed.name.slice(1);
-
-      const existingItem = findExistingItemForMerge(parsed.name, explicitLoc) || (!explicitLoc ? findExistingItemForMerge(parsed.name, null) : null);
+      const existingItem = findExistingItemForMerge(body, explicitLoc);
       if (existingItem) {
-        existingItem.qty = (Number(existingItem.qty) || 0) + qtyToAdd;
-        if (parsed.unit && parsed.unit !== 'pz') existingItem.unit = parsed.unit;
+        existingItem.qty = (Number(existingItem.qty) || 0) + qty;
         persistState();
         updateAllViews();
-        const whereLabel = existingItem.location === 'dispensa' ? 'in dispensa' : 'nel frigo';
-        const badgeLabel = existingItem.location === 'dispensa' ? 'Aggiornato in Dispensa' : 'Aggiornato nel Frigo';
-        const unitLabel = existingItem.qty === 1 && existingItem.unit === 'litri' ? 'litro' : (existingItem.unit || 'pz');
-        const reply = `Perfetto! Ho aggiunto ${qtyToAdd} di ${existingItem.name} a quello che avevi già ${whereLabel}. Ora ne hai ${existingItem.qty} ${unitLabel}.`;
-        showFrigoVoiceResponse(badgeLabel, reply);
+        showVoiceReply('Quantità Aggiornata', `Ho aggiunto ${qty} a ${existingItem.name} ${formatPlacePhrase(existingItem.location)}. Ora ne hai ${existingItem.qty} ${existingItem.unit}.`);
         return;
       }
 
-      const targetLoc = explicitLoc || 'frigo';
+      const finalLoc = explicitLoc || (state.learnedRules && state.learnedRules[body]) || 'frigo';
+      const capName = body.charAt(0).toUpperCase() + body.slice(1);
       state.items.unshift({
-        id: 'p_' + Date.now(),
+        id: 'item_' + Date.now(),
         name: capName,
-        location: targetLoc,
-        qty: qtyToAdd,
-        unit: parsed.unit,
-        expiry: addDaysIso(targetLoc === 'dispensa' ? 90 : 5)
+        location: finalLoc,
+        qty,
+        unit,
+        expiry: addDaysIso(finalLoc === 'dispensa' || finalLoc === 'freezer' ? 180 : 7)
       });
+      if (!state.learnedRules) state.learnedRules = {};
+      state.learnedRules[body] = finalLoc;
       persistState();
+      updateLearnedRulesBadge();
       updateAllViews();
-
-      const whereLabel = targetLoc === 'dispensa' ? 'in dispensa' : 'nel frigo';
-      const badgeLabel = targetLoc === 'dispensa' ? 'Aggiunto in Dispensa' : 'Aggiunto in Frigo';
-      const reply = `Ho aggiunto ${qtyToAdd} ${parsed.unit} di ${capName} ${whereLabel}.`;
-      showFrigoVoiceResponse(badgeLabel, reply);
+      showVoiceReply('Aggiunto', `Ho aggiunto ${qty} ${unit} di ${capName} ${formatPlacePhrase(finalLoc)}.`);
     }
 
-    (function initDraggableWidget() {
+    function initFloatingVoiceDrag() {
       const widget = document.getElementById('floating-voice-widget');
       const handle = document.getElementById('floating-voice-drag-handle');
-      let dragging = false, moved = false, sx = 0, sy = 0, ol = 0, ot = 0;
+      if (!widget || !handle) return;
+
+      let isDragging = false;
+      let moved = false;
+      let startX = 0, startY = 0, origRight = 16, origBottom = 20;
 
       handle.addEventListener('pointerdown', (e) => {
-        const r = widget.getBoundingClientRect();
-        dragging = true; moved = false; sx = e.clientX; sy = e.clientY; ol = r.left; ot = r.top;
-        widget.style.right = 'auto'; widget.style.bottom = 'auto';
-        widget.style.left = ol + 'px'; widget.style.top = ot + 'px';
-        try { handle.setPointerCapture(e.pointerId); } catch (err) {}
+        isDragging = true;
+        moved = false;
+        startX = e.clientX;
+        startY = e.clientY;
+        const rect = widget.getBoundingClientRect();
+        origRight = window.innerWidth - rect.right;
+        origBottom = window.innerHeight - rect.bottom;
+        handle.setPointerCapture(e.pointerId);
       });
-      handle.addEventListener('pointermove', (e) => {
-        if (!dragging) return;
-        const dx = e.clientX - sx, dy = e.clientY - sy;
-        if (Math.abs(dx) > 5 || Math.abs(dy) > 5) moved = true;
-        if (!moved) return;
-        widget.style.left = Math.min(Math.max(8, ol + dx), window.innerWidth - widget.offsetWidth - 8) + 'px';
-        widget.style.top = Math.min(Math.max(8, ot + dy), window.innerHeight - widget.offsetHeight - 8) + 'px';
-      });
-      handle.addEventListener('pointerup', (e) => {
-        if (!dragging) return;
-        dragging = false;
-        try { handle.releasePointerCapture(e.pointerId); } catch (err) {}
-        if (!moved) openFrigoVoiceModal(true);
-      });
-    })();
 
-    // Boot
+      handle.addEventListener('pointermove', (e) => {
+        if (!isDragging) return;
+        const dx = e.clientX - startX;
+        const dy = e.clientY - startY;
+        if (Math.abs(dx) > 5 || Math.abs(dy) > 5) moved = true;
+        if (moved) {
+          const nextRight = Math.min(window.innerWidth - widget.offsetWidth - 8, Math.max(8, origRight - dx));
+          const nextBottom = Math.min(window.innerHeight - widget.offsetHeight - 8, Math.max(8, origBottom - dy));
+          widget.style.right = nextRight + 'px';
+          widget.style.bottom = nextBottom + 'px';
+        }
+      });
+
+      handle.addEventListener('pointerup', (e) => {
+        if (!isDragging) return;
+        isDragging = false;
+        try { handle.releasePointerCapture(e.pointerId); } catch (err) {}
+        if (!moved) openFrigoVoiceModal();
+      });
+    }
+
     recoverAnyLocalState();
     checkUrlFamilyInviteParam();
-    syncFamilyAndWorkerUI();
     syncExpiryThresholdUI();
+    syncFamilyAndWorkerUI();
     updateInstallButtonsVisibility();
+    initFloatingVoiceDrag();
     updateAllViews();
-    setupUpdateDetection();
+    registerServiceWorkerAndUpdates();
   </script>
 </body>
 </html>
